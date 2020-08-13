@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+
+
+        <!--    책장 종류 버튼 레이아웃-->
+    <Button
+        android:id="@+id/btn_addBook"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="100dp"
+        android:text="+"
+        android:textSize="20sp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <LinearLayout
+
+        android:id="@+id/layout_readingD_dMenu"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="10dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <Button
+            android:id="@+id/btn_to_read"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+
+            android:background="@drawable/border_non_selected"
+            android:text="읽은 책"
+            android:layout_weight="1"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_weight="1"
+            android:text="읽고 있는 책"
+
+
+            android:background="@drawable/border_selected"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btn_to_interested"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="읽을 책"
+            android:background="@drawable/border_non_selected"
+            android:layout_weight="1"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </LinearLayout>
+
+        <!--책장 화면 레이아웃-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/info"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_margin="5dp"-->
+<!--        android:gravity="center"-->
+<!--        android:text="책 이미지를 길게 누르면 수정, 삭제할 수 있습니다"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/layout_readingD_dMenu">-->
+
+<!--    </TextView>-->
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_reading"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/border_without_top"
+        android:padding="5dp"
+
+        app:layout_constraintBottom_toTopOf="@+id/layout_main_menu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_readingD_dMenu" />
+
+
+<!--    <LinearLayout-->
+<!--        android:id="@+id/layout_main_drawer"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_marginStart="24dp"-->
+<!--        android:layout_marginEnd="24dp"-->
+<!--        android:background="#FFFFFF"-->
+<!--        android:orientation="vertical"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/layout_main_menu"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/layout_readingD_dMenu"-->
+<!--        app:layout_constraintVertical_bias="0.0">-->
+
+<!--                      -->
+
+
+
+
+<!--        <TableLayout-->
+
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+
+<!--            android:background="@drawable/border_without_top"-->
+<!--            android:stretchColumns="0,1,2"-->
+<!--            app:layout_constraintLeft_toLeftOf="parent"-->
+<!--            app:layout_constraintRight_toRightOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent">-->
+
+<!--            <TableRow-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                android:layout_marginLeft="2dp"-->
+<!--                android:layout_marginRight="5dp"-->
+<!--                >-->
+
+<!--                <ImageButton-->
+<!--                    android:id="@+id/btn_readingD_bookcover"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="120dp"-->
+
+<!--                    android:background="#ffffff"-->
+<!--                    android:padding="0dp"-->
+<!--                    android:scaleType="fitCenter"-->
+<!--                    app:srcCompat="@drawable/book_jieun" />-->
+
+
+<!--                <ImageButton-->
+<!--                    android:id="@+id/btn_crazy"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="120dp"-->
+
+<!--                    android:background="#ffffff"-->
+<!--                    android:padding="0dp"-->
+<!--                    android:scaleType="fitCenter"-->
+<!--                    app:srcCompat="@drawable/book_crazylady" />-->
+
+
+<!--                <ImageButton-->
+
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="120dp"-->
+
+<!--                    android:background="#ffffff"-->
+<!--                    android:padding="0dp"-->
+<!--                    android:scaleType="fitCenter"-->
+<!--                    app:srcCompat="@drawable/book_crazylady" />-->
+
+<!--            </TableRow>-->
+
+
+<!--            &lt;!&ndash;                <TableRow&ndash;&gt;-->
+<!--            &lt;!&ndash;                    android:layout_width="match_parent"&ndash;&gt;-->
+<!--            &lt;!&ndash;                    android:layout_height="wrap_content"&ndash;&gt;-->
+<!--            &lt;!&ndash;                    android:layout_marginBottom="10dp"&ndash;&gt;-->
+<!--            &lt;!&ndash;                    android:stretchColumns="0,1,2"&ndash;&gt;-->
+<!--            &lt;!&ndash;                    app:layout_constraintLeft_toLeftOf="parent"&ndash;&gt;-->
+<!--            &lt;!&ndash;                    app:layout_constraintRight_toRightOf="parent"&ndash;&gt;-->
+<!--            &lt;!&ndash;                    app:layout_constraintTop_toTopOf="parent">&ndash;&gt;-->
+
+<!--            &lt;!&ndash;                    <ImageView&ndash;&gt;-->
+
+<!--            &lt;!&ndash;                        android:layout_width="70dp"&ndash;&gt;-->
+<!--            &lt;!&ndash;                        android:layout_height="120dp"&ndash;&gt;-->
+
+<!--            &lt;!&ndash;                        app:srcCompat="@drawable/book_jieun" />&ndash;&gt;-->
+
+<!--            &lt;!&ndash;                    <ImageView&ndash;&gt;-->
+
+<!--            &lt;!&ndash;                        android:layout_width="70dp"&ndash;&gt;-->
+<!--            &lt;!&ndash;                        android:layout_height="120dp"&ndash;&gt;-->
+
+<!--            &lt;!&ndash;                        app:srcCompat="@drawable/book_jieun" />&ndash;&gt;-->
+
+<!--            &lt;!&ndash;                    <ImageView&ndash;&gt;-->
+
+<!--            &lt;!&ndash;                        android:layout_width="70dp"&ndash;&gt;-->
+<!--            &lt;!&ndash;                        android:layout_height="120dp"&ndash;&gt;-->
+
+<!--            &lt;!&ndash;                        app:srcCompat="@drawable/book_jieun" />&ndash;&gt;-->
+
+
+<!--            &lt;!&ndash;                </TableRow>&ndash;&gt;-->
+
+
+<!--        </TableLayout>-->
+
+
+<!--    </LinearLayout>-->
+
+    <LinearLayout
+        android:id="@+id/layout_main_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <Button
+            android:id="@+id/btn_to_drawer"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="#F1CF69"
+            android:text="내 책장"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn_to_calender"
+            android:layout_width="103dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="#DFDBDB"
+            android:text="독서 달력" />
+
+
+
+        <Button
+            android:id="@+id/btn_to_assay"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="#DFDBDB"
+            android:text="에세이" />
+
+        <Button
+            android:id="@+id/btn_to_stat"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="#DFDBDB"
+            android:text="통계" />
+
+
+        <Button
+            android:id="@+id/btn_to_setting"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="#DFDBDB"
+            android:text="설정" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

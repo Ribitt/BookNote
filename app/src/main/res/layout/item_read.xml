@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:background="@drawable/border_underline">
+
+    <ImageButton
+        android:id="@+id/btn_readD_bookCover"
+        android:layout_width="70dp"
+        android:layout_height="120dp"
+        android:background="@drawable/empty_background"
+        android:padding="2dp"
+        android:scaleType="fitCenter"
+
+        app:srcCompat="@drawable/book_crazylady" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:orientation="vertical"
+        android:padding="5dp"
+        android:paddingLeft="20dp">
+
+
+        <TextView
+            android:id="@+id/tv_readD_bookTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="김지은입니다"
+            android:textStyle="bold"
+            android:textSize="16sp"
+
+            ></TextView>
+
+        <RatingBar
+            android:id="@+id/rating_readD"
+            style="@style/Widget.AppCompat.RatingBar.Small"
+            android:layout_marginBottom="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:rating="3.5"
+            android:stepSize="0.5"
+           >
+
+        </RatingBar>
+
+        <TextView
+        android:id="@+id/tv_readD_endDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:layout_marginLeft="3dp"
+        android:textSize="13sp"
+        android:text="2020.8.4"
+
+        ></TextView>
+
+        <TextView
+            android:id="@+id/tv_readD_ALineReview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+
+            android:text="한줄 평이 들어가는 자리인데 혹시 줄이 길어지면 이거 그냥 잘리나
+나는 두줄까지 "
+
+            ></TextView>
+
+
+
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Bookdetail_note_byColor">
+
+
+    <!--    컨텐츠 레이아웃-->
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="50dp"
+        >
+
+        <RelativeLayout
+            android:id="@+id/bookDetailLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <ImageView
+                android:id="@+id/bookCoverImg"
+                android:layout_width="80dp"
+                android:layout_height="130dp"
+                android:layout_marginRight="20dp"
+                app:srcCompat="@drawable/book_jieun" />
+
+            <TextView
+                android:id="@+id/authorTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/bookCoverImg"
+                android:text="저자" />
+
+
+            <TextView
+                android:id="@+id/publisherTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/authorTxt"
+                android:layout_toRightOf="@+id/bookCoverImg"
+                android:text="출판사" />
+
+            <TextView
+                android:id="@+id/startDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/publisherTxt"
+                android:layout_toRightOf="@+id/bookCoverImg"
+                android:text="읽기 시작한 날짜" />
+
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/startDate"
+                android:layout_toRightOf="@+id/bookCoverImg" />
+
+            <TextView
+                android:id="@+id/pageTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/startDate"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/progressBar"
+                android:text="78/367 pages" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/align"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/bookDetailLayout"
+            android:layout_marginTop="25dp"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/byPage"
+                android:background="#ffffff"
+
+                android:text="페이지 순 정렬"
+
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginRight="10dp"
+
+                />
+
+            <Button
+                android:id="@+id/byColor"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_toRightOf="@+id/byPage"
+                android:textStyle="bold"
+                android:background="#ffffff"
+                android:text="색상 순 정렬" />
+
+        </RelativeLayout>
+
+
+        <!--        검색하기 -->
+        <TextView
+            android:id="@+id/searchInput"
+            android:layout_marginTop="25dp"
+            android:layout_below="@+id/align"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/searchBtn"
+
+            android:hint="검색어를 입력하세요."
+            android:text="" />
+
+        <ImageButton
+            android:id="@+id/searchBtn"
+            android:layout_marginTop="15dp"
+            android:layout_below="@+id/align"
+
+            android:layout_alignParentRight="true"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:srcCompat="@android:drawable/ic_menu_search" />
+
+
+
+        <LinearLayout
+            android:id="@+id/noteListLayout"
+
+            android:layout_below="@+id/searchInput"
+
+            android:layout_marginTop="25dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginBottom="10dp"
+                android:background="#353535"
+
+                />
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="21"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:layout_marginBottom="10dp"
+                android:textColor="#393939"
+                android:text="p.115    무슨 24시간 대기조네 잠 안자고 일을 어떻게 하지" />
+
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:background="#031C97"
+
+                />
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:ellipsize="end"
+                android:ems="21"
+                android:maxLines="1"
+                android:text="p.80      이 사이트 확인해보기"
+                android:textColor="#031C97" />
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:background="#830C25"
+
+                />
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:ellipsize="end"
+                android:ems="21"
+                android:maxLines="1"
+                android:text="p.320      ??? 이 부분은 동의하지 않는다."
+                android:textColor="#830C25" />
+
+
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/noteListLayout"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="133dp"
+
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="25dp"
+            android:text="+" />
+
+    </RelativeLayout>
+
+    <!--    하단 화면 전환 버튼 레이아웃 -->
+
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+
+        <Button
+            android:id="@+id/btn_to_calender"
+            android:layout_weight="1"
+            android:layout_width="40dp"
+
+            android:layout_height="wrap_content"
+            android:background="#DFDBDB"
+            android:layout_gravity="center"
+            android:text="독서 달력" />
+
+        <Button
+            android:id="@+id/btn_to_drawer"
+            android:layout_weight="1"
+            android:layout_width="40dp"
+
+            android:layout_height="wrap_content"
+
+            android:layout_gravity="center"
+            android:text="내 책장"
+
+            android:background="#F1CF69"
+            android:textStyle="bold"
+            />
+
+        <Button
+            android:id="@+id/btn_to_assay"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="#DFDBDB"
+            android:text="전체 노트"
+
+            />
+
+        <Button
+            android:id="@+id/btn_to_setting"
+            android:layout_weight="1"
+            android:layout_width="40dp"
+
+            android:layout_height="wrap_content"
+            android:background="#DFDBDB"
+            android:layout_gravity="center"
+            android:text="설정" />
+
+    </LinearLayout>
+
+</RelativeLayout>

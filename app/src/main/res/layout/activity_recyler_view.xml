@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".RecylerView"
+    android:orientation="vertical">
+
+<!--    <TextView-->
+<!--        android:id="@+id/textView4"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="RecylerView practice"-->
+<!--        android:textSize="30sp"-->
+<!--        android:textStyle="bold"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent">-->
+
+<!--    </TextView>-->
+
+
+    <!--    화면 크기보다 많은 데이터가 추가되면 오른쪽에 스크롤 바를 보여주도록 하는코드
+    scroll에 있는 거 두개 !!-->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_test"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:scrollbars="vertical" />
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/button_test"
+        android:text="데이터 추가"/>
+
+
+</LinearLayout>

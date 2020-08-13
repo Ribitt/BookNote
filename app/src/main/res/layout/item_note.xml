@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="8dp"
+    android:elevation="8dp"
+    android:layout_marginEnd="5dp"
+    android:layout_marginTop="-2dp"
+    android:layout_marginBottom="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="5dp">
+            <TextView
+                android:id="@+id/tv_note_date"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border_underline"
+                android:textColor="@color/green"
+                android:inputType="date"
+                android:text="2020.08.31"
+                >
+
+            </TextView>
+
+
+
+            <ImageButton
+                android:id="@+id/btn_note_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/empty_background"
+                android:tint="@color/green"
+                android:src="@drawable/ic_edit_24px">
+
+            </ImageButton>
+
+            <ImageButton
+                android:id="@+id/btn_note_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/empty_background"
+                android:tint="@color/green"
+                android:src="@drawable/ic_delete_24px"/>
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:textColor="@color/myBlack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="P. "
+                >
+
+                `` </TextView>
+            <TextView
+                android:textColor="@color/myBlack"
+                android:id="@+id/tv_note_pageNum"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="123"
+                android:textStyle="bold">
+
+            </TextView>
+
+
+            <TextView
+
+                android:layout_weight="3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textStyle="bold">
+
+            </TextView>
+
+
+        </LinearLayout>
+        <TextView
+            android:textColor="@color/myBlack"
+            android:id="@+id/tv_note_quote"
+            android:layout_width="match_parent"
+            android:background="@drawable/border_underline"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:ellipsize="end"
+            android:text="책에서 인용한 내용이 들어갈 부분"></TextView>
+
+
+        <TextView
+            android:textColor="@color/myBlack"
+            android:id="@+id/tv_note_userNote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:ellipsize="end"
+            android:text="여기에 메모 내용이 들어갑니다. 아 참으로 재미있는 책이었다. 울룰루 뚤루루 "></TextView>
+
+
+    </LinearLayout>
+
+
+
+</androidx.cardview.widget.CardView>

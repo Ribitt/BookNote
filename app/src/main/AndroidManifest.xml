@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.booknoteapp">
+    <!-- 카메라와 갤러리 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/MyToolTheme">
+        <activity android:name=".DrawerTap">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        </activity>
+        <activity android:name=".Home" />
+        <activity
+            android:name=".Coordinator"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
+        <activity
+            android:name=".SignUp"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Login" />
+
+<!--             <intent-filter>-->
+<!--             <action android:name="android.intent.action.MAIN" />-->
+
+
+<!--             <category android:name="android.intent.category.LAUNCHER" />-->
+<!--             </intent-filter>-->
+        </activity>
+        <activity android:name=".Login">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
+        <activity android:name=".EditBook" />
+        <activity android:name=".Button_Recylcer_Exam">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
+        <activity android:name=".RecylerView">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
+        <activity android:name=".BookLog_Notes" />
+        <activity
+            android:name=".BookLog_Pages"
+            android:theme="@style/MyToolTheme">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
+        <activity
+            android:name=".Essay"
+            android:theme="@style/MyToolTheme" />
+        <activity android:name=".Stat" />
+        <activity
+            android:name=".EditNote"
+            android:theme="@style/MyToolTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Note" />
+        </activity>
+        <activity
+            android:name=".AddNote"
+            android:label=".AddNote"
+            android:theme="@style/MyToolTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".BookLog_Notes" />
+        </activity>
+        <activity
+            android:name=".Note"
+            android:theme="@style/MyToolTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Bookdetail_note_byPage" />
+        </activity>
+        <activity android:name=".AddBook_toRead" />
+        <activity
+            android:name=".AddBook_toReading"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/MyToolTheme">
+
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Note" />
+        </activity>
+
+
+        <activity android:name=".Bookdetail_note_byColor" />
+        <activity android:name=".Bookdetail_note_byPage" />
+        <activity
+            android:name=".Calendar"
+            android:theme="@style/MyToolTheme" />
+        <activity android:name=".Drawer_interested" />
+        <activity android:name=".Drawer_read" />
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/MyToolTheme" />
+        <activity
+            android:name=".SplashActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/SplashTheme">
+
+             <intent-filter>
+             <action android:name="android.intent.action.MAIN" />
+
+
+             <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

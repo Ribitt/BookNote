@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:background="@drawable/border_underline">
+
+    <ImageButton
+        android:id="@+id/btn_interestedD_bookCover"
+        android:layout_width="70dp"
+        android:layout_height="120dp"
+        android:background="@drawable/empty_background"
+        android:padding="2dp"
+        android:scaleType="fitCenter"
+
+        app:srcCompat="@drawable/book_jieun" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="15dp"
+        android:paddingLeft="20dp">
+
+
+        <TextView
+            android:id="@+id/tv_interestedD_bookTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="김지은입니다"
+            android:textStyle="bold"
+            android:textSize="16sp"
+
+            ></TextView>
+
+        <TextView
+            android:id="@+id/tv_interestedD_memo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:text="읽어봐야지 하고 미루고 있는데 얼른 봐야지"
+            android:textStyle="bold"
+
+            ></TextView>
+
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

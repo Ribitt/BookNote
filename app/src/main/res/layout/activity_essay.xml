@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    tools:context=".Essay">
+
+    <LinearLayout
+        android:id="@+id/layout_essay_allEssay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="32dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/layout_essay_anEssay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/border_round_whole">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="제목"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"></TextView>
+
+                <Button
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:text="수정"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"></Button>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="350dp"
+                android:textSize="16sp"
+                android:hint="에세이에 들어갈 내용을 입력합니다."></TextView>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/border_round_whole">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:hint="제목"></TextView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="350dp"
+                android:textSize="16sp"
+                android:hint="에세이에 들어갈 내용을 입력합니다."></TextView>
+
+
+
+
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+
+    <LinearLayout
+        android:id="@+id/layout_main_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/btn_to_drawer"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:background="#DFDBDB"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+
+            android:text="내 책장"
+            />
+
+        <Button
+            android:id="@+id/btn_to_calender"
+            android:layout_width="103dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="#DFDBDB"
+            android:text="독서 달력" />
+
+
+        <Button
+            android:id="@+id/btn_to_assay"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:background="#F1CF69"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+
+            android:text="에세이" />
+
+        <Button
+            android:id="@+id/btn_to_stat"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="#DFDBDB"
+            android:text="통계" />
+
+
+        <Button
+            android:id="@+id/btn_to_setting"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="#DFDBDB"
+            android:text="설정" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

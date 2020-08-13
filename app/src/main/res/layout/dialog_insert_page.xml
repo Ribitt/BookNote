@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="30dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:text="얼마나 읽으셨나요?"
+        android:background="@drawable/border_selected_underline"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="10dp">
+
+    </TextView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:textSize="16sp"
+            android:text="읽은 날짜 : "/>
+        <TextView
+            android:id="@+id/editText_insertDate"
+            android:background="@drawable/underline_green"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:textColor="@color/myBlack"
+            android:inputType="date"
+            android:gravity="center"
+            android:textSize="16sp"
+            />
+
+    </LinearLayout>
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:textSize="16sp"
+            android:text="시작 : "></TextView>
+
+        <EditText
+            android:id="@+id/editText_startPage"
+            android:background="@drawable/underline_green"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+
+            android:textSize="16sp"
+            android:maxLength="3"
+            android:inputType="number">
+
+        </EditText>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            android:text=" ~ ">
+
+        </TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:textSize="16sp"
+            android:text="마지막 : "></TextView>
+
+        <EditText
+            android:id="@+id/editText_endPage"
+          android:background="@drawable/underline_green"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:textSize="16sp"
+            android:maxLength="3"
+            android:inputType="number">
+
+        </EditText>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/btn_insertPage_negative"
+          android:layout_weight="3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:gravity="right"
+            android:textColor="@color/green"
+            android:text="취소"></Button>
+        <Button
+            android:id="@+id/btn_insertPage_positive"
+          android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:gravity="right"
+
+            android:textColor="@color/green"
+            android:text="확인"></Button>
+    </LinearLayout>
+
+</LinearLayout>

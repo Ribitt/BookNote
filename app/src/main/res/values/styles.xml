@@ -1,0 +1,62 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="MyToolTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/green</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <!--        이게 전체 배경색이다~ -->
+        <item name="android:windowBackground">@color/almostWhite</item>
+        <item name="toolbarStyle">
+            @style/ToolbarStyle
+        </item>
+        <!--    <item name="colorAccent">@color/myRed</item>-->
+        <!--    <item name="android:textColor">@color/myRed</item>-->
+
+
+    </style>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+
+    </style>
+
+    <style name="ToolbarStyle" parent="Widget.AppCompat.Toolbar">
+        <item name="android:background">@color/yellowGreen</item>
+        <item name="android:textColor">@color/green</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+
+
+    </style>
+
+    <style name="ToolBarTitleStyle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/green</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
+    <!--&lt;!&ndash;        액션바 없애고 타이틀도 안보이게 해!&ndash;&gt;-->
+    <!--        <item name = "windowActionBar">false</item>-->
+    <!--        <item name="windowNoTitle">true</item>-->
+
+    <!--    <style name="NoActionBarTheme" parent="Theme.AppCompat.Light.NoActionBar">-->
+    <!--                <item name = "windowActionBar">false</item>-->
+    <!--                <item name="windowNoTitle">true</item>-->
+
+    <!--    </style>-->
+
+    <!--    처음 시작할 때 나오는 스플래시 이미지 테마 -->
+
+    <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_img</item>
+    </style>
+
+    <style name="NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+</resources>

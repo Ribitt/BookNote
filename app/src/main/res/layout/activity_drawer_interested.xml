@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:orientation="vertical"
+    tools:context=".Drawer_interested">
+
+
+    <LinearLayout
+
+        android:id="@+id/layout_interestedD_dMenu"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginStart="10dp"
+
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="10dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <Button
+        android:id="@+id/btn_to_read"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_weight="1"
+            android:text="읽은 책"
+
+            android:background="@drawable/border_non_selected"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btn_to_reading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_weight="1"
+            android:text="읽고 있는 책"
+            android:background="@drawable/border_non_selected"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:background="@drawable/border_selected"
+            android:layout_weight="1"
+            android:text="읽을 책"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </LinearLayout>
+
+<!--    상단 메뉴 레이아웃-->
+
+
+<!--    책 추가 버튼-->
+    <Button
+        android:id="@+id/btn_addBook"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="100dp"
+        android:text="+"
+        android:textSize="20sp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+<!--책 추가버튼 -->
+
+
+    <!--    컨텐츠 전체 레이아웃-->
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+       android:background="@drawable/border_without_top"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_interestedD_dMenu">
+
+
+
+<androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/recycler_interested"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dp">
+
+
+</androidx.recyclerview.widget.RecyclerView>
+<!--        &lt;!&ndash;책장 화면 레이아웃&ndash;&gt;-->
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="vertical">-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="20dp"-->
+<!--                android:orientation="horizontal">-->
+
+<!--                <ImageButton-->
+<!--                    android:id="@+id/btn_bookcover_read"-->
+<!--                    android:layout_width="70dp"-->
+<!--                    android:layout_height="120dp"-->
+<!--                    android:padding="0dp"-->
+
+<!--                    android:scaleType="fitCenter"-->
+<!--                    app:srcCompat="@drawable/book_habits" />-->
+
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginLeft="20dp"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    android:orientation="vertical">-->
+
+<!--                    <TextView-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="김돌콩님 추천도서 등등 책 관련 메모 길어지면 밑으로 내려가는 메모"-->
+<!--                        android:textSize="13sp">-->
+
+<!--                    </TextView>-->
+
+
+
+
+<!--                </LinearLayout>-->
+
+
+<!--            </LinearLayout>-->
+
+
+<!--        </LinearLayout>-->
+
+
+    </LinearLayout>
+
+
+    <!--    하단 화면 전환 버튼 레이아웃 -->
+    <LinearLayout
+        android:id="@+id/linearLayout5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+
+        <Button
+            android:id="@+id/btn_to_drawer"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+
+            android:textStyle="bold"
+            android:background="#F1CF69"
+            android:text="내 책장"
+            />
+
+        <Button
+            android:id="@+id/btn_to_calender"
+            android:layout_width="103dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="#DFDBDB"
+            android:text="독서 달력" />
+
+
+
+        <Button
+            android:id="@+id/btn_to_assay"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="#DFDBDB"
+            android:text="에세이" />
+
+        <Button
+            android:id="@+id/btn_to_stat"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="#DFDBDB"
+            android:text="통계" />
+
+
+        <Button
+            android:id="@+id/btn_to_setting"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="#DFDBDB"
+            android:text="설정" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

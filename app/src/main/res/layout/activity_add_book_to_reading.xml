@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddBook_toReading">
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/app_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:elevation="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+
+    <ImageView
+        android:id="@+id/btn_addBook_addBookCover"
+        android:layout_width="110dp"
+        android:layout_height="170dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="44dp"
+
+
+        android:background="@drawable/border_round_whole"
+        android:text="이미지 추가"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_toolbar" />
+
+    <TextView
+        android:id="@+id/tv_addBookCover"
+        android:layout_width="110dp"
+        android:layout_height="170dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="100dp"
+        android:gravity="center"
+        android:text="이미지 추가"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent">
+
+    </TextView>
+
+    <LinearLayout
+        android:id="@+id/activity_addBook_bookDetail"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="20dp"
+        android:orientation="vertical"
+
+        app:layout_constraintBottom_toBottomOf="@+id/btn_addBook_addBookCover"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.26"
+        app:layout_constraintStart_toEndOf="@+id/btn_addBook_addBookCover"
+        app:layout_constraintTop_toTopOf="@+id/btn_addBook_addBookCover">
+
+<!--        책 제목-->
+        
+        <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+            android:gravity="center">
+
+        <TextView
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:textColor="@color/myBlack"
+            android:text="제목">
+
+        </TextView>
+
+            <EditText
+
+            android:id="@+id/et_addBook_title"
+            android:background="@drawable/underline_green"
+            android:layout_width="190dp"
+            android:layout_height="40dp"
+            android:hint="" />
+
+
+    </LinearLayout>
+
+<!--        책 제목 끝-->
+
+<!--        저자-->
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textColor="@color/myBlack"
+                android:text="저자">
+
+            </TextView>
+
+            <EditText
+                android:id="@+id/et_addBook_author"
+                android:background="@drawable/underline_green"
+                android:layout_width="190dp"
+                android:layout_height="40dp"
+                android:hint="" />
+
+        </LinearLayout>
+<!--저자 끝-->
+
+<!--전체 페이지 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textColor="@color/myBlack"
+                android:text="페이지 수">
+
+            </TextView>
+            <EditText
+                android:id="@+id/et_addBook_page"
+                android:background="@drawable/underline_green"
+                android:layout_width="190dp"
+                android:layout_height="40dp"
+                android:inputType="number"
+                android:maxLength="4"
+                android:hint=""/>
+
+        </LinearLayout>
+
+<!--        전체 페이지 끝-->
+
+<!--        출판사 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textColor="@color/myBlack"
+                android:text="출판사">
+
+            </TextView>
+
+            <EditText
+                android:id="@+id/et_addBook_publisher"
+                android:background="@drawable/underline_green"
+                android:layout_width="190dp"
+                android:layout_height="40dp"
+                android:hint=""/>
+
+        </LinearLayout>
+
+<!--        출판사 끝-->
+
+
+    </LinearLayout>
+
+
+
+<LinearLayout
+    android:id="@+id/choose_status"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginTop="40dp"
+    android:layout_marginLeft="25dp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/activity_addBook_bookDetail">
+
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="독서 상태"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:textColor="@color/myBlack"
+        ></TextView>
+
+    <Spinner
+        android:id="@+id/spinner_addBook"
+        android:layout_width="200dp"
+        android:layout_marginLeft="20dp"
+        android:layout_height="40dp"
+        android:entries="@array/reading_status"
+        android:gravity="center" />
+
+
+</LinearLayout>
+
+
+
+<!--    <LinearLayout-->
+<!--        android:id="@+id/linearLayout6"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:layout_marginStart="24dp"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:layout_marginEnd="24dp"-->
+<!--        android:gravity="center"-->
+<!--        android:orientation="horizontal"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/choose_status">-->
+
+<!--        <Button-->
+<!--            android:id="@+id/btn_addBook_status_read"-->
+<!--            android:layout_width="wrap_content"-->
+
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            android:background="@drawable/underline_green"-->
+<!--            android:textColor="@color/border"-->
+<!--            android:text="읽은 책">-->
+
+<!--        </Button>-->
+
+<!--        <Button-->
+<!--            android:id="@+id/btn_addBook_status_reading"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            android:background="@drawable/underline_green_selected"-->
+<!--            android:text="읽는 중인 책"-->
+<!--            android:textColor="@color/green">-->
+
+<!--        </Button>-->
+
+<!--        <Button-->
+<!--            android:id="@+id/btn_addBook_status_interested"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            android:background="@drawable/underline_green"-->
+<!--            android:text="관심 책"-->
+<!--            android:textColor="@color/border">-->
+
+<!--        </Button>-->
+
+
+<!--    </LinearLayout>-->
+
+<!--관심 책에 보여줄 내용-->
+
+
+    <LinearLayout
+        android:id="@+id/layout_addBook_interested"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/choose_status">
+
+    <EditText
+        android:id="@+id/et_addBook_interested_memo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:hint="책에 대한 간단한 메모를 입력하세요."
+        android:background="@drawable/border_round_whole"
+        />
+
+    </LinearLayout>
+
+
+    <!--관심 책에 보여줄 내용 끝-->
+
+
+<!--    읽는 중인 책에 보여줄 내용 -->
+
+    <LinearLayout
+        android:id="@+id/layout_addBook_reading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/choose_status"
+        android:visibility="visible"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+
+       >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:textSize="16sp"
+                android:text="마지막으로 읽은 날"
+                android:textColor="@color/myBlack"
+                />
+
+            <TextView
+                android:id="@+id/tv_addBook_reading_lastDate"
+                android:background="@drawable/underline_green"
+                android:layout_width="150dp"
+                android:paddingLeft="10dp"
+                android:paddingBottom="2dp"
+                android:textSize="16sp"
+
+                android:layout_height="wrap_content"
+                android:hint="2020.08.02" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:textSize="16sp"
+                android:text="지금까지 읽은 페이지"
+                android:textColor="@color/myBlack"
+                />
+
+            <EditText
+                android:id="@+id/et_addBook_reading_startDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:textSize="16sp"
+                android:hint="###"></EditText>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <!--    읽는 중인 책에 보여줄 내용 끝 -->
+
+<!--    읽은 책에 보여줄 내용-->
+
+    <LinearLayout
+        android:id="@+id/layout_addBook_read"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:orientation="vertical"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/choose_status">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:paddingLeft="5dp"
+            android:gravity="center"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:textSize="16sp"
+                android:text="다 읽은 날짜"
+                android:textColor="@color/myBlack"
+                />
+
+
+            <TextView
+                android:id="@+id/tv_addBook_read_endDate"
+                android:background="@drawable/underline_green"
+                android:layout_width="150dp"
+                android:paddingLeft="10dp"
+                android:textSize="16sp"
+                android:layout_height="wrap_content"
+                android:hint="2020.08.02" />
+
+        </LinearLayout>
+
+
+
+
+        <RatingBar
+            android:id="@+id/rating_addBook_read"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:isIndicator="false"
+            android:layout_marginTop="15dp"
+
+            android:numStars="5"
+            android:stepSize="0.5"
+            android:rating="3.5"
+
+            style="@style/Widget.AppCompat.RatingBar.Indicator"
+
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout_addBook_read_date" />
+
+        <EditText
+            android:id="@+id/et_addBook_read_ALineReview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+             android:layout_marginTop="15dp"
+            android:padding="5dp"
+            android:textSize="16sp"
+            android:hint="한줄 평을 입력하세요"
+            android:background="@drawable/border_round_whole"
+
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rating_addBook_read" />
+
+    </LinearLayout>
+
+
+
+    <!--    읽은 책에 보여줄 내용 끝-->
+
+
+
+    <Button
+        android:id="@+id/btn_addBook_cancel"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="208dp"
+        android:text="취소"
+        app:layout_constraintEnd_toStartOf="@+id/btn_addBook_done"
+        app:layout_constraintHorizontal_bias="0.761"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/choose_status"  />
+
+    <Button
+        android:id="@+id/btn_addBook_done"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="208dp"
+        android:layout_marginEnd="56dp"
+        android:text="책 추가하기"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/choose_status" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
