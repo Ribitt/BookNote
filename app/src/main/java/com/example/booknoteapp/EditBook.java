@@ -21,15 +21,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -107,7 +103,7 @@ public class EditBook extends AppCompatActivity {
         layout_addBook_reading_date =findViewById(R.id.layout_addBook_reading_date);
         layout_addBook_reading_readPage =findViewById(R.id.layout_addBook_reading_readPage);
 
-        btn_addBook_addBookCover = findViewById(R.id.btn_addBook_addBookCover);
+        btn_addBook_addBookCover = findViewById(R.id.imageV_addBook_addBookCover);
         btn_addBook_status_read = findViewById(R.id.btn_addBook_status_read);
         btn_addBook_status_reading = findViewById(R.id.btn_addBook_status_reading);
         btn_addBook_status_interested = findViewById(R.id.btn_addBook_status_interested);
