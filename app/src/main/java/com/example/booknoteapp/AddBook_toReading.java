@@ -444,44 +444,11 @@ public class AddBook_toReading extends AppCompatActivity {
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         switch(i) {
                                             case 0: //사진찍기인 경우
-                                                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                                if(takePictureIntent.resolveActivity(getPackageManager())!=null){//카메라 기능이 있는지, 사용가능한지 확인
+                                                takePicture();
 
-                                                    File photoFile = null;
-                                                    try{
-
-                                                        photoFile = createImageFile();
-                                                        //tempFile = createImageFile();
-
-                                                    }catch(IOException e){
-                                                        Toast.makeText(AddBook_toReading.this, "이미치 처리 오류 발생. 다시 시도해주세요",Toast.LENGTH_LONG).show();
-                                                        finish();
-                                                        e.printStackTrace();
-                                                    }
-
-//                                                    if(tempFile!=null){
-//                                                        //카메라에서 찍은 이미지가 저장될 주소
-////                                                        Uri photoUri = Uri.fromFile(tempFile);
-////                                                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,photoUri);
-//                                                        startActivityForResult(takePictureIntent,PICK_FROM_CAMERA);
-//                                                    }
-                                                    if(photoFile!=null){
-                                                        //찍어온 사진이 저장돼서 이미지 파일이 있다면
-                                                        Uri photoURI = FileProvider.getUriForFile(AddBook_toReading.this,
-                                                                "com.example.android.fileprovider",
-                                                                photoFile);
-                                                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                                                        startActivityForResult(takePictureIntent, PICK_FROM_CAMERA);
-                                                    }
-
-
-                                                }else{
-                                                    Toast.makeText(AddBook_toReading.this,"사용할 수 있는 카메라가 없습니다",Toast.LENGTH_LONG).show();
-                                                }
 
                                                 break;
                                             case 1: //갤러리에서 불러오기인 경우
-
 
                                                 Intent getImgIntent = new Intent();
                                                 getImgIntent.setAction(Intent.ACTION_PICK);
@@ -500,26 +467,44 @@ public class AddBook_toReading extends AppCompatActivity {
         );
     }
 
-    public void camGalleryPermissionCheck() {
-        PermissionListener permissionListener = new PermissionListener() {
-            @Override
-            public void onPermissionGranted() {
-                Toast.makeText(AddBook_toReading.this,"Permission Granted",Toast.LENGTH_LONG).show();
+
+    /////사진찍기
+    protected void takePicture() {
+
+        // 인텐트의 ACTIONImageCapture 속성을 이용해 카메라를 띄운다.
+        // 그런 뒤 찍은 사진을 intent에 담아서 startActivityForResult를 이용해서 보낸다
+        // 보낸 intent는 onActivityResult에서 받는다. 여기서 사이즈를 줄여준다.
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if(takePictureIntent.resolveActivity(getPackageManager())!=null){//카메라 기능이 있는지, 사용가능한지 확인
+
+            File photoFile = null;
+            //사진을 새로 찍을 경우 빈 포토 파일을 만들어주기
+            try{
+
+                photoFile = createImageFile();
+
+            }catch(IOException e){
+                Toast.makeText(AddBook_toReading.this, "이미치 처리 오류 발생. 다시 시도해주세요",Toast.LENGTH_LONG).show();
+                finish();
+                e.printStackTrace();
             }
 
-            @Override
-            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-                Toast.makeText(AddBook_toReading.this, "Permission Denied\n" +deniedPermissions.toString(), Toast.LENGTH_LONG).show();
+            if(photoFile!=null){
+                //
+                Uri photoURI = FileProvider.getUriForFile(AddBook_toReading.this,
+                        "com.example.android.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, PICK_FROM_CAMERA);
             }
-        };
 
-    TedPermission.with(AddBook_toReading.this)
-            .setPermissionListener(permissionListener)
-            .setRationaleMessage("책 표지를 직접 입력하려면 카메라, 갤러리 접근 권한이 필요합니다.")
-            .setDeniedMessage("책 표지를 직접 입력하시려면 \n[설정]-[권한]에서 권한을 승인해주세요")
-            .setPermissions(Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            .check();
+
+        }else{
+            Toast.makeText(AddBook_toReading.this,"사용할 수 있는 카메라가 없습니다",Toast.LENGTH_LONG).show();
+        }
     }
+    //////////사진 찍기
+
 
     //카메라에서 찍은 사진 저장하기
 
@@ -549,6 +534,7 @@ public class AddBook_toReading extends AppCompatActivity {
     //카메라에서 찍은 사진 저장하기
 
 
+    ///인텐트에 정보가 포함되어 넘어온다
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -571,7 +557,6 @@ public class AddBook_toReading extends AppCompatActivity {
         }
 
 
-
         if(requestCode==PICK_FROM_ALBUM){
 
             //갤러리에서 선택한 이미지의 Uri를 받아온다.
@@ -588,61 +573,27 @@ public class AddBook_toReading extends AppCompatActivity {
                 assert cursor!=null;
                 int columm_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
 
-
-
                 cursor.moveToFirst();
 
                 //여기에 이미지를 저장한다.
                 tempFile = new File(cursor.getString(columm_index));
+                currentPhotoPath = tempFile.getAbsolutePath();
 
             }finally {
 
             }
-            setImage();
+            setPic();
 
         }else if(requestCode==PICK_FROM_CAMERA){
-            tv_addBookCover.setText("");
+
             setPic();
-         //  if(data.hasExtra("data")){
-
-
-
-               //////////////////////새로운 방식
-//               Bundle extras = data.getExtras();
-//               Bitmap imageBitmap = (Bitmap)extras.get("data");
-//               backBitmap = imageBitmap;
-//               Drawable bookCover = new BitmapDrawable(imageBitmap);
-//               tv_addBookCover.setVisibility(View.INVISIBLE);
-//               imageV_addBook_addBookCover.setBackground(bookCover);
-               ////////////////////////////////새 방식
-              // Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-              // if(bitmap!=null) {
-
-                  // Drawable bookCover = new BitmapDrawable(bitmap);
-
-//                   btn_addBook_addBookCover.setText("");
-//                   btn_addBook_addBookCover.setBackground(bookCover);
-              // }
-             //    }
-            // setImage();
 
         }
     }
 
-    //갤러리에서 받아온 이미지 넣기
-    private void setImage() {
 
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        Bitmap originalBm = BitmapFactory.decodeFile(tempFile.getAbsolutePath(),options);
-        backBitmap = originalBm;
-        Drawable bookCover = new BitmapDrawable(originalBm);
 
-        tv_addBookCover.setVisibility(View.INVISIBLE);
-        imageV_addBook_addBookCover.setBackground(bookCover);
-    }
-    //갤러리에서 받은 이미지 넣기
-
-    //찍어온 사진 이미지 크기 줄여서 넣기
+    //찍거나 갤러리에서 가져온 사진 이미지 크기 줄여서 넣기
     private void setPic(){
         //사진 들어갈 자리 크기를 구한다
         int targetW = imageV_addBook_addBookCover.getWidth();
@@ -666,8 +617,36 @@ public class AddBook_toReading extends AppCompatActivity {
 
         Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
         imageV_addBook_addBookCover.setImageBitmap(bitmap);
+        tv_addBookCover.setText("");
 
     }
+    //찍어온 사진 이미지 크기 줄여서 넣기
 
 
+
+
+
+//권한승인
+    public void camGalleryPermissionCheck() {
+        PermissionListener permissionListener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+                Toast.makeText(AddBook_toReading.this,"Permission Granted",Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+                Toast.makeText(AddBook_toReading.this, "Permission Denied\n" +deniedPermissions.toString(), Toast.LENGTH_LONG).show();
+            }
+        };
+
+        TedPermission.with(AddBook_toReading.this)
+                .setPermissionListener(permissionListener)
+                .setRationaleMessage("책 표지를 직접 입력하려면 카메라, 갤러리 접근 권한이 필요합니다.")
+                .setDeniedMessage("책 표지를 직접 입력하시려면 \n[설정]-[권한]에서 권한을 승인해주세요")
+                .setPermissions(Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .check();
+    }
+
+    //권한승인 끝
 }
