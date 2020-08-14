@@ -94,11 +94,9 @@ public class Login extends AppCompatActivity {
 
                 String temp = pref.getString(email.getText().toString(),"");
 
-
                 if(!temp.equals("")){
                     //해당 이메일 주소로 저장된 게 있으면 여기로 와서 이메일과 비밀번호를 각각 저장해준다.
                     isRegistered = true;
-                    warning_noEmail_registered.setVisibility(View.INVISIBLE);
                     savedEmail = email.getText().toString();
                     savedPassword = temp;
 
@@ -106,7 +104,7 @@ public class Login extends AppCompatActivity {
                 }else{
                     //아무 것도 없으면 해당하는 이메일이 없다 = 가입해야 한다 식으로 가야할 듯
                     isRegistered = false;
-                   // warning_noEmail_registered.setVisibility(View.VISIBLE);
+
                 }
 
 
@@ -148,12 +146,15 @@ public class Login extends AppCompatActivity {
             public void onClick(View view) {
                 if(isPasswordSame && isRegistered) {
 
+                    editor.putString("currentUser",savedEmail);
+                    //유저 관리창에 현재 유저 이메일을 저장한다. 다른 액티비티에서 모두 이 이메일을 불러와서 정보를 가져오게 된다.
                     SharedPreferences userPref = getSharedPreferences(savedEmail,MODE_PRIVATE);
                     String nickname = userPref.getString("nickname","");
                     Toast.makeText(Login.this, nickname+"님 환영합니다", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getApplicationContext(), DrawerTap.class);
                     startActivity(intent);
                     finish();
+
                 }else{
                     Toast.makeText(Login.this, "존재하지 않는 계정이거나 비밀번호가 올바르지 않습니다", Toast.LENGTH_SHORT).show();
                 }

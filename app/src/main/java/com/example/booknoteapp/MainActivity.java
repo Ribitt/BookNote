@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                 if(position!=RecyclerView.NO_POSITION){//노 포지션이라고 안나오면 진행한다.
                     Dictionary_reading dict = mList.get(position);
 
-                    Intent intentEdit = new Intent(getApplicationContext(), AddBook_toReading.class);
+                    Intent intentEdit = new Intent(getApplicationContext(), AddBook.class);
                     intentEdit.putExtra("dict", dict);
                     startActivityForResult(intentEdit,REQUEST_EDIT_BOOK);
                 }
@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         switch (i) {
                                             case 0:
-                                                Intent intent = new Intent(getApplicationContext(), AddBook_toReading.class);
+                                                Intent intent = new Intent(getApplicationContext(), AddBook.class);
                                                 startActivityForResult(intent,REQUEST_ADD_BOOK);
                                                 break;
                                             case 1:

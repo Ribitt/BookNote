@@ -1,7 +1,6 @@
 package com.example.booknoteapp;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -198,7 +197,7 @@ public class Drawer_interested extends AppCompatActivity {
                                         public void onClick(DialogInterface dialogInterface, int i) {
                                             switch (i) {
                                                 case 0:
-                                                    Intent intent = new Intent(getApplicationContext(), AddBook_toReading.class);
+                                                    Intent intent = new Intent(getApplicationContext(), AddBook.class);
                                                     startActivity(intent);
                                                     break;
                                                 case 1:

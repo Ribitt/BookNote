@@ -49,7 +49,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class AddBook_toReading extends AppCompatActivity {
+public class AddBook extends AppCompatActivity {
     // private final int MY_PERMISSIONS_REQUEST_CAMERA = 1001;
 
     //현재시간 가져오는 메소드
@@ -65,26 +65,31 @@ public class AddBook_toReading extends AppCompatActivity {
 
     Bitmap backBitmap;
 
+    //책 상태
+    Spinner status_spinner;
     boolean read =true;
     boolean reading = false;
     boolean interested = false;
+    String status = "read";
+    //책 상태
+
+    Boolean isStatusSelected=false;
 
     ////이미지/카메라 받아오기
     private static final int PICK_FROM_ALBUM =185;
     private static final int PICK_FROM_CAMERA = 195;
     private File tempFile;
     String currentPhotoPath;
+    Bitmap coverBitmap;
     ////이미지/카메라 받아오기
 
     ImageView imageV_addBook_addBookCover;
     EditText et_title;
+    EditText et_author;
 
     LinearLayout layout_reading;
     LinearLayout layout_read;
     LinearLayout layout_interested;
-
-    Spinner status_spinner;
-    Boolean isStatusSelected=false;
 
     TextView tv_addBookCover;
     EditText et_addBook_read_ALineReview;
@@ -100,7 +105,7 @@ public class AddBook_toReading extends AppCompatActivity {
     SharedPreferences pref;
     SharedPreferences.Editor editor;
 
-    ArrayList<Dictionary_read> readBookList=null;
+    ArrayList<Dictionary_book> readBookList= new ArrayList<>();
 
 
     private final int CAMERA_REQUEST = 19;
@@ -179,6 +184,7 @@ public class AddBook_toReading extends AppCompatActivity {
 
         //입력창 초기화
         et_title = findViewById(R.id.et_addBook_title);
+        et_author = findViewById(R.id.et_addBook_author);
 
         rating_addBook_read = findViewById(R.id.rating_addBook_read);
         et_addBook_read_ALineReview = findViewById(R.id. et_addBook_read_ALineReview);
@@ -213,6 +219,7 @@ public class AddBook_toReading extends AppCompatActivity {
                         reading = false;
                         read=true;
                         interested =false;
+                        status = "read";
                         layout_reading.setVisibility(View.INVISIBLE);
                         layout_read.setVisibility(View.VISIBLE);
                         layout_interested.setVisibility(View.INVISIBLE);
@@ -222,6 +229,7 @@ public class AddBook_toReading extends AppCompatActivity {
                         reading = true;
                         read=false;
                         interested =false;
+                        status ="reading";
                         layout_reading.setVisibility(View.VISIBLE);
                         layout_read.setVisibility(View.INVISIBLE);
                         layout_interested.setVisibility(View.INVISIBLE);
@@ -231,6 +239,7 @@ public class AddBook_toReading extends AppCompatActivity {
                         reading = false;
                         read=false;
                         interested =true;
+                        status ="interested";
                         layout_reading.setVisibility(View.INVISIBLE);
                         layout_read.setVisibility(View.INVISIBLE);
                         layout_interested.setVisibility(View.VISIBLE);
@@ -253,7 +262,7 @@ public class AddBook_toReading extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                DatePickerDialog dialog = new DatePickerDialog(AddBook_toReading.this, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog dialog = new DatePickerDialog(AddBook.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int date) {
 
@@ -267,16 +276,16 @@ public class AddBook_toReading extends AppCompatActivity {
 
             }
         });
-        //다 읽은 날짜 클릭 리스너
+        /////////////////////////////////다 읽은 날짜 클릭 리스너
 
 
-        //읽고 있는 책 마지막으로 읽은 날 클릭 리스너
+        //////////////////////////////읽고 있는 책 마지막으로 읽은 날 클릭 리스너
 
         tv_addBook_reading_lastDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                DatePickerDialog dialog = new DatePickerDialog(AddBook_toReading.this, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog dialog = new DatePickerDialog(AddBook.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int date) {
 
@@ -306,104 +315,69 @@ public class AddBook_toReading extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                if(!et_title.getText().toString().equals("") && !et_author.getText().toString().equals("")){
+                    /////////////////////////////////////////////////////////////////////////////////////////이러면 책을 저장하고 어쩌고를 할 수 있다. 아니라면 썩 꺼져라
 
-                if(et_title.getText().toString().equals("")){
-                    Toast.makeText(AddBook_toReading.this, "책 제목을 입력해주세요", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(getApplicationContext(), DrawerTap.class);
+                    //필수는 제목이랑 저자
+                    Dictionary_book dictionary_book = new Dictionary_book(status,et_title.getText().toString(),et_author.getText().toString());
 
-
-                }else if(imageV_addBook_addBookCover.getBackground().toString()=="android.graphics.drawable.ColorDrawable@e37edef"){
-                    //이미지가 없는 경우에도 하고 싶은데 어떻게 잡아내야 할지 모르겠다.
-                   // Toast.makeText(AddBook_toReading.this,"지금 이미지 경로"+btn_addBook_addBookCover.getBackground(),Toast.LENGTH_LONG).show();
-                }
-                else{
-                    //찍은 사진 크기가 너~~무 커서 넘기다 오류나니까 공부할것
                     if(reading){
-                        Intent intent;
-                        intent = new Intent(getApplicationContext(), MainActivity.class);
-                        intent.putExtra("title", et_title.getText().toString());
-                        //이미지 백그라운드에 있는 드로어블 이미지를 비트맵으로 가져오기
-                        Bitmap readCover = backBitmap;
-                        //비트맵 리소스 지정 코드
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        //스트림이 무슨 뜻인지 모르겠네
-                        readCover.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                        byte[] byteArray = stream.toByteArray();
-                        intent.putExtra("image", byteArray);
-                        setResult(RESULT_OK,intent);
-                        finish();
+
+
                     }else if(read) {
 
-                        Intent intent = new Intent(getApplicationContext(), DrawerTap.class);
-                        Dictionary_read dictionary_read = new Dictionary_read(et_title.getText().toString(),tv_addBook_read_endDate.getText().toString(),
-                                rating_addBook_read.getRating(),et_addBook_read_ALineReview.getText().toString());
-
-                        //저장된 어레이를 가져오고
-                        getPrefToArray().add(0,dictionary_read);
-                        //어레이에 추가하고
-                       // readBookList.add(dictionary_read);
-                       // Toast.makeText(AddBook_toReading.this, "여기까지 온다",Toast.LENGTH_LONG).show();
-                        Log.d("오나안오나", "일단 찍힘");
-                        //다시 저장
-                        saveArrayToPref(readBookList);
-
-                       startActivity(intent);
-                       finish();
-
-//                        intent.putExtra("title", et_title.getText().toString());
-//                        intent.putExtra("rating", rating_addBook_read.getRating());
-//                        intent.putExtra("review", et_addBook_read_ALineReview.getText().toString());
-//                        intent.putExtra("endDate", tv_addBook_read_endDate.getText().toString());
-//                        Bitmap readCover = backBitmap;
-//                        //이미지 소스를 비트맵 소스로 바꾸기
-//                        // Bitmap readCover = ((BitmapDrawable) btn_addBook_addBookCover.getBackground()).getBitmap();
-//                        //백그라운드에 있는 드로어블 이미지를 비트맵으로 가져오기
-//                        //비트맵 리소스 지정 코드
-//                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//                        //스트림이 무슨 뜻인지 모르겠네
-//                        readCover.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-//                        byte[] byteArray = stream.toByteArray();
-//                        intent.putExtra("image", byteArray);
-//                        // intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-
+                        dictionary_book.setFinishedDate(tv_addBook_read_endDate.getText().toString());
+                        dictionary_book.setRating(rating_addBook_read.getRating());
+                        dictionary_book.setReview( et_addBook_read_ALineReview.getText().toString());
+                        dictionary_book.setBookCover(coverBitmap);
 
                     }else if(interested){
-                        Intent intent = new Intent(getApplicationContext(), Drawer_interested.class);
-                        intent.putExtra("title", et_title.getText().toString());
-                        intent.putExtra("memo", et_addBook_interested_memo.getText().toString());
-                        Bitmap readCover = backBitmap;
-                        //이미지 소스를 비트맵 소스로 바꾸기
-                        // Bitmap readCover = ((BitmapDrawable) btn_addBook_addBookCover.getBackground()).getBitmap();
-                        //백그라운드에 있는 드로어블 이미지를 비트맵으로 가져오기
-                        //비트맵 리소스 지정 코드
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        //스트림이 무슨 뜻인지 모르겠네
-                        readCover.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                        byte[] byteArray = stream.toByteArray();
-                        intent.putExtra("image", byteArray);
-                        startActivity(intent);
-
+                        dictionary_book.setMemo(et_addBook_interested_memo.getText().toString());
                     }
+
+                    //쉐어드에 저장된 어레이 리스트를 가져온 다음에 맨 위에 지금 리스트를 넣어주기
+                    getPrefToArray();
+                    readBookList.add(0,dictionary_book);
+                    saveBookArrayToPref(readBookList);
+
+                    startActivity(intent);
+                    finish();
+                    /////////////////////////////////////////////////////////////////////////////////////////////////////책 저장하기 완료 
+            }else{
+                    ///////////////////////////////////////////////////책 제목이나 저자를 입력하지 않은 경우에는 넘어갈 수 없음.
+                if(et_title.getText().toString().equals("")){
+                    Toast.makeText(AddBook.this,"책 제목을 입력해주세요",Toast.LENGTH_LONG);
+                }else if(et_author.getText().toString().equals("")){
+                    Toast.makeText(AddBook.this,"저자를 입력해주세요",Toast.LENGTH_LONG);
                 }
+            }
+
 
             }
         });
+        ////////////////////////////확인 버튼 눌렀을 때 끝
 
 
 
     }//이벤트 리스너 끝
 
     ///쉐어드 프리퍼런스 가져와서 어레이 리스트로 바꿔주기
-    private ArrayList<Dictionary_read> getPrefToArray() {
+    private void getPrefToArray() {
         Gson gson = new Gson();
-        String json = pref.getString("bookList","EMPTY");
-        Type type = new TypeToken<ArrayList<Dictionary_read>>() {
-        }.getType();
-        readBookList = gson.fromJson(json,type);
-        Log.d("들어오는지 확인", json);
-     //   Log.d("대체 어레이 리스트가 존재는 하는지 확인 ", String.valueOf(getArrayList.size()));
-      //  Log.d("대체 어레이 리스트가 존재는 하는지 확인 ", getArrayList.get(0).getTitle());
+        String json = pref.getString("books","EMPTY");
+        if(!json.equals("EMPTY")){
+            Type type = new TypeToken<ArrayList<Dictionary_book>>() {
+            }.getType();
+            readBookList = gson.fromJson(json,type);
+            Log.d("들어오는지 확인", json);
+            //   Log.d("대체 어레이 리스트가 존재는 하는지 확인 ", String.valueOf(getArrayList.size()));
+            //  Log.d("대체 어레이 리스트가 존재는 하는지 확인 ", getArrayList.get(0).getTitle());
+        }else{
 
-    return readBookList;
+        }
+
+
     }
     ///쉐어드 프리퍼런스 가져와서 어레이 리스트로 바꿔주기 끝
 
@@ -413,6 +387,13 @@ public class AddBook_toReading extends AppCompatActivity {
         Gson gson = new Gson();
         String json = gson.toJson(arrayList);
         editor.putString("bookList",json);
+        editor.apply();
+    }
+
+    private void saveBookArrayToPref(ArrayList<Dictionary_book> arrayList) {
+        Gson gson = new Gson();
+        String json = gson.toJson(arrayList);
+        editor.putString("books",json);
         editor.apply();
     }
 
@@ -436,7 +417,7 @@ public class AddBook_toReading extends AppCompatActivity {
                         //카메라 불러오는 메소드
                         camGalleryPermissionCheck(); //카메라,앨범 권한이 승인돼있는지 확인하는 메소드
 
-                        AlertDialog.Builder builder = new AlertDialog.Builder(AddBook_toReading.this);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(AddBook.this);
 
                         builder.setTitle("이미지 추가")
                                 .setItems(cameraOrGallery, new DialogInterface.OnClickListener() {
@@ -484,14 +465,14 @@ public class AddBook_toReading extends AppCompatActivity {
                 photoFile = createImageFile();
 
             }catch(IOException e){
-                Toast.makeText(AddBook_toReading.this, "이미치 처리 오류 발생. 다시 시도해주세요",Toast.LENGTH_LONG).show();
+                Toast.makeText(AddBook.this, "이미치 처리 오류 발생. 다시 시도해주세요",Toast.LENGTH_LONG).show();
                 finish();
                 e.printStackTrace();
             }
 
             if(photoFile!=null){
                 //
-                Uri photoURI = FileProvider.getUriForFile(AddBook_toReading.this,
+                Uri photoURI = FileProvider.getUriForFile(AddBook.this,
                         "com.example.android.fileprovider",
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
@@ -500,7 +481,7 @@ public class AddBook_toReading extends AppCompatActivity {
 
 
         }else{
-            Toast.makeText(AddBook_toReading.this,"사용할 수 있는 카메라가 없습니다",Toast.LENGTH_LONG).show();
+            Toast.makeText(AddBook.this,"사용할 수 있는 카메라가 없습니다",Toast.LENGTH_LONG).show();
         }
     }
     //////////사진 찍기
@@ -593,6 +574,7 @@ public class AddBook_toReading extends AppCompatActivity {
 
 
 
+
     //찍거나 갤러리에서 가져온 사진 이미지 크기 줄여서 넣기
     private void setPic(){
         //사진 들어갈 자리 크기를 구한다
@@ -618,6 +600,7 @@ public class AddBook_toReading extends AppCompatActivity {
         Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
         imageV_addBook_addBookCover.setImageBitmap(bitmap);
         tv_addBookCover.setText("");
+        coverBitmap = bitmap;
 
     }
     //찍어온 사진 이미지 크기 줄여서 넣기
@@ -631,16 +614,16 @@ public class AddBook_toReading extends AppCompatActivity {
         PermissionListener permissionListener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {
-                Toast.makeText(AddBook_toReading.this,"Permission Granted",Toast.LENGTH_LONG).show();
+                Toast.makeText(AddBook.this,"Permission Granted",Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-                Toast.makeText(AddBook_toReading.this, "Permission Denied\n" +deniedPermissions.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(AddBook.this, "Permission Denied\n" +deniedPermissions.toString(), Toast.LENGTH_LONG).show();
             }
         };
 
-        TedPermission.with(AddBook_toReading.this)
+        TedPermission.with(AddBook.this)
                 .setPermissionListener(permissionListener)
                 .setRationaleMessage("책 표지를 직접 입력하려면 카메라, 갤러리 접근 권한이 필요합니다.")
                 .setDeniedMessage("책 표지를 직접 입력하시려면 \n[설정]-[권한]에서 권한을 승인해주세요")

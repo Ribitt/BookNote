@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class Drawer_read extends AppCompatActivity {
 
     ////////////리사이클러뷰
-    ArrayList<Dictionary_read> mList = new ArrayList<>();
+    ArrayList<Dictionary_book> mList = new ArrayList<>();
     Dictionary_read dic;
     RecyclerView recyclerView;
     Adapter_read adapter_read;
@@ -219,7 +219,7 @@ public class Drawer_read extends AppCompatActivity {
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         switch (i) {
                                             case 0:
-                                                Intent intent = new Intent(getApplicationContext(), AddBook_toReading.class);
+                                                Intent intent = new Intent(getApplicationContext(), AddBook.class);
                                                 startActivity(intent);
                                                 break;
                                             case 1:

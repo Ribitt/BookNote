@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +18,6 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -37,12 +32,15 @@ public class Fragment_read extends Fragment {
 
     private RecyclerView recyclerView_read;
     private Adapter_read adapter_read;
-    private ArrayList<Dictionary_read> sendArrayList = new ArrayList<>();
-    private ArrayList<Dictionary_read> getArrayList = new ArrayList<>();
-    private Dictionary_read dic;
+    private ArrayList<Dictionary_book> sendArrayList = new ArrayList<>();
+    private ArrayList<Dictionary_book> getArrayList = new ArrayList<>();
+
     ViewGroup rootView;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
+
+    private ArrayList<Dictionary_book> bookArrayList = new ArrayList<>();
+
 
     Button btn_addBook;
     CharSequence[] list_howToAddBook = {"직접 입력","책 검색하기","바코드 스캔"};
@@ -52,9 +50,20 @@ public class Fragment_read extends Fragment {
                              Bundle savedInstanceState) {
         rootView = (ViewGroup)inflater.inflate(R.layout.fragment_read,container,false);
 
+
+        initialize();
+        allListener();
+
+
+        return rootView;
+    }//온 크리에이트뷰 끝
+
+
+    //이니셜라이즈
+    private void initialize() {
+
         recyclerView_read = (RecyclerView)rootView.findViewById(R.id.recycler_read);
         adapter_read = new Adapter_read(getArrayList);
-
 
         recyclerView_read.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView_read.setAdapter(adapter_read);
@@ -62,14 +71,8 @@ public class Fragment_read extends Fragment {
         pref = this.getActivity().getSharedPreferences("book",this.getActivity().MODE_PRIVATE);
         editor = pref.edit();
 
-        allListener();
-
-
-
-
-
-        return rootView;
-    }//온 크리에이트뷰 끝
+    }
+    //이니셜라이즈 끝끝
 
     private void allListener() {
 
@@ -88,18 +91,18 @@ public class Fragment_read extends Fragment {
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         switch (i) {
                                             case 0:
-                                                Intent intent = new Intent(rootView.getContext(), AddBook_toReading.class);
+                                                Intent intent = new Intent(rootView.getContext(), AddBook.class);
                                                 startActivity(intent);
                                                 break;
                                             case 1:
                                                 Toast.makeText(rootView.getContext(),list_howToAddBook[1]+"를 골랐습니다.",Toast.LENGTH_LONG).show();
-                                                for(int j=0; j<5; j++){
-                                                    dic = new Dictionary_read("김지은입니다",
-                                                            "2020.8.4",(float) 4.5, "한줄 평이 들어가는 자리");
-                                                    sendArrayList.add(dic);
-                                                }
-                                                Toast.makeText(rootView.getContext(),String.valueOf(sendArrayList.size()),Toast.LENGTH_LONG).show();
-                                                saveArrayToPref(sendArrayList);
+//                                                for(int j=0; j<5; j++){
+//                                                    dic = new Dictionary_read("김지은입니다",
+//                                                            "2020.8.4",(float) 4.5, "한줄 평이 들어가는 자리");
+//                                                    sendArrayList.add(dic);
+//                                                }
+//                                                Toast.makeText(rootView.getContext(),String.valueOf(sendArrayList.size()),Toast.LENGTH_LONG).show();
+//                                                saveArrayToPref(sendArrayList);
                                                 //일단 무작위로 5개의 리사이클러뷰 데이터를 만들어서 어레이 리스트에 집어 넣는다
 
 
@@ -161,19 +164,26 @@ public class Fragment_read extends Fragment {
         editor.apply();
     }
 
+
     private void getPrefToArray() {
         Gson gson = new Gson();
-        String json = pref.getString("bookList","EMPTY");
-        Type type = new TypeToken<ArrayList<Dictionary_read>>() {
+        String json = pref.getString("books","EMPTY");
+        Type type = new TypeToken<ArrayList<Dictionary_book>>() {
         }.getType();
-        getArrayList = gson.fromJson(json,type);
-        Log.d("들어오는지 확인", json);
-        Log.d("대체 어레이 리스트가 존재는 하는지 확인 ", String.valueOf(getArrayList.size()));
-        Log.d("대체 어레이 리스트가 존재는 하는지 확인 ", getArrayList.get(0).getTitle());
-        adapter_read = new Adapter_read(getArrayList);
+        ArrayList<Dictionary_book> temp = new ArrayList<>();
+        temp = gson.fromJson(json,type);
+        for(int i =0; i<temp.size(); i++){
+            if(temp.get(i).status.equals("read")){
+                bookArrayList.add(temp.get(i));
+            }
+        }
+
+//        Log.d("들어오는지 확인", json);
+//        Log.d("대체 어레이 리스트가 존재는 하는지 확인 ", String.valueOf(getArrayList.size()));
+//        Log.d("대체 어레이 리스트가 존재는 하는지 확인 ", getArrayList.get(0).getTitle());
+        adapter_read = new Adapter_read(bookArrayList);
         recyclerView_read.setAdapter(adapter_read);
         adapter_read.notifyDataSetChanged();
-
 
     }
 
