@@ -8,16 +8,28 @@ import androidx.appcompat.widget.Toolbar;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.se.omapi.Session;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Properties;
 import java.util.Random;
 import java.util.regex.Pattern;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 public class SignUp extends AppCompatActivity {
 
@@ -60,6 +72,11 @@ public class SignUp extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+        .permitDiskReads()
+        .permitDiskWrites()
+        .permitNetwork().build());
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.app_toolbar);
         toolbar.setTitleTextColor(getResources().getColor(R.color.green));
@@ -169,6 +186,7 @@ public class SignUp extends AppCompatActivity {
 
                   //형식에 맞는 이메일 주소인지 확인한다
                  if(checkEmail(email.getText().toString())){
+                    // gmailSend(email.getText().toString(),certNum);
                      Toast.makeText(SignUp.this, "인증 번호를 전송했습니다", Toast.LENGTH_SHORT).show();
                      makeCertNum();
                      et_certNum.setHint(certNum);
@@ -342,6 +360,51 @@ public class SignUp extends AppCompatActivity {
 
     }
     //랜덤한 인증번호 만들기 메소드 끝
+
+    //이메일 보내기
+    public static void gmailSend(String userEmail, String certNum){
+        final  String user = "bittnuri@gmail.com";
+        final String password = "asdf0528"; //내 계정과 비밀번호
+
+        Properties prop = new Properties();
+        prop.put("mail.smtp.host","smtp.gmail.com");
+        prop.put("mail.smtp.port",465);
+        prop.put("mail.smtp.auth","true");
+        prop.put("mail.smtp.ssl.enable","true");
+        prop.put("mail.smtp.ssl.trust","smtp.gmail.com");
+
+
+       javax.mail.Session session = javax.mail.Session.getDefaultInstance(prop,new javax.mail.Authenticator(){
+            protected PasswordAuthentication getPasswordAuthentication() {
+
+                return new PasswordAuthentication(user,password);
+            }
+        });
+
+       try{
+           MimeMessage message = new MimeMessage(session);
+           message.setFrom(new InternetAddress(user));
+
+           message.addRecipients(Message.RecipientType.TO, String.valueOf(new InternetAddress(userEmail)));
+
+           message.setSubject("[BookNoteApp] 인증번호");
+
+           message.setText("BookNoteApp을 사용하기 위해 인증번호를 입력해주세요./n" +
+                   "인증번호 : "+certNum);
+
+           Transport.send(message);
+           Log.d("이메일이 잘 갔는지 보겠습니다", "잘 간듯");
+
+       }catch (AddressException e){
+           e.printStackTrace();
+       }catch (MessagingException e){
+           e.printStackTrace();
+       }
+
+
+    }
+
+    //이메일 보내기끝
 
     //이메일 형식 체커
     public static final Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile(

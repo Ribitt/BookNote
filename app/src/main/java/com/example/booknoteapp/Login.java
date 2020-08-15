@@ -9,7 +9,10 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +22,7 @@ public class Login extends AppCompatActivity {
     EditText password;
     Button loginBtn;
     Button signUpBtn;
+    CheckBox checkBox_autoLogin;
 
     TextView warning_noEmail_registered;
 
@@ -31,6 +35,7 @@ public class Login extends AppCompatActivity {
 
     Boolean isRegistered =true;
     Boolean isPasswordSame=false;
+
 
     boolean isKeyboardShowing = false;
     int keypadBaseHeight = 0;
@@ -47,10 +52,29 @@ public class Login extends AppCompatActivity {
 
         initializer();
         allClickListener();
+        autoLogin();
 
 
 
     }
+
+    private void autoLogin() {
+
+        Toast.makeText(Login.this, pref.getBoolean("autoLogin",false)+"님 환영합니다", Toast.LENGTH_SHORT).show();
+
+        if(pref.getBoolean("autoLogin",false)){
+            String autoLogin = pref.getString("currentUser","");
+            SharedPreferences userPref = getSharedPreferences(autoLogin,MODE_PRIVATE);
+            String nickname = userPref.getString("nickname","");
+              Intent intent = new Intent(getApplicationContext(), DrawerTap.class);
+             startActivity(intent);
+            Toast.makeText(Login.this, nickname+"님 환영합니다", Toast.LENGTH_SHORT).show();
+              finish();
+        }
+
+
+    }
+
 
 
     private void initializer() {
@@ -66,9 +90,30 @@ public class Login extends AppCompatActivity {
         loginBtn = findViewById(R.id.btn_login_login);
         signUpBtn = findViewById(R.id.btn_login_signUp);
         warning_noEmail_registered = findViewById(R.id.tv_login_warningNoEmail);
+        checkBox_autoLogin = findViewById(R.id.checkbox_autoLogin);
     }
 
     private void allClickListener() {
+        //자동로그인 체크박스
+        checkBox_autoLogin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(isChecked){
+                    if(isPasswordSame && isRegistered) {
+                        //로그인할 수 있는 정보인데 자동 로그인 체크를 한 경우에만 신경쓰자
+                        editor.putBoolean("autoLogin",true);
+                        editor.commit();
+                        //유저 관리창에 현재 유저 이메일을 저장한다. 다른 액티비티에서 모두 이 이메일을 불러와서 정보를 가져오게 된다.
+                    }
+
+                }else{
+
+                }
+            }
+        });
+        //자동로그인 체크박스 끝
+
+
         //회원가입 버튼
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,10 +149,7 @@ public class Login extends AppCompatActivity {
                 }else{
                     //아무 것도 없으면 해당하는 이메일이 없다 = 가입해야 한다 식으로 가야할 듯
                     isRegistered = false;
-
                 }
-
-
 
             }
 
@@ -147,6 +189,7 @@ public class Login extends AppCompatActivity {
                 if(isPasswordSame && isRegistered) {
 
                     editor.putString("currentUser",savedEmail);
+                    editor.commit();
                     //유저 관리창에 현재 유저 이메일을 저장한다. 다른 액티비티에서 모두 이 이메일을 불러와서 정보를 가져오게 된다.
                     SharedPreferences userPref = getSharedPreferences(savedEmail,MODE_PRIVATE);
                     String nickname = userPref.getString("nickname","");
