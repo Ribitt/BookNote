@@ -10,7 +10,7 @@
         </item>
         <!--    <item name="colorAccent">@color/myRed</item>-->
         <!--    <item name="android:textColor">@color/myRed</item>-->
-
+        <item name="colorControlHighlight">@color/myYellow</item>
 
     </style>
 

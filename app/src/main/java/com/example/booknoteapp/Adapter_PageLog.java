@@ -11,7 +11,9 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -93,13 +95,20 @@ public class Adapter_PageLog extends RecyclerView.Adapter<Adapter_PageLog.pageLo
 
         @Override
         public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+
+           // itemView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.yellowGreen));
+
             MenuItem Edit = contextMenu.add(Menu.NONE, 1001, 1,"수정");
             MenuItem Delete = contextMenu.add(Menu.NONE, 1002, 2, "삭제");
             Edit.setOnMenuItemClickListener(onEditMenu);
             Delete.setOnMenuItemClickListener(onEditMenu);
 
 
+
         }
+
+
+
 
         private final MenuItem.OnMenuItemClickListener onEditMenu = new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -115,6 +124,7 @@ public class Adapter_PageLog extends RecyclerView.Adapter<Adapter_PageLog.pageLo
                         dialog.startP.setText(temp.getStartP());
                         dialog.endP.setText(temp.getEndP());
                         dialog.date.setText(temp.getDate());
+                      ///  itemView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.almostWhite));
 
                         break;
                     case 1002:
@@ -123,6 +133,7 @@ public class Adapter_PageLog extends RecyclerView.Adapter<Adapter_PageLog.pageLo
                         mList.remove(getAdapterPosition());
                         notifyItemRemoved(getAdapterPosition());
                         notifyDataSetChanged();
+                      //  itemView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.almostWhite));
 
                         break;
                 }

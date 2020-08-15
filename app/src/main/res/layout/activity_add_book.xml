@@ -212,7 +212,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginRight="5dp"
                 android:background="@color/yellowGreen"
-                android:text="독서 상태"
+                android:text="책장"
                 android:textSize="15sp"
                 android:gravity="center"
                 android:textColor="@color/myBlack"

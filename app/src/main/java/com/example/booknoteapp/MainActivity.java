@@ -200,6 +200,8 @@ public class MainActivity extends AppCompatActivity {
         btn_to_setting = (Button)findViewById(R.id.btn_to_setting);
         // 하단 메뉴바 버튼 선언 끝
         // 하단 메뉴바 클릭 이벤트
+
+
         btn_to_calendar.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
