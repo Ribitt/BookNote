@@ -72,6 +72,12 @@ public class AddBook extends AppCompatActivity {
     String status = "read";
     //책 상태
 
+    ArrayList<Dictionary_book> bookList = new ArrayList<>();
+
+    ArrayList<Dictionary_book> readList = new ArrayList<>();
+    ArrayList<Dictionary_book> readingList = new ArrayList<>();
+    ArrayList<Dictionary_book> interestedList = new ArrayList<>();
+
 
     ////이미지/카메라 받아오기
     private static final int PICK_FROM_ALBUM =185;
@@ -103,7 +109,7 @@ public class AddBook extends AppCompatActivity {
     SharedPreferences pref;
     SharedPreferences.Editor editor;
 
-    ArrayList<Dictionary_book> bookList = new ArrayList<>();
+
 
 
     private final int CAMERA_REQUEST = 19;
@@ -392,12 +398,19 @@ public class AddBook extends AppCompatActivity {
                     if(isAuthor){
                         Intent intent = new Intent(getApplicationContext(), DrawerTap.class);
 
+                        //책장 상태에 따라서 책 리스트를 가져온다 (읽은/읽을/읽는 중)
+                            getPrefToArray();
+
+                            //공통으로 꼭 들어가야 할 요소를 넣어준다
                             Dictionary_book dictionary_book = new Dictionary_book(status,et_title.getText().toString(),et_author.getText().toString());
+                            //책 커버 이미지가 있다면 이미지를 넣어준다.
                             if(coverBitmap!=null){
                                 dictionary_book.setBookCover(coverBitmap);
                             }
 
+                            //각 상태별로 다양한 내용을 더 넣어준다.
                             if(reading){
+
 
                             }else if(read) {
 
@@ -405,17 +418,16 @@ public class AddBook extends AppCompatActivity {
                                 dictionary_book.setRating(rating_addBook_read.getRating());
                                 dictionary_book.setReview( et_addBook_read_ALineReview.getText().toString());
 
-
                             }else if(interested){
 
                                 dictionary_book.setMemo(et_addBook_interested_memo.getText().toString());
                             }
 
-                            //쉐어드에 저장된 어레이 리스트를 가져온 다음에 맨 위에 지금 리스트를 넣어주기
-                            getPrefToArray();
+                            //추가할 내용을 다 더해준 리스트를 북리스트에 추가한 뒤에
                             bookList.add(0,dictionary_book);
+                            //쉐어드에 저장해준다.
                             saveBookArrayToPref(bookList);
-
+                            //이제 책 추가 액티비티는 종료
                             startActivity(intent);
                             finish();
                             ///////////////////////////////////////////////////////////////////////////////////////////////////책 저장하기 완료
@@ -441,7 +453,15 @@ public class AddBook extends AppCompatActivity {
     ///쉐어드 프리퍼런스 가져와서 어레이 리스트로 바꿔주기
     private void getPrefToArray() {
         Gson gson = new Gson();
-        String json = pref.getString("books","EMPTY");
+        String json ="EMPTY";
+        if(read){
+            json = pref.getString("read","EMPTY");
+        }else if(reading){
+           json = pref.getString("reading","EMPTY");
+        }else if(interested){
+            json = pref.getString("interested","EMPTY");
+        }
+
         if(!json.equals("EMPTY")){
             Type type = new TypeToken<ArrayList<Dictionary_book>>() {
             }.getType();
@@ -453,7 +473,6 @@ public class AddBook extends AppCompatActivity {
             // 내용이 없으면 가져오지 않음
         }
 
-
     }
     ///쉐어드 프리퍼런스 가져와서 어레이 리스트로 바꿔주기 끝
 
@@ -462,11 +481,22 @@ public class AddBook extends AppCompatActivity {
     private void saveBookArrayToPref(ArrayList<Dictionary_book> arrayList) {
         Gson gson = new Gson();
         String json = gson.toJson(arrayList);
-        editor.putString("books",json);
+        if(read){
+            editor.putString("read",json);
+        }else if(reading){
+            editor.putString("reading",json);
+        }else if(interested){
+            editor.putString("interested",json);
+        }
         editor.apply();
     }
 
     //어레이리스트 쉐어드에 저장하기 끝
+
+  
+
+
+
 
     @Override
     protected void onPostResume() {

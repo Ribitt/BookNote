@@ -37,36 +37,5 @@
         app:layout_constraintTop_toBottomOf="@+id/btn_readingD_bookcover"></TextView>
 
 
-    <LinearLayout
-        android:layout_width="90dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
-
-
-        app:layout_constraintTop_toBottomOf="@id/tv_readingD_bookTitle"
-        app:layout_constraintEnd_toEndOf="@+id/btn_readingD_bookcover"
-        app:layout_constraintStart_toStartOf="@+id/btn_readingD_bookcover">
-
-        <ImageButton
-            android:id="@+id/btn_reading_edit"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/empty_background"
-            android:src="@drawable/ic_edit_24px"
-            android:tint="@color/myBlack">
-
-        </ImageButton>
-
-        <ImageButton
-            android:id="@+id/btn_reading_delete"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/empty_background"
-            android:src="@drawable/ic_delete_24px"
-            android:tint="@color/myBlack" />
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

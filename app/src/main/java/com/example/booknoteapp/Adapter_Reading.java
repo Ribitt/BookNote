@@ -59,8 +59,6 @@ public class Adapter_Reading extends androidx.recyclerview.widget.RecyclerView.A
             //4. 뷰 홀더 생성자 내부에 뷰 객체 참조값을 넣어 초기화한다.
             bookCover = (ImageButton) itemView.findViewById(R.id.btn_readingD_bookcover);
             bookTitle = (TextView)itemView.findViewById(R.id.tv_readingD_bookTitle);
-            editBtn = (ImageButton) itemView.findViewById(R.id.btn_reading_edit);
-            deleteBtn = (ImageButton) itemView.findViewById(R.id.btn_reading_delete);
 
 
             /////////////커버에 롱클릭 이벤트로 다이얼로그 띄우기
@@ -119,16 +117,16 @@ public class Adapter_Reading extends androidx.recyclerview.widget.RecyclerView.A
                 }
             });
 
-
-            deleteBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int position = getAdapterPosition();
-                    readingArrayList.remove(position);
-                    notifyItemRemoved(position);
-                    notifyDataSetChanged();
-                }
-            });
+//
+//            deleteBtn.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    int position = getAdapterPosition();
+//                    readingArrayList.remove(position);
+//                    notifyItemRemoved(position);
+//                    notifyDataSetChanged();
+//                }
+//            });
 
 
 
@@ -142,7 +140,7 @@ public class Adapter_Reading extends androidx.recyclerview.widget.RecyclerView.A
     private void saveBookArrayToPref(ArrayList<Dictionary_book> arrayList) {
         Gson gson = new Gson();
         String json = gson.toJson(arrayList);
-        editor.putString("books",json);
+        editor.putString("reading",json);
         editor.apply();
     }
 
@@ -196,7 +194,7 @@ public class Adapter_Reading extends androidx.recyclerview.widget.RecyclerView.A
         }
        // holder.bookCover.setImageDrawable(readingItem.getBookCover());
         holder.bookTitle.setText(readingItem.getTitle());
-        holder.editBtn.setTag(holder.getAdapterPosition());
+//        holder.editBtn.setTag(holder.getAdapterPosition());
       //  holder.editBtn.setOnClickListener(editListener);
 
     }

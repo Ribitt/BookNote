@@ -124,22 +124,14 @@ public class Fragment_reading extends Fragment {
 
     private void getPrefToArray() {
         Gson gson = new Gson();
-        String json = pref.getString("books","EMPTY");
+        String json = pref.getString("reading","EMPTY");
         Type type = new TypeToken<ArrayList<Dictionary_book>>() {
         }.getType();
-        ArrayList<Dictionary_book> temp;
-        //매번 새롭게 안해주면 창 나갔다가 들어올때마다 추가된다.
-        readingBooksList.clear();
-        temp = gson.fromJson(json,type);
-        for(int i =0; i<temp.size(); i++){
-            if(temp.get(i).status.equals("reading")){
-                readingBooksList.add(temp.get(i));
-            }
+        if(!json.equals("EMPTY")){
+            readingBooksList= gson.fromJson(json,type);
         }
 
-//        Log.d("들어오는지 확인", json);
-//        Log.d("대체 어레이 리스트가 존재는 하는지 확인 ", String.valueOf(getArrayList.size()));
-//        Log.d("대체 어레이 리스트가 존재는 하는지 확인 ", getArrayList.get(0).getTitle());
+
         adapter_reading = new Adapter_Reading(readingBooksList);
         recyclerView_reading.setAdapter(adapter_reading);
         adapter_reading.notifyDataSetChanged();

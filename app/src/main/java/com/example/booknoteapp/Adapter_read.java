@@ -31,7 +31,7 @@ public class Adapter_read extends RecyclerView.Adapter<Adapter_read.readViewHold
         this.mList = mList;
     }
 
-    ArrayList<Dictionary_book> mList = new ArrayList<>();
+    ArrayList<Dictionary_book> mList;
 
     Context mContext;
     SharedPreferences pref;
@@ -105,7 +105,7 @@ public class Adapter_read extends RecyclerView.Adapter<Adapter_read.readViewHold
     private void saveBookArrayToPref(ArrayList<Dictionary_book> arrayList) {
         Gson gson = new Gson();
         String json = gson.toJson(arrayList);
-        editor.putString("books",json);
+        editor.putString("read",json);
         editor.apply();
     }
 

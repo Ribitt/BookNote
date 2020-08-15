@@ -130,20 +130,22 @@ public class Fragment_read extends Fragment {
         editor.apply();
     }
 
-
+/////읽은 책 목록 불러오기
     private void getPrefToArray() {
         Gson gson = new Gson();
-        String json = pref.getString("books","EMPTY");
+        String json = pref.getString("read","EMPTY");
         Type type = new TypeToken<ArrayList<Dictionary_book>>() {
         }.getType();
-        ArrayList<Dictionary_book> temp;
-        readBooksList.clear();
-        temp = gson.fromJson(json,type);
-        for(int i =0; i<temp.size(); i++){
-            if(temp.get(i).status.equals("read")){
-                readBooksList.add(temp.get(i));
-            }
+     //   ArrayList<Dictionary_book> temp;
+        if(!json.equals("EMPTY")){
+            readBooksList = gson.fromJson(json,type);
         }
+
+//        for(int i =0; i<temp.size(); i++){
+//            if(temp.get(i).status.equals("read")){
+//                readBooksList.add(temp.get(i));
+//            }
+//        }
 
 //        Log.d("들어오는지 확인", json);
 //        Log.d("대체 어레이 리스트가 존재는 하는지 확인 ", String.valueOf(getArrayList.size()));
@@ -151,8 +153,9 @@ public class Fragment_read extends Fragment {
         adapter_read = new Adapter_read(readBooksList);
         recyclerView_read.setAdapter(adapter_read);
         adapter_read.notifyDataSetChanged();
-
     }
+
+    ///읽은 책 목록 불러오기 끝
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
