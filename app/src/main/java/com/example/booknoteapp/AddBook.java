@@ -1,5 +1,6 @@
 package com.example.booknoteapp;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +27,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -55,12 +59,10 @@ public class AddBook extends AppCompatActivity {
     SimpleDateFormat mFormat = new SimpleDateFormat("yyyy.MM.dd");
     String time = mFormat.format(date);
     //현재시간 가져오는 메소드
-
     //달력
     Calendar cal = Calendar.getInstance();
     //달력
 
-    Bitmap backBitmap;
 
     //책 상태
     Spinner status_spinner;
@@ -70,7 +72,6 @@ public class AddBook extends AppCompatActivity {
     String status = "read";
     //책 상태
 
-    Boolean isStatusSelected=false;
 
     ////이미지/카메라 받아오기
     private static final int PICK_FROM_ALBUM =185;
@@ -207,7 +208,7 @@ public class AddBook extends AppCompatActivity {
         status_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                isStatusSelected=true;
+
                 switch (position){
 
                     case 0:
@@ -246,7 +247,7 @@ public class AddBook extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                isStatusSelected=false;
+
             }
         });
         //////////////////////////////책 상태 고르는 스피너 클릭 이벤트
@@ -311,44 +312,38 @@ public class AddBook extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if(!et_title.getText().toString().equals("") && !et_author.getText().toString().equals("")){
-                    /////////////////////////////////////////////////////////////////////////////////////////이러면 책을 저장하고 어쩌고를 할 수 있다. 아니라면 썩 꺼져라
+                ////////////////////////////////////////////////////////////////////////////////////////제목과 작가가 없다면 썩 꺼져라
 
-                    Intent intent = new Intent(getApplicationContext(), DrawerTap.class);
-                    //필수는 제목이랑 저자
-                    Dictionary_book dictionary_book = new Dictionary_book(status,et_title.getText().toString(),et_author.getText().toString());
+//
+//                    if(et_title.getText().toString().equals("")){
+//                    isTitle = false;
+//                }else{
+//                    isTitle = true;
+//                    Toast.makeText(AddBook.this,"제목 있음. 넘어갈 수 있음",Toast.LENGTH_LONG);
+//                }
+//
+//                if(et_author.getText().toString().equals("")){
+//                    isAuthor =false;
+//                }else{
+//                    isAuthor =true;
+//                }
 
-                    if(reading){
+//                    if(isTitle){
+//
+//                        if(isAuthor){
+//
+//                            Toast.makeText(AddBook.this,"둘 다 있음. 넘어갈 수 있음",Toast.LENGTH_LONG);
+////
+//
+//                        }else{
+//                            //Toast.makeText(AddBook.this,"작가를 입력해주세요",Toast.LENGTH_LONG);
+//                        }
+//
+//                    }else{
+//                        //Toast.makeText(AddBook.this,"책 제목을 입력해주세요",Toast.LENGTH_LONG);
+//                    }
+                ///////////////////////////////////////////////////책 제목이나 저자를 입력하지 않은 경우에는 넘어갈 수 없음.
 
-                        dictionary_book.setBookCover(coverBitmap);
-                    }else if(read) {
-
-                        dictionary_book.setFinishedDate(tv_addBook_read_endDate.getText().toString());
-                        dictionary_book.setRating(rating_addBook_read.getRating());
-                        dictionary_book.setReview( et_addBook_read_ALineReview.getText().toString());
-                        dictionary_book.setBookCover(coverBitmap);
-
-                    }else if(interested){
-                        dictionary_book.setBookCover(coverBitmap);
-                        dictionary_book.setMemo(et_addBook_interested_memo.getText().toString());
-                    }
-
-                    //쉐어드에 저장된 어레이 리스트를 가져온 다음에 맨 위에 지금 리스트를 넣어주기
-                    getPrefToArray();
-                    bookList.add(0,dictionary_book);
-                    saveBookArrayToPref(bookList);
-
-                    startActivity(intent);
-                    finish();
-                    /////////////////////////////////////////////////////////////////////////////////////////////////////책 저장하기 완료 
-            }else{
-                    ///////////////////////////////////////////////////책 제목이나 저자를 입력하지 않은 경우에는 넘어갈 수 없음.
-                if(et_title.getText().toString().equals("")){
-                    Toast.makeText(AddBook.this,"책 제목을 입력해주세요",Toast.LENGTH_LONG);
-                }else if(et_author.getText().toString().equals("")){
-                    Toast.makeText(AddBook.this,"저자를 입력해주세요",Toast.LENGTH_LONG);
-                }
-            }
 
 
             }
@@ -358,6 +353,91 @@ public class AddBook extends AppCompatActivity {
 
 
     }//이벤트 리스너 끝
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    Boolean isTitle=true;
+    Boolean isAuthor =false;
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()){
+            case android.R.id.home: {
+
+                return true;
+            }
+            case R.id.btn_done: {
+
+                if(et_title.getText().toString().equals("")){
+                    isTitle=false;
+                }else {
+                    isTitle=true;
+                }
+                if(et_author.getText().toString().equals("")){
+                    isAuthor =false;
+                }else{
+                    isAuthor= true;
+                }
+             ////////////////////////////////////////////작가와 저자를 모두 입력했는지 확인하기 위해 판별함
+
+                if(isTitle){
+
+                    if(isAuthor){
+                        Toast.makeText(this, "저장할 수 있습니다.", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(getApplicationContext(), DrawerTap.class);
+
+                            Dictionary_book dictionary_book = new Dictionary_book(status,et_title.getText().toString(),et_author.getText().toString());
+                            if(coverBitmap!=null){
+                                dictionary_book.setBookCover(coverBitmap);
+                            }
+
+                            if(reading){
+
+                            }else if(read) {
+
+                                dictionary_book.setFinishedDate(tv_addBook_read_endDate.getText().toString());
+                                dictionary_book.setRating(rating_addBook_read.getRating());
+                                dictionary_book.setReview( et_addBook_read_ALineReview.getText().toString());
+
+
+                            }else if(interested){
+
+                                dictionary_book.setMemo(et_addBook_interested_memo.getText().toString());
+                            }
+
+                            //쉐어드에 저장된 어레이 리스트를 가져온 다음에 맨 위에 지금 리스트를 넣어주기
+                            getPrefToArray();
+                            bookList.add(0,dictionary_book);
+                            saveBookArrayToPref(bookList);
+
+                            startActivity(intent);
+                            finish();
+                            ///////////////////////////////////////////////////////////////////////////////////////////////////책 저장하기 완료
+
+                    }else{
+                        Toast.makeText(this, "작가를 입력해주세요", Toast.LENGTH_LONG).show();
+                    }
+
+
+                }else{
+                    Toast.makeText(this, "제목을 입력해주세요", Toast.LENGTH_LONG).show();
+                }
+
+
+
+            }
+
+
+      }
+        return super.onOptionsItemSelected(item);
+    }
 
     ///쉐어드 프리퍼런스 가져와서 어레이 리스트로 바꿔주기
     private void getPrefToArray() {

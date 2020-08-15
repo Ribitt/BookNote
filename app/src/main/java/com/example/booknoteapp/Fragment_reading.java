@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -68,7 +69,7 @@ public class Fragment_reading extends Fragment {
         recyclerView_reading = (RecyclerView)rootView.findViewById(R.id.recycler_reading);
         adapter_reading = new Adapter_Reading(readingBooksList);
 
-        recyclerView_reading.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView_reading.setLayoutManager(new GridLayoutManager(getActivity(),3));
         recyclerView_reading.setAdapter(adapter_reading);
         btn_addBook = rootView.findViewById(R.id.btn_addBook);
         pref = this.getActivity().getSharedPreferences("book",this.getActivity().MODE_PRIVATE);

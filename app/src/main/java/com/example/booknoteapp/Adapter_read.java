@@ -65,7 +65,10 @@ public class Adapter_read extends RecyclerView.Adapter<Adapter_read.readViewHold
         holder.ratingBar.setRating(dic.getRating());
         holder.ALineReview.setText(dic.getReview());
         holder.endDate.setText(dic.getFinishedDate());
-        holder.bookCover.setImageBitmap(dic.getBookCover());
+        if(dic.bookCover!=null){
+            holder.bookCover.setImageBitmap(dic.getBookCover());
+        }
+
 
 
     }

@@ -125,8 +125,11 @@ public class Adapter_Reading extends androidx.recyclerview.widget.RecyclerView.A
         //실제 데이터를 뷰홀더의 아이템뷰에 표시해준다.
         Dictionary_book readingItem = readingArrayList.get(position);
 
+        if(readingItem.bookCover==null){
 
-        holder.bookCover.setImageBitmap(readingItem.getBookCover());
+        }else{
+            holder.bookCover.setImageBitmap(readingItem.getBookCover());
+        }
        // holder.bookCover.setImageDrawable(readingItem.getBookCover());
         holder.bookTitle.setText(readingItem.getTitle());
         holder.editBtn.setTag(holder.getAdapterPosition());

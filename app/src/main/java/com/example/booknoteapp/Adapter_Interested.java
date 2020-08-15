@@ -57,7 +57,10 @@ public class Adapter_Interested extends androidx.recyclerview.widget.RecyclerVie
 
         Dictionary_book dic = myList.get(position);
 
-        holder.bookCover.setImageBitmap(dic.getBookCover());
+        if(dic.bookCover!=null){
+            holder.bookCover.setImageBitmap(dic.getBookCover());
+        }
+
         holder.title.setText(dic.getTitle());
         holder.memo.setText(dic.getMemo());
 

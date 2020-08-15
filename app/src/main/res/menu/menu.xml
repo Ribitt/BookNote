@@ -6,6 +6,7 @@
     <item
         android:id="@+id/btn_done"
         android:title="완료"
+
         app:showAsAction="ifRoom"
         />
 </menu>
