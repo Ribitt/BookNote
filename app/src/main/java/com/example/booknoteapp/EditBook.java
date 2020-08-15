@@ -116,7 +116,7 @@ public class EditBook extends AppCompatActivity {
 
         rating_addBook_read = findViewById(R.id.rating_addBook_read);
         et_addBook_read_ALineReview = findViewById(R.id. et_addBook_read_ALineReview);
-        tv_addBook_read_endDate = findViewById(R.id.tv_addBook_read_endDate);
+        tv_addBook_read_endDate = findViewById(R.id.tv_addBook_read_finishedDate);
 
         tv_addBook_reading_lastDate =findViewById(R.id.tv_addBook_reading_lastDate);
 

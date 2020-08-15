@@ -21,8 +21,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -113,7 +111,7 @@ public class AddBook extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_book_to_reading);
+        setContentView(R.layout.activity_add_book);
 
         //////툴바 적용하기
         Toolbar toolbar = (Toolbar)findViewById(R.id.app_toolbar);
@@ -186,7 +184,7 @@ public class AddBook extends AppCompatActivity {
 
         rating_addBook_read = findViewById(R.id.rating_addBook_read);
         et_addBook_read_ALineReview = findViewById(R.id. et_addBook_read_ALineReview);
-        tv_addBook_read_endDate = findViewById(R.id.tv_addBook_read_endDate);
+        tv_addBook_read_endDate = findViewById(R.id.tv_addBook_read_finishedDate);
 
         tv_addBook_reading_lastDate =findViewById(R.id.tv_addBook_reading_lastDate);
 

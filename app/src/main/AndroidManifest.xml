@@ -129,7 +129,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Bookdetail_note_byPage" />
         </activity>
-        <activity android:name=".AddBook_toRead" />
         <activity
             android:name=".AddBook"
             android:configChanges="orientation|screenSize"

@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:id="@+id/activity_addBook_bookDetail"
+        android:id="@+id/layout_addBook_bookDetail"
         android:layout_width="185dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -75,7 +75,7 @@
         android:textColor="@color/myBlack"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_addBook_bookDetail"></TextView>
+        app:layout_constraintTop_toBottomOf="@+id/layout_addBook_bookDetail"></TextView>
 
     <LinearLayout
         android:id="@+id/linearLayout6"
@@ -248,7 +248,7 @@
             />
 
         <TextView
-            android:id="@+id/tv_addBook_read_endDate"
+            android:id="@+id/tv_addBook_read_finishedDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="15sp"
