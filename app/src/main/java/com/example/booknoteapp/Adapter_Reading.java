@@ -23,7 +23,7 @@ import java.util.ArrayList;
 public class Adapter_Reading extends androidx.recyclerview.widget.RecyclerView.Adapter<Adapter_Reading.readingViewHolder> {
 
     //1. 어레이 리스트 정하고 그 애는 일단 비어있다. 이 리스트는 딕셔너리 객체들이 들어간다.
-    ArrayList<Dictionary_reading> readingArrayList = null;
+    ArrayList<Dictionary_book> readingArrayList = null;
 
     View.OnClickListener editListener;
 
@@ -91,9 +91,10 @@ public class Adapter_Reading extends androidx.recyclerview.widget.RecyclerView.A
 
 
    //5. 어댑터의 상속자. 어레이 리스트를 받는다.
-    public Adapter_Reading(ArrayList<Dictionary_reading> mList, View.OnClickListener editListener) {
+    public Adapter_Reading(ArrayList<Dictionary_book> mList) {
         this.readingArrayList = mList;
-        this.editListener = editListener;
+        //, View.OnClickListener editListener
+      //  this.editListener = editListener;
     }
 
     @NonNull
@@ -122,14 +123,14 @@ public class Adapter_Reading extends androidx.recyclerview.widget.RecyclerView.A
     public void onBindViewHolder(@NonNull readingViewHolder holder, int position) {
 
         //실제 데이터를 뷰홀더의 아이템뷰에 표시해준다.
-        Dictionary_reading readingItem = readingArrayList.get(position);
+        Dictionary_book readingItem = readingArrayList.get(position);
 
 
         holder.bookCover.setImageBitmap(readingItem.getBookCover());
        // holder.bookCover.setImageDrawable(readingItem.getBookCover());
-        holder.bookTitle.setText(readingItem.getBookTitle());
+        holder.bookTitle.setText(readingItem.getTitle());
         holder.editBtn.setTag(holder.getAdapterPosition());
-        holder.editBtn.setOnClickListener(editListener);
+      //  holder.editBtn.setOnClickListener(editListener);
 
     }
 

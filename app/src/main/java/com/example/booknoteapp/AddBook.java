@@ -40,7 +40,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -105,7 +104,7 @@ public class AddBook extends AppCompatActivity {
     SharedPreferences pref;
     SharedPreferences.Editor editor;
 
-    ArrayList<Dictionary_book> readBookList= new ArrayList<>();
+    ArrayList<Dictionary_book> bookList = new ArrayList<>();
 
 
     private final int CAMERA_REQUEST = 19;
@@ -135,22 +134,21 @@ public class AddBook extends AppCompatActivity {
 //            Toast.makeText(this, "든 게 없음", Toast.LENGTH_LONG).show();
             //책 추가하기 버튼으로 이 화면을 부른 경우다
         }else{
-
 //            Toast.makeText(this, "어, 뭐가 왔는데", Toast.LENGTH_LONG).show();
             //책 수정하기 버튼으로 온 경우다
-            tv_addBookCover.setVisibility(View.INVISIBLE);
-
-            Dictionary_reading dic = intent.getParcelableExtra("dict");
-            //byte[] arr = intent.getByteArrayExtra("image");
-            //Bitmap image = BitmapFactory.decodeByteArray(arr, 0, arr.length);
-            Bitmap image = dic.getBookCover();
-            backBitmap = image;
-           // Drawable bookCover = new BitmapDrawable(image);
-            Drawable bookCover = new BitmapDrawable(image);
-            imageV_addBook_addBookCover.setBackground(bookCover);
-            //백그라운드는 드로어블밖에 지정이 안된다. 짜증
-            String title = dic.getBookTitle();
-            et_title.setText(title);
+//            tv_addBookCover.setVisibility(View.INVISIBLE);
+//
+//            Dictionary_reading dic = intent.getParcelableExtra("dict");
+//            //byte[] arr = intent.getByteArrayExtra("image");
+//            //Bitmap image = BitmapFactory.decodeByteArray(arr, 0, arr.length);
+//            Bitmap image = dic.getBookCover();
+//            backBitmap = image;
+//           // Drawable bookCover = new BitmapDrawable(image);
+//            Drawable bookCover = new BitmapDrawable(image);
+//            imageV_addBook_addBookCover.setBackground(bookCover);
+//            //백그라운드는 드로어블밖에 지정이 안된다. 짜증
+//            String title = dic.getBookTitle();
+//            et_title.setText(title);
             actionBar.setTitle("책 수정하기");
             btn_addBook_done.setText("수정하기");
         }
@@ -324,7 +322,7 @@ public class AddBook extends AppCompatActivity {
 
                     if(reading){
 
-
+                        dictionary_book.setBookCover(coverBitmap);
                     }else if(read) {
 
                         dictionary_book.setFinishedDate(tv_addBook_read_endDate.getText().toString());
@@ -333,13 +331,14 @@ public class AddBook extends AppCompatActivity {
                         dictionary_book.setBookCover(coverBitmap);
 
                     }else if(interested){
+                        dictionary_book.setBookCover(coverBitmap);
                         dictionary_book.setMemo(et_addBook_interested_memo.getText().toString());
                     }
 
                     //쉐어드에 저장된 어레이 리스트를 가져온 다음에 맨 위에 지금 리스트를 넣어주기
                     getPrefToArray();
-                    readBookList.add(0,dictionary_book);
-                    saveBookArrayToPref(readBookList);
+                    bookList.add(0,dictionary_book);
+                    saveBookArrayToPref(bookList);
 
                     startActivity(intent);
                     finish();
@@ -369,12 +368,12 @@ public class AddBook extends AppCompatActivity {
         if(!json.equals("EMPTY")){
             Type type = new TypeToken<ArrayList<Dictionary_book>>() {
             }.getType();
-            readBookList = gson.fromJson(json,type);
+            bookList = gson.fromJson(json,type);
             Log.d("들어오는지 확인", json);
             //   Log.d("대체 어레이 리스트가 존재는 하는지 확인 ", String.valueOf(getArrayList.size()));
             //  Log.d("대체 어레이 리스트가 존재는 하는지 확인 ", getArrayList.get(0).getTitle());
         }else{
-
+            // 내용이 없으면 가져오지 않음
         }
 
 
@@ -382,13 +381,6 @@ public class AddBook extends AppCompatActivity {
     ///쉐어드 프리퍼런스 가져와서 어레이 리스트로 바꿔주기 끝
 
     //어레이리스트 쉐어드에 저장하기
-
-    private void saveArrayToPref(ArrayList<Dictionary_read> arrayList) {
-        Gson gson = new Gson();
-        String json = gson.toJson(arrayList);
-        editor.putString("bookList",json);
-        editor.apply();
-    }
 
     private void saveBookArrayToPref(ArrayList<Dictionary_book> arrayList) {
         Gson gson = new Gson();

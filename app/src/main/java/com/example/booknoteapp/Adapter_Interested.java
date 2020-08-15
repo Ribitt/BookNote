@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class Adapter_Interested extends androidx.recyclerview.widget.RecyclerView.Adapter<Adapter_Interested.interestedViewHolder> {
 
-    ArrayList<Dictionary_interested> myList =null;
+    ArrayList<Dictionary_book> myList =null;
 
 
 
@@ -36,7 +36,7 @@ public class Adapter_Interested extends androidx.recyclerview.widget.RecyclerVie
 
 
 
-    public Adapter_Interested(ArrayList<Dictionary_interested> mList) {
+    public Adapter_Interested(ArrayList<Dictionary_book> mList) {
         this.myList = mList;
     }
 
@@ -55,9 +55,9 @@ public class Adapter_Interested extends androidx.recyclerview.widget.RecyclerVie
     @Override
     public void onBindViewHolder(@NonNull Adapter_Interested.interestedViewHolder holder, int position) {
 
-        Dictionary_interested dic = myList.get(position);
+        Dictionary_book dic = myList.get(position);
 
-        holder.bookCover.setImageDrawable(dic.getBookCover());
+        holder.bookCover.setImageBitmap(dic.getBookCover());
         holder.title.setText(dic.getTitle());
         holder.memo.setText(dic.getMemo());
 

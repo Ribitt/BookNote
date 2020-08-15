@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     RecyclerView mRecylerView = null;
     Adapter_Reading mAdapter = null;
-    ArrayList<Dictionary_reading> mList = new ArrayList<>();
+    ArrayList<Dictionary_book> mList = new ArrayList<>();
     Dictionary_reading dic;
     final int REQUEST_ADD_BOOK=134;
     final int REQUEST_EDIT_BOOK=290;
@@ -52,10 +52,10 @@ public class MainActivity extends AppCompatActivity {
 
             if(mAdapter.getItemCount()>0){ //뭐라도 하나 넣은 다음에 실행되어야 오류가 나지 않는다.
                 if(position!=RecyclerView.NO_POSITION){//노 포지션이라고 안나오면 진행한다.
-                    Dictionary_reading dict = mList.get(position);
+                    Dictionary_book dict = mList.get(position);
 
                     Intent intentEdit = new Intent(getApplicationContext(), AddBook.class);
-                    intentEdit.putExtra("dict", dict);
+                   // intentEdit.putExtra("dict", dict);
                     startActivityForResult(intentEdit,REQUEST_EDIT_BOOK);
                 }
 
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         ///////////////////////////////////////////////////리사이클러뷰
         mRecylerView = findViewById(R.id.recycler_reading);
         //리사이클러뷰에 어댑터 객체 지정
-        mAdapter = new Adapter_Reading(mList,editListener);
+        mAdapter = new Adapter_Reading(mList);
         mRecylerView.setAdapter(mAdapter);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
         mRecylerView.setLayoutManager(gridLayoutManager);
@@ -294,7 +294,7 @@ public class MainActivity extends AppCompatActivity {
             String title = data.getStringExtra("title");
             Dictionary_reading dict = new Dictionary_reading(image, title);
 
-            mList.add(dict);
+           // mList.add(dict);
             mAdapter.notifyDataSetChanged();
 
         }else if(resultCode==RESULT_OK && requestCode == REQUEST_EDIT_BOOK){
@@ -306,7 +306,7 @@ public class MainActivity extends AppCompatActivity {
                     String editTitle = data.getStringExtra("title");
                     Dictionary_reading editDict = new Dictionary_reading(editImage,editTitle);
 
-                    mList.set(position,editDict);
+                 //   mList.set(position,editDict);
                     mAdapter.notifyItemChanged(position);
                    // mAdapter.notifyDataSetChanged();
 

@@ -22,8 +22,8 @@ public class Drawer_interested extends AppCompatActivity {
 
     RecyclerView recyclerView = null;
     Adapter_Interested adapter = null;
-    ArrayList<Dictionary_interested> myList = new ArrayList<>();
-    Dictionary_interested dic;
+    ArrayList<Dictionary_book> myList = new ArrayList<>();
+    Dictionary_book dic;
 
 
     //책 추가 버튼
@@ -52,10 +52,10 @@ public class Drawer_interested extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        dic = new Dictionary_interested(getDrawable(R.drawable.book_habits), "아주 작은 습관의 힘", "진짜 유명해서 한 번 읽어보고 싶다. " +
-                "얼마나 재밌으면 사람들이 그렇게 추천을 하는걸까. " +
-                "이걸 읽으면 인생이 바뀌나? " +
-                "\n가격이 ");
+//        dic = new Dictionary_interested(getDrawable(R.drawable.book_habits), "아주 작은 습관의 힘", "진짜 유명해서 한 번 읽어보고 싶다. " +
+//                "얼마나 재밌으면 사람들이 그렇게 추천을 하는걸까. " +
+//                "이걸 읽으면 인생이 바뀌나? " +
+//                "\n가격이 ");
 
         for (int i = 0; i < 20; i++) {
             myList.add(dic);
@@ -178,7 +178,7 @@ public class Drawer_interested extends AppCompatActivity {
             String memo = intent.getExtras().getString("memo");
 
             Dictionary_interested dict = new Dictionary_interested(bookCover, title, memo);
-            myList.add(0, dict);
+          //  myList.add(0, dict);
             adapter.notifyItemInserted(0);
             adapter.notifyDataSetChanged();
             //데이터 수신 끝

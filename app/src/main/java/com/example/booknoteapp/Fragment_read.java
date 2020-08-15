@@ -32,14 +32,14 @@ public class Fragment_read extends Fragment {
 
     private RecyclerView recyclerView_read;
     private Adapter_read adapter_read;
-    private ArrayList<Dictionary_book> sendArrayList = new ArrayList<>();
-    private ArrayList<Dictionary_book> getArrayList = new ArrayList<>();
+//    private ArrayList<Dictionary_book> sendArrayList = new ArrayList<>();
+//    private ArrayList<Dictionary_book> getArrayList = new ArrayList<>();
 
     ViewGroup rootView;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
 
-    private ArrayList<Dictionary_book> bookArrayList = new ArrayList<>();
+    private ArrayList<Dictionary_book> readBooksList = new ArrayList<>();
 
 
     Button btn_addBook;
@@ -63,7 +63,7 @@ public class Fragment_read extends Fragment {
     private void initialize() {
 
         recyclerView_read = (RecyclerView)rootView.findViewById(R.id.recycler_read);
-        adapter_read = new Adapter_read(getArrayList);
+        adapter_read = new Adapter_read(readBooksList);
 
         recyclerView_read.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView_read.setAdapter(adapter_read);
@@ -96,49 +96,10 @@ public class Fragment_read extends Fragment {
                                                 break;
                                             case 1:
                                                 Toast.makeText(rootView.getContext(),list_howToAddBook[1]+"를 골랐습니다.",Toast.LENGTH_LONG).show();
-//                                                for(int j=0; j<5; j++){
-//                                                    dic = new Dictionary_read("김지은입니다",
-//                                                            "2020.8.4",(float) 4.5, "한줄 평이 들어가는 자리");
-//                                                    sendArrayList.add(dic);
-//                                                }
-//                                                Toast.makeText(rootView.getContext(),String.valueOf(sendArrayList.size()),Toast.LENGTH_LONG).show();
-//                                                saveArrayToPref(sendArrayList);
-                                                //일단 무작위로 5개의 리사이클러뷰 데이터를 만들어서 어레이 리스트에 집어 넣는다
 
-
-
-//                                                JSONArray jsonArray = null;
-//
-//                                                try {
-//                                                    jsonArray = new JSONArray();
-//                                                    for(int k=0 ; k<sendArrayList.size(); k++){
-//                                                        JSONObject jsonObject = new JSONObject(); //배열 내에 들어갈 json
-//                                                        jsonObject.put("bookCover",sendArrayList.get(i).bookCover);
-//                                                        jsonObject.put("title", sendArrayList.get(i).title);
-//                                                        jsonObject.put("date",sendArrayList.get(i).endDate);
-//                                                        jsonObject.put("rating",sendArrayList.get(i).rating);
-//                                                        jsonObject.put("review",sendArrayList.get(i).review);
-//                                                        jsonArray.put(jsonObject);
-//
-//                                                    }
-//
-//                                                }catch (JSONException e){
-//                                                    e.printStackTrace();
-//                                                }
-//                                                Log.d("JSON Test",jsonArray.toString());
-//                                                editor.putString("test",jsonArray.toString());
-//                                                editor.commit();
                                                 break;
                                             case 2:
                                                 Toast.makeText(rootView.getContext(),list_howToAddBook[2]+"을 골랐습니다.",Toast.LENGTH_LONG).show();
-
-//                                                for(int j=0; j<5; j++){
-//                                                    dic = new Dictionary_read("김지은입니다",
-//                                                            "2020.8.4",(float) 4.5, "자칭 진보면서 민주주의를 지향한다는 이들의 더럽고 허무한 이면");
-//                                                    getArrayList.add(dic);
-//                                                }
-//
-//                                                adapter_read.notifyDataSetChanged();
 
 
                                                 break;
@@ -170,18 +131,19 @@ public class Fragment_read extends Fragment {
         String json = pref.getString("books","EMPTY");
         Type type = new TypeToken<ArrayList<Dictionary_book>>() {
         }.getType();
-        ArrayList<Dictionary_book> temp = new ArrayList<>();
+        ArrayList<Dictionary_book> temp;
+        readBooksList.clear();
         temp = gson.fromJson(json,type);
         for(int i =0; i<temp.size(); i++){
             if(temp.get(i).status.equals("read")){
-                bookArrayList.add(temp.get(i));
+                readBooksList.add(temp.get(i));
             }
         }
 
 //        Log.d("들어오는지 확인", json);
 //        Log.d("대체 어레이 리스트가 존재는 하는지 확인 ", String.valueOf(getArrayList.size()));
 //        Log.d("대체 어레이 리스트가 존재는 하는지 확인 ", getArrayList.get(0).getTitle());
-        adapter_read = new Adapter_read(bookArrayList);
+        adapter_read = new Adapter_read(readBooksList);
         recyclerView_read.setAdapter(adapter_read);
         adapter_read.notifyDataSetChanged();
 
