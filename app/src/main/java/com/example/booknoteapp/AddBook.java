@@ -390,7 +390,6 @@ public class AddBook extends AppCompatActivity {
                 if(isTitle){
 
                     if(isAuthor){
-                        Toast.makeText(this, "저장할 수 있습니다.", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(getApplicationContext(), DrawerTap.class);
 
                             Dictionary_book dictionary_book = new Dictionary_book(status,et_title.getText().toString(),et_author.getText().toString());

@@ -14,7 +14,7 @@
         android:padding="2dp"
         android:scaleType="fitCenter"
 
-        app:srcCompat="@drawable/book_jieun" />
+        app:srcCompat="@drawable/ic_book" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,19 +23,43 @@
         android:padding="15dp"
         android:paddingLeft="20dp">
 
-
-        <TextView
-            android:id="@+id/tv_interestedD_bookTitle"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="김지은입니다"
-            android:textStyle="bold"
-            android:textSize="16sp"
+            android:orientation="horizontal">
 
-            ></TextView>
+            <TextView
+                android:id="@+id/tv_interestedD_bookTitle"
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="김지은입니다"
+                android:textStyle="bold"
+                android:textSize="16sp"
+
+                ></TextView>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text=""/>
+
+            <ImageView
+                android:id="@+id/btn_edit_or_delete"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/empty_background"
+                android:src="@drawable/ic_more"
+                android:tint="@color/myBlack"/>
+
+        </LinearLayout>
+
+
+
 
         <TextView
             android:id="@+id/tv_interestedD_memo"

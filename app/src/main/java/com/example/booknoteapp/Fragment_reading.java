@@ -132,7 +132,7 @@ public class Fragment_reading extends Fragment {
         readingBooksList.clear();
         temp = gson.fromJson(json,type);
         for(int i =0; i<temp.size(); i++){
-            if(temp.get(i).status.equals("interested")){
+            if(temp.get(i).status.equals("reading")){
                 readingBooksList.add(temp.get(i));
             }
         }

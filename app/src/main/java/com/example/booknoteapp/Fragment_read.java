@@ -117,6 +117,11 @@ public class Fragment_read extends Fragment {
 
     }//올 리스너 끝
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getPrefToArray();
+    }
 
     private void saveArrayToPref(ArrayList<Dictionary_read> arrayList) {
         Gson gson = new Gson();
@@ -189,11 +194,7 @@ public class Fragment_read extends Fragment {
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        getPrefToArray();
-    }
+
 }
 
 //        StringBuffer sb = new StringBuffer();

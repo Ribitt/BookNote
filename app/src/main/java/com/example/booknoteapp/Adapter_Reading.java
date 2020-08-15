@@ -1,7 +1,9 @@
 package com.example.booknoteapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -37,10 +39,10 @@ public class Adapter_Reading extends androidx.recyclerview.widget.RecyclerView.A
     View.OnClickListener editListener;
     Context mContext;
 
+    CharSequence[] list_edit_or_delete = {"책 정보 수정하기","책 삭제하기"};
 
     //2. 뷰홀더를 상속하는 뷰홀더를 만든다.
-    public class readingViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder
-                                    implements View.OnCreateContextMenuListener{
+    public class readingViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
 
 
 
@@ -60,8 +62,44 @@ public class Adapter_Reading extends androidx.recyclerview.widget.RecyclerView.A
             editBtn = (ImageButton) itemView.findViewById(R.id.btn_reading_edit);
             deleteBtn = (ImageButton) itemView.findViewById(R.id.btn_reading_delete);
 
-            view.setOnCreateContextMenuListener(this);
 
+            /////////////커버에 롱클릭 이벤트로 다이얼로그 띄우기
+            bookCover.setOnLongClickListener(new View.OnLongClickListener(){
+            @Override
+            public boolean onLongClick(View view){
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+
+                builder
+                        .setItems(list_edit_or_delete, new DialogInterface.OnClickListener() {
+                            //선택목록이랑 클릭 이벤트 리스너를 같이 주는군
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                switch (i) {
+                                    case 0:
+                                        //수정하기
+                                        Intent intent = new Intent(mContext,AddBook.class);
+                                        mContext.startActivity(intent);
+                                        break;
+                                    case 1:
+                                        //삭제하기
+                                        readingArrayList.remove(getAdapterPosition());
+                                        notifyItemRemoved(getAdapterPosition());
+                                        notifyDataSetChanged();
+                                        saveBookArrayToPref(readingArrayList);
+
+                                        break;
+                                }
+                            }
+                        });
+
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+
+            return true;
+            }
+                });
+
+            /////////////커버에 롱클릭 이벤트로 다이얼로그 띄우기
 
 
             bookCover.setOnClickListener(new View.OnClickListener() {
@@ -97,39 +135,10 @@ public class Adapter_Reading extends androidx.recyclerview.widget.RecyclerView.A
         }
 
 
-        @Override
-        public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
-            MenuItem Edit = contextMenu.add(Menu.NONE, 1001, 1, "수정하기");
-            MenuItem Delete = contextMenu.add(Menu.NONE, 1002, 1, "삭제하기");
-            Edit.setOnMenuItemClickListener(onEditMenu);
-            Delete.setOnMenuItemClickListener(onEditMenu);
-        }
-
-        private final MenuItem.OnMenuItemClickListener onEditMenu = new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-
-                switch (item.getItemId()){
-                    case 1001:
-                        //수정하기
-                        Intent intent = new Intent(mContext,AddBook.class);
-                        mContext.startActivity(intent);
-                        break;
-
-                    case 1002:
-                           readingArrayList.remove(getAdapterPosition());
-                           notifyItemRemoved(getAdapterPosition());
-                           notifyDataSetChanged();
-                           saveBookArrayToPref(readingArrayList);
-                    break;
-                }
-
-                return true;
-            }
-        };
 
     }
 
+    //지금 어레이를 쉐어드에 저장하기
     private void saveBookArrayToPref(ArrayList<Dictionary_book> arrayList) {
         Gson gson = new Gson();
         String json = gson.toJson(arrayList);
@@ -142,8 +151,6 @@ public class Adapter_Reading extends androidx.recyclerview.widget.RecyclerView.A
 
     public Adapter_Reading(ArrayList<Dictionary_book> mList) {
         this.readingArrayList = mList;
-      //  pref = mContext.getSharedPreferences("book", Activity.MODE_PRIVATE);
-      //  editor = pref.edit();
 
         //, View.OnClickListener editListener
         //  this.editListener = editListener;
@@ -158,8 +165,6 @@ public class Adapter_Reading extends androidx.recyclerview.widget.RecyclerView.A
 
         mContext = parent.getContext();
         //리사이클러 뷰가 들어갈 페어런트 컨텍스트
-        pref = mContext.getSharedPreferences("book", MODE_PRIVATE);
-        editor = pref.edit();
 
         LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         // 그 컨텍스트에서 레이아웃 인플레이터를 쓸거고
@@ -170,6 +175,9 @@ public class Adapter_Reading extends androidx.recyclerview.widget.RecyclerView.A
         Adapter_Reading.readingViewHolder viewHolder = new Adapter_Reading.readingViewHolder(view);
         //그 뷰 자리를 가지고 있는 뷰 홀더를 만들어서 리턴
 
+        //쉐어드를 쓰고 싶다면 온크리에이트 뷰홀더에~~
+        pref = mContext.getSharedPreferences("book", MODE_PRIVATE);
+        editor = pref.edit();
 
         return viewHolder;
     }
