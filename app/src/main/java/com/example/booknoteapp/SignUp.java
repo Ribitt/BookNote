@@ -186,10 +186,14 @@ public class SignUp extends AppCompatActivity {
 
                   //형식에 맞는 이메일 주소인지 확인한다
                  if(checkEmail(email.getText().toString())){
+
                     // gmailSend(email.getText().toString(),certNum);
-                     Toast.makeText(SignUp.this, "인증 번호를 전송했습니다", Toast.LENGTH_SHORT).show();
+                     SendMail mailServer = new SendMail();
                      makeCertNum();
-                     et_certNum.setHint(certNum);
+
+                     mailServer.sendSecurityCode(getApplicationContext(), email.getText().toString(), certNum);
+                    // Toast.makeText(SignUp.this, "인증 번호를 전송했습니다", Toast.LENGTH_SHORT).show();
+
 
                  }else{
                      Toast.makeText(SignUp.this, "올바른 이메일 주소를 입력해주세요", Toast.LENGTH_SHORT).show();
@@ -216,7 +220,7 @@ public class SignUp extends AppCompatActivity {
                     //에딧텍스트랑 스트링 비교하는 뻘짓 하지 말자 ^^!
 
                     //인증번호 일치
-                    Toast.makeText(SignUp.this, "인증 완료", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignUp.this, "이메일 인증 완료", Toast.LENGTH_SHORT).show();
                     isCertSame = true;
 
                 }else{
