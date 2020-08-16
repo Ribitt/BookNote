@@ -6,9 +6,10 @@ import android.util.Base64;
 import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Dictionary_book {
+public class Dictionary_book implements Serializable {
 
 
     //필수로 들어가야 하는 항목
@@ -30,8 +31,8 @@ public class Dictionary_book {
 
     String memo="";
 
-    ArrayList<Dictionary_pageLog> pageLogArrayList;
-    ArrayList<Dictionary_note> noteArrayList;
+   // ArrayList<Dictionary_pageLog> pageLogArrayList;
+   // ArrayList<Dictionary_note> noteArrayList;
 
 
     public Dictionary_book(String status, String title, String author) {
@@ -145,19 +146,19 @@ public class Dictionary_book {
         this.memo = memo;
     }
 
-    public ArrayList<Dictionary_pageLog> getPageLogArrayList() {
-        return pageLogArrayList;
-    }
-
-    public void setPageLogArrayList(ArrayList<Dictionary_pageLog> pageLogArrayList) {
-        this.pageLogArrayList = pageLogArrayList;
-    }
-
-    public ArrayList<Dictionary_note> getNoteArrayList() {
-        return noteArrayList;
-    }
-
-    public void setNoteArrayList(ArrayList<Dictionary_note> noteArrayList) {
-        this.noteArrayList = noteArrayList;
-    }
+//    public ArrayList<Dictionary_pageLog> getPageLogArrayList() {
+//        return pageLogArrayList;
+//    }
+//
+//    public void setPageLogArrayList(ArrayList<Dictionary_pageLog> pageLogArrayList) {
+//        this.pageLogArrayList = pageLogArrayList;
+//    }
+//
+//    public ArrayList<Dictionary_note> getNoteArrayList() {
+//        return noteArrayList;
+//    }
+//
+//    public void setNoteArrayList(ArrayList<Dictionary_note> noteArrayList) {
+//        this.noteArrayList = noteArrayList;
+//    }
 }

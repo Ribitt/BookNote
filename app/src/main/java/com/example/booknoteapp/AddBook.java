@@ -90,6 +90,8 @@ public class AddBook extends AppCompatActivity {
     ImageView imageV_addBook_addBookCover;
     EditText et_title;
     EditText et_author;
+    EditText et_page;
+    EditText et_publisher;
 
     LinearLayout layout_reading;
     LinearLayout layout_read;
@@ -169,25 +171,25 @@ public class AddBook extends AppCompatActivity {
         editor = pref.edit();
 
 
-        //수정 가능한 뷰 초기화
+        //뷰 위에서부터 초기화~~
+
+        //책 표지
+        imageV_addBook_addBookCover = findViewById(R.id.imageV_addBook_addBookCover);
+        tv_addBookCover = findViewById(R.id.tv_addBookCover);
+
+        //입력창
+        et_title = findViewById(R.id.et_addBook_title);
+        et_author = findViewById(R.id.et_addBook_author);
+        et_page = findViewById(R.id.et_addBook_page);
+        et_publisher = findViewById(R.id.et_addBook_publisher);
+
+        status_spinner = findViewById(R.id.spinner_addBook);
 
         layout_reading = findViewById(R.id.layout_addBook_reading);
         layout_read =findViewById(R.id.layout_addBook_read);
         layout_interested = findViewById(R.id.layout_addBook_interested);
 
-        status_spinner = findViewById(R.id.spinner_addBook);
 
-        imageV_addBook_addBookCover = findViewById(R.id.imageV_addBook_addBookCover);
-//        btn_addBook_status_read = findViewById(R.id.btn_addBook_status_read);
-//        btn_addBook_status_reading = findViewById(R.id.btn_addBook_status_reading);
-//        btn_addBook_status_interested = findViewById(R.id.btn_addBook_status_interested);
-
-        btn_addBook_done = findViewById(R.id.btn_addBook_done);
-        btn_addBook_cancel = findViewById(R.id.btn_addBook_cancel);
-
-        //입력창 초기화
-        et_title = findViewById(R.id.et_addBook_title);
-        et_author = findViewById(R.id.et_addBook_author);
 
         rating_addBook_read = findViewById(R.id.rating_addBook_read);
         et_addBook_read_ALineReview = findViewById(R.id. et_addBook_read_ALineReview);
@@ -196,8 +198,6 @@ public class AddBook extends AppCompatActivity {
         tv_addBook_reading_lastDate =findViewById(R.id.tv_addBook_reading_lastDate);
 
         et_addBook_interested_memo = findViewById(R.id.et_addBook_interested_memo);
-
-        tv_addBookCover = findViewById(R.id.tv_addBookCover);
 
         //뷰 초기화 끝
 
@@ -217,7 +217,7 @@ public class AddBook extends AppCompatActivity {
 
                 switch (position){
 
-                    case 0:
+                    case 1:
                         //읽은 책
                         reading = false;
                         read=true;
@@ -227,7 +227,7 @@ public class AddBook extends AppCompatActivity {
                         layout_read.setVisibility(View.VISIBLE);
                         layout_interested.setVisibility(View.INVISIBLE);
                         break;
-                    case 1:
+                    case 0:
                         //읽는 중인 책
                         reading = true;
                         read=false;

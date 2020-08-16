@@ -73,7 +73,10 @@ public class Adapter_read extends RecyclerView.Adapter<Adapter_read.readViewHold
                                     switch (i) {
                                         case 0:
                                             //수정하기
-                                            Intent intent = new Intent(mContext,AddBook.class);
+                                            Intent intent = new Intent(mContext,EditBook.class);
+                                            Dictionary_book selectedBook = mList.get(getAdapterPosition());
+                                            intent.putExtra("selectedBook",selectedBook);
+                                            intent.putExtra("position",getAdapterPosition());
                                             mContext.startActivity(intent);
                                             break;
                                         case 1:

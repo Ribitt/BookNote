@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -26,6 +27,7 @@ import java.util.regex.Pattern;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
+import javax.mail.SendFailedException;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -38,6 +40,10 @@ public class SignUp extends AppCompatActivity {
     String NICKNAMES="nicknames";
     String NICKNAME = "nickname";
     String allNicknames = "";
+
+    String user = "bittnuri@gmail.com";
+    String passwordd = "asdf0528";
+    String subject = "[BookNoteApp] 인증메일";
 
     EditText email;
     EditText et_certNum;
@@ -184,17 +190,18 @@ public class SignUp extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //쉐어드에 이메일 주소를 저장한다.
+
+
               if(isEmailNew){
                   //중복이 아니기 때문에 다음 단계를 진행한다.
-
+                    String userEmail = email.getText().toString();
                   //형식에 맞는 이메일 주소인지 확인한다
-                 if(checkEmail(email.getText().toString())){
-
+                 if(checkEmail(userEmail)){
                     // 인증번호 생성하고 입력 받은 이메일 주소로 전송하기
-                     SendMail mailServer = new SendMail();
                      makeCertNum();
                    //  et_certNum.setText(certNum);
-                     mailServer.sendSecurityCode(getApplicationContext(), email.getText().toString(), certNum);
+                    sendSecurityCode(getApplicationContext(),userEmail,certNum);
+
                     // Toast.makeText(SignUp.this, "인증 번호를 전송했습니다", Toast.LENGTH_SHORT).show();
 
                      countDown();
@@ -377,6 +384,31 @@ public class SignUp extends AppCompatActivity {
         }.start();
     }
 
+    ////이메일 보내기
+    public void sendSecurityCode(Context context, String sendTo, String certNum) {
+        try{
+            GMailSender gMailSender = new GMailSender(user, passwordd, certNum);
+            String body = "BookNoteApp에서 보낸 인증메일입니다. \n " +
+                    "인증번호 : "+certNum +
+                    "\n 어플에서 인증번호를 입력해주세요";
+            gMailSender.sendMail(subject, body, sendTo);
+            Toast.makeText(context, "이메일로 인증번호가 발송되었습니다", Toast.LENGTH_SHORT).show();
+
+        }catch (SendFailedException e){
+            Toast.makeText(context, "이메일 형식이 잘못되었습니다", Toast.LENGTH_SHORT).show();
+
+
+
+        }catch (MessagingException e){
+            Toast.makeText(context, "인터넷 연결을 확인해주세요", Toast.LENGTH_SHORT).show();
+
+            System.out.println("//////////////////////////////////////////////////////////////////////////");
+            e.printStackTrace();
+            System.out.println("//////////////////////////////////////////////////////////////////////////");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     //랜덤한 인증번호 만들기 메소드
     private void makeCertNum() {

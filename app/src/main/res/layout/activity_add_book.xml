@@ -89,7 +89,7 @@
                 android:background="@drawable/underline_green"
 
                 android:hint=""
-                android:text="책 제목이 들어간다"/>
+            />
 
 
         </LinearLayout>
