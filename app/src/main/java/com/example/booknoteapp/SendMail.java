@@ -24,7 +24,7 @@ public void sendSecurityCode(Context context, String sendTo, String certNum) {
                 "인증번호 : "+certNum +
                 "\n 어플에서 인증번호를 입력해주세요";
         gMailSender.sendMail(subject, body, sendTo);
-        Toast.makeText(context, "이메일을 성공적으로 보냈습니다", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "이메일로 인증번호가 발송되었습니다", Toast.LENGTH_SHORT).show();
     }catch (SendFailedException e){
         Toast.makeText(context, "이메일 형식이 잘못되었습니다", Toast.LENGTH_SHORT).show();
     }catch (MessagingException e){

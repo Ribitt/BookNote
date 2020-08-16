@@ -8,8 +8,8 @@ import androidx.appcompat.widget.Toolbar;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.StrictMode;
-import android.se.omapi.Session;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -54,6 +54,8 @@ public class SignUp extends AppCompatActivity {
     TextView warning_password;
     TextView warning_nickname;
     TextView warning_existedEmail;
+    TextView warning_certNum;
+
 
 
     Boolean isEmailNew = false;
@@ -127,7 +129,8 @@ public class SignUp extends AppCompatActivity {
         warning_password = findViewById(R.id.tv_signUp_passwordNotSame);
         warning_confirmNum = findViewById(R.id.tv_signUp_numNotSame);
         warning_nickname = findViewById(R.id.tv_signUp_nickNameAlreadyUsed);
-        warning_existedEmail = findViewById(R.id.tv_signUp_emailAlreadyExist);
+        warning_existedEmail = findViewById(R.id.warning_emailAlreadyExist);
+        warning_certNum = findViewById(R.id.warning_certNum);
 
         //뷰 불러오기 끝
 
@@ -187,13 +190,14 @@ public class SignUp extends AppCompatActivity {
                   //형식에 맞는 이메일 주소인지 확인한다
                  if(checkEmail(email.getText().toString())){
 
-                    // gmailSend(email.getText().toString(),certNum);
+                    // 인증번호 생성하고 입력 받은 이메일 주소로 전송하기
                      SendMail mailServer = new SendMail();
                      makeCertNum();
-
+                   //  et_certNum.setText(certNum);
                      mailServer.sendSecurityCode(getApplicationContext(), email.getText().toString(), certNum);
                     // Toast.makeText(SignUp.this, "인증 번호를 전송했습니다", Toast.LENGTH_SHORT).show();
 
+                     countDown();
 
                  }else{
                      Toast.makeText(SignUp.this, "올바른 이메일 주소를 입력해주세요", Toast.LENGTH_SHORT).show();
@@ -221,6 +225,7 @@ public class SignUp extends AppCompatActivity {
 
                     //인증번호 일치
                     Toast.makeText(SignUp.this, "이메일 인증 완료", Toast.LENGTH_SHORT).show();
+                    warning_certNum.setVisibility(View.GONE);
                     isCertSame = true;
 
                 }else{
@@ -338,6 +343,40 @@ public class SignUp extends AppCompatActivity {
 
 
     }//올 클릭 리스너 끝
+
+
+    private void countDown() {
+        new CountDownTimer(70000, 1000){
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                String time="";
+
+
+                if(millisUntilFinished>60000){
+                    time = "0"+millisUntilFinished/60000+":"+""+(millisUntilFinished%60000)/1000;
+                    if((millisUntilFinished%60000)/1000<10){
+                        time = "0"+millisUntilFinished/60000+":"+"0"+(millisUntilFinished%60000)/1000;
+                    }
+                }else{
+                    time="00:"+millisUntilFinished/1000;
+                    if(millisUntilFinished/1000<10){
+                        time = "00:0"+millisUntilFinished/1000;
+                    }
+
+                }
+                warning_certNum.setVisibility(View.VISIBLE);
+                warning_certNum.setText("인증 번호 유효시간 [ "+time+" ]");
+            }
+
+            @Override
+            public void onFinish() {
+                warning_certNum.setText("인증 번호 만료. 인증번호를 다시 전송하세요");
+                makeCertNum();
+            }
+        }.start();
+    }
+
 
     //랜덤한 인증번호 만들기 메소드
     private void makeCertNum() {

@@ -73,12 +73,22 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/tv_signUp_emailAlreadyExist"
+                android:id="@+id/warning_emailAlreadyExist"
                 android:layout_marginLeft="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="이미 가입한 이메일 주소입니다"
                 android:textColor="@color/myRed"
+                android:visibility="gone"></TextView>
+
+            <TextView
+                android:id="@+id/warning_certNum"
+                android:layout_marginLeft="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="인증 번호 유효시간"
+                android:textStyle="bold"
+                android:textColor="@color/green"
                 android:visibility="gone"></TextView>
 
 
