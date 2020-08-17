@@ -64,7 +64,12 @@ public class Adapter_SearchBook extends androidx.recyclerview.widget.RecyclerVie
 
         Dictionary_book book = mList.get(position);
 
-        holder.bookCover.setImageBitmap(book.getBookCover());
+        if(book.bookCover==null){
+            //북커버가 아무것도 없으면 암것도 하지 않는다..
+        }else{
+            holder.bookCover.setImageBitmap(book.getBookCover());
+        }
+
         holder.title.setText(book.getTitle());
         holder.author.setText(book.getAuthor());
         holder.publisher.setText(book.getPublisher());
