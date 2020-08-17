@@ -18,6 +18,7 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <SearchView
+        android:id="@+id/search_searchBook"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
@@ -25,6 +26,13 @@
         android:queryHint="도서명 / 작가를 검색하세요"
 
         android:iconifiedByDefault="false"/>
+
+
+    <TextView
+        android:id="@+id/search_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00:00"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_bookSearch"
