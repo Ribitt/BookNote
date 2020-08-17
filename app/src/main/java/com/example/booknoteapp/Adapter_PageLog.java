@@ -41,8 +41,8 @@ public class Adapter_PageLog extends RecyclerView.Adapter<Adapter_PageLog.pageLo
 
         DatePickerDialog pickerDialog = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-                dialog.setDate(year+"."+(int)(month+1)+"."+dayOfMonth);
+            public void onDateSet(DatePicker datePicker, int year, int month, int date) {
+                dialog.setDate(String.format("%2d.%02d.%02d",year,month+1,date));
             }
         }, calendar.get(java.util.Calendar.YEAR), calendar.get(java.util.Calendar.MONTH), calendar.get(java.util.Calendar.DAY_OF_MONTH));
         pickerDialog.getDatePicker().setMaxDate(new Date().getTime());

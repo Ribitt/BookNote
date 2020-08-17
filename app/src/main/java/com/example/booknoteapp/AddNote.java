@@ -111,7 +111,7 @@ public class AddNote extends AppCompatActivity {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int date) {
 
-                        tv_addNote_date.setText(year+"."+(int)(month+1)+"."+date);
+                        tv_addNote_date.setText(String.format("%2d.%02d.%02d",year,month+1,date));
                     }
                 }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
 
