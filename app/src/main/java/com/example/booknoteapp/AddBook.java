@@ -338,6 +338,8 @@ public class AddBook extends AppCompatActivity {
                             if(coverBitmap!=null){
                                 dictionary_book.setBookCover(coverBitmap);
                             }
+                            dictionary_book.setPageNum(et_page.getText().toString());
+                            dictionary_book.setPublisher(et_publisher.getText().toString());
 
                             //각 상태별로 다양한 내용을 더 넣어준다.
                             if(reading){

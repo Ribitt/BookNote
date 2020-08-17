@@ -26,7 +26,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -52,7 +51,7 @@ import java.util.Date;
 public class EditBook extends AppCompatActivity {
     // private final int MY_PERMISSIONS_REQUEST_CAMERA = 1001;
 
-
+    int position=0;
     Dictionary_book dictionary_book;
 
     //현재시간 가져오는 메소드
@@ -71,14 +70,16 @@ public class EditBook extends AppCompatActivity {
     boolean read =true;
     boolean reading = false;
     boolean interested = false;
-    String status = "read";
+    String changedStatus = "read";
+    String originalStatus ="";
     //책 상태
+
 
     ArrayList<Dictionary_book> bookList = new ArrayList<>();
 
-    ArrayList<Dictionary_book> readList = new ArrayList<>();
-    ArrayList<Dictionary_book> readingList = new ArrayList<>();
-    ArrayList<Dictionary_book> interestedList = new ArrayList<>();
+    ArrayList<Dictionary_book> originalList = new ArrayList<>();
+    ArrayList<Dictionary_book> changedList = new ArrayList<>();
+
 
 
     ////이미지/카메라 받아오기
@@ -95,7 +96,6 @@ public class EditBook extends AppCompatActivity {
     EditText et_page;
     EditText et_publisher;
 
-    LinearLayout layout_reading;
     LinearLayout layout_read;
     LinearLayout layout_interested;
     LinearLayout layout_startDate;
@@ -135,10 +135,7 @@ public class EditBook extends AppCompatActivity {
         initialize();
         allListener();
 
-        Intent intent = getIntent();
-        dictionary_book = (Dictionary_book)intent.getSerializableExtra("selectedBook");
-            //책 수정하기 버튼으로 오기 때문에 무조건 인텐트가 존재한다.
-        setData();
+        setData(); //넘어온 책 정보와 인덱스 넘버를 정의해주는 메소드
 
 
 
@@ -147,17 +144,29 @@ public class EditBook extends AppCompatActivity {
 
     private void setData() {
 
+        Intent intent = getIntent();
+        //책 수정하기 버튼으로 오기 때문에 무조건 인텐트가 존재한다.
+
+        dictionary_book = (Dictionary_book)intent.getSerializableExtra("selectedBook");
+        position = intent.getIntExtra("position",0);
+
+
         if(dictionary_book.bookCover==null){
 
         }else{
             imageV_addBook_addBookCover.setImageBitmap(dictionary_book.getBookCover());
             tv_addBookCover.setText("");
+            coverBitmap = dictionary_book.getBookCover();
         }
 
         et_title.setText(dictionary_book.getTitle());
         et_author.setText(dictionary_book.getAuthor());
         et_publisher.setText(dictionary_book.getPublisher());
         et_page.setText(dictionary_book.getPageNum());
+
+        originalStatus = dictionary_book.getStatus();
+        changedStatus = dictionary_book.getStatus();
+        //처음에는 둘 다 책 원래 책장상태를 저장한다.
 
         int status_position =0;
           switch (dictionary_book.getStatus()){
@@ -179,6 +188,7 @@ public class EditBook extends AppCompatActivity {
 
 
         //읽는 중인 책
+        tv_addBook_read_startDate.setText(dictionary_book.getFinishedDate());
 
 
         //읽을 책
@@ -244,18 +254,19 @@ public class EditBook extends AppCompatActivity {
                         reading = false;
                         read=true;
                         interested =false;
-                        status = "read";
+                        changedStatus = "read";
                         layout_startDate.setVisibility(View.VISIBLE);
                         layout_read.setVisibility(View.VISIBLE);
                         layout_interested.setVisibility(View.INVISIBLE);
+                       // Toast.makeText(getApplicationContext(), "원래 상태 : "+originalStatus+"지금 상태 : "+changedStatus, Toast.LENGTH_LONG).show();
                         break;
                     case 0:
                         //읽는 중인 책
                         reading = true;
                         read=false;
                         interested =false;
-                        status ="reading";
-
+                        changedStatus ="reading";
+                      //  Toast.makeText(getApplicationContext(), "원래 상태 : "+originalStatus+"지금 상태 : "+changedStatus, Toast.LENGTH_LONG).show();
                         layout_read.setVisibility(View.INVISIBLE);
                         layout_startDate.setVisibility(View.VISIBLE);
                         layout_interested.setVisibility(View.INVISIBLE);
@@ -265,7 +276,8 @@ public class EditBook extends AppCompatActivity {
                         reading = false;
                         read=false;
                         interested =true;
-                        status ="interested";
+                        changedStatus ="interested";
+                      //  Toast.makeText(getApplicationContext(), "원래 상태 : "+originalStatus+"지금 상태 : "+changedStatus, Toast.LENGTH_LONG).show();
                         layout_startDate.setVisibility(View.INVISIBLE);
                         layout_read.setVisibility(View.INVISIBLE);
                         layout_interested.setVisibility(View.VISIBLE);
@@ -369,40 +381,47 @@ public class EditBook extends AppCompatActivity {
                 if(isTitle){
 
                     if(isAuthor){
+
                         Intent intent = new Intent(getApplicationContext(), DrawerTap.class);
 
-                        //책장 상태에 따라서 책 리스트를 가져온다 (읽은/읽을/읽는 중)
-                        getPrefToArray();
+                        //수정한 정보를 dictionary에 담는다
+                        putDateIntoDict();
 
-                        //공통으로 꼭 들어가야 할 요소를 넣어준다
-                        Dictionary_book dictionary_book = new Dictionary_book(status,et_title.getText().toString(),et_author.getText().toString());
-                        //책 커버 이미지가 있다면 이미지를 넣어준다.
-                        if(coverBitmap!=null){
-                            dictionary_book.setBookCover(coverBitmap);
+                        //원래 책이 들어가있는 책 리스트를 가져온다
+                        originalList = getList(originalStatus);
+                        //getOriginalList();
+                        if(originalStatus.equals(changedStatus)){//만약 책 상태를 바꾸지 않았다면
+
+                            originalList.set(position,dictionary_book);
+                            //원래 리스트에 해당 포지션에 책을 넣어준다
+
+                            saveBookArrayToPref(originalList, originalStatus);
+                            //리스트를 쉐어드에 저장한다.
+
+                        }else{//책 상태를 바꿨다면
+
+                         originalList.remove(position);
+                         //원래 리스트에서 그녀석을 지우고
+                            saveBookArrayToPref(originalList,originalStatus);
+                            //저장
+
+                         changedList = getList(changedStatus);
+                         changedList.add(0,dictionary_book);
+                         //새로운 리스트 0번에다가 집어넣고
+                         saveBookArrayToPref(changedList,changedStatus);
+                         //저장
                         }
 
-                        //각 상태별로 다양한 내용을 더 넣어준다.
-                        if(reading){
-
-
-                        }else if(read) {
-
-                            dictionary_book.setFinishedDate(tv_addBook_read_finishDate.getText().toString());
-                            dictionary_book.setRating(rating_addBook_read.getRating());
-                            dictionary_book.setReview( et_addBook_read_ALineReview.getText().toString());
-
-                        }else if(interested){
-
-                            dictionary_book.setMemo(et_addBook_interested_memo.getText().toString());
-                        }
-
-                        //추가할 내용을 다 더해준 리스트를 북리스트에 추가한 뒤에
-                        bookList.add(0,dictionary_book);
-                        //쉐어드에 저장해준다.
-                        saveBookArrayToPref(bookList);
-                        //이제 책 추가 액티비티는 종료
                         startActivity(intent);
                         finish();
+
+
+//                        //추가할 내용을 다 더해준 리스트를 북리스트에 추가한 뒤에
+//                        bookList.add(0,dictionary_book);
+//                        //쉐어드에 저장해준다.
+//                        saveBookArrayToPref(bookList);
+//                        //이제 책 추가 액티비티는 종료
+
                         ///////////////////////////////////////////////////////////////////////////////////////////////////책 저장하기 완료
 
                     }else{
@@ -423,45 +442,123 @@ public class EditBook extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    ///쉐어드 프리퍼런스 가져와서 어레이 리스트로 바꿔주기
-    private void getPrefToArray() {
-        Gson gson = new Gson();
-        String json ="EMPTY";
-        if(read){
-            json = pref.getString("read","EMPTY");
-        }else if(reading){
-            json = pref.getString("reading","EMPTY");
-        }else if(interested){
-            json = pref.getString("interested","EMPTY");
+    public void putDateIntoDict() {
+        //공통으로 꼭 들어가야 할 요소를 넣어준다
+        dictionary_book = new Dictionary_book(changedStatus,et_title.getText().toString(),et_author.getText().toString());
+        //책 커버 이미지가 있다면 이미지를 넣어준다.
+        if(coverBitmap!=null){
+            dictionary_book.setBookCover(coverBitmap);
         }
 
-        if(!json.equals("EMPTY")){
-            Type type = new TypeToken<ArrayList<Dictionary_book>>() {
-            }.getType();
-            bookList = gson.fromJson(json,type);
-            Log.d("들어오는지 확인", json);
-            //   Log.d("대체 어레이 리스트가 존재는 하는지 확인 ", String.valueOf(getArrayList.size()));
-            //  Log.d("대체 어레이 리스트가 존재는 하는지 확인 ", getArrayList.get(0).getTitle());
-        }else{
-            // 내용이 없으면 가져오지 않음
+        //각 상태별로 다양한 내용을 더 넣어준다.
+        if(reading){
+
+
+        }else if(read) {
+
+            dictionary_book.setFinishedDate(tv_addBook_read_finishDate.getText().toString());
+            dictionary_book.setRating(rating_addBook_read.getRating());
+            dictionary_book.setReview( et_addBook_read_ALineReview.getText().toString());
+
+        }else if(interested){
+
+            dictionary_book.setMemo(et_addBook_interested_memo.getText().toString());
         }
 
     }
-    ///쉐어드 프리퍼런스 가져와서 어레이 리스트로 바꿔주기 끝
+
+
+    private ArrayList<Dictionary_book> getList(String status){
+        //저장된 읽는 상태에 따라서 원래 리스트를 가져온다
+        Gson gson = new Gson();
+        String json ="EMPTY";
+
+
+        switch (status){
+            case "reading":
+                json = pref.getString("reading","EMPTY");
+                break;
+            case "read":
+                json = pref.getString("read","EMPTY");
+                break;
+            case "interested":
+                json = pref.getString("interested","EMPTY");
+        }
+
+        Type type = new TypeToken<ArrayList<Dictionary_book>>() {
+        }.getType();
+        ArrayList<Dictionary_book> list = gson.fromJson(json,type);
+        return list;
+    }
+
+
+    private void getChangedList(){
+        //저장된 읽는 상태에 따라서 원래 리스트를 가져온다
+        Gson gson = new Gson();
+        String json ="EMPTY";
+
+
+        switch (changedStatus){
+            case "reading":
+                json = pref.getString("reading","EMPTY");
+                break;
+            case "read":
+                json = pref.getString("read","EMPTY");
+                break;
+            case "interested":
+                json = pref.getString("interested","EMPTY");
+        }
+
+        Type type = new TypeToken<ArrayList<Dictionary_book>>() {
+        }.getType();
+        changedList = gson.fromJson(json,type);
+
+    }
+
+    private void getOriginalList(){
+        //저장된 읽는 상태에 따라서 원래 리스트를 가져온다
+        Gson gson = new Gson();
+        String json ="EMPTY";
+
+
+        switch (originalStatus){
+            case "reading":
+                json = pref.getString("reading","EMPTY");
+                break;
+            case "read":
+                json = pref.getString("read","EMPTY");
+                break;
+            case "interested":
+                json = pref.getString("interested","EMPTY");
+        }
+
+            Type type = new TypeToken<ArrayList<Dictionary_book>>() {
+            }.getType();
+            originalList = gson.fromJson(json,type);
+
+    }
+
+
 
     //어레이리스트 쉐어드에 저장하기
 
-    private void saveBookArrayToPref(ArrayList<Dictionary_book> arrayList) {
+    private void saveBookArrayToPref(ArrayList<Dictionary_book> arrayList, String status) {
         Gson gson = new Gson();
         String json = gson.toJson(arrayList);
-        if(read){
-            editor.putString("read",json);
-        }else if(reading){
-            editor.putString("reading",json);
-        }else if(interested){
-            editor.putString("interested",json);
+
+        switch (status){
+            case "read" :
+                editor.putString("read",json);
+                break;
+            case "reading":
+                editor.putString("reading",json);
+                break;
+            case "interested":
+                editor.putString("interested",json);
+                break;
         }
         editor.apply();
+
     }
 
     //어레이리스트 쉐어드에 저장하기 끝
