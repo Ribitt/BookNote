@@ -25,6 +25,16 @@ public class Dictionary_book implements Serializable {
     String bookCoverUrl="";
     String publisher="";
 
+    String startDate="";
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
     String finishedDate="";
     String review="";
     float rating=0;

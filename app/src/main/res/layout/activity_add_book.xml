@@ -265,86 +265,15 @@
     <!--관심 책에 보여줄 내용 끝-->
 
 
-<!--    읽는 중인 책에 보여줄 내용 -->
 
+
+<!--    시작날짜 레이아웃-->
     <LinearLayout
-        android:id="@+id/layout_addBook_reading"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="24dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_addBook_bookDetail"
-        android:visibility="invisible"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-
-       >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:text="읽기 시작한 날"
-                android:textColor="@color/myBlack"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/tv_addBook_reading_lastDate"
-                android:background="@drawable/underline_green"
-                android:layout_width="150dp"
-                android:paddingLeft="10dp"
-                android:paddingBottom="2dp"
-                android:textSize="16sp"
-
-                android:layout_height="wrap_content"
-                android:hint="2020.08.02" />
-
-        </LinearLayout>
-
-<!--        <LinearLayout-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="horizontal"-->
-<!--            >-->
-
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginRight="10dp"-->
-<!--                android:textSize="16sp"-->
-<!--                android:text="지금까지 읽은 페이지"-->
-<!--                android:textColor="@color/myBlack"-->
-<!--                />-->
-
-<!--            <EditText-->
-<!--                android:id="@+id/et_addBook_reading_startDate"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:inputType="number"-->
-<!--                android:textSize="16sp"-->
-<!--                android:hint="###"></EditText>-->
-<!--        </LinearLayout>-->
-
-    </LinearLayout>
-
-
-    <!--    읽는 중인 책에 보여줄 내용 끝 -->
-
-<!--    읽은 책에 보여줄 내용-->
-
-    <LinearLayout
-        android:id="@+id/layout_addBook_read"
+        android:id="@+id/layout_startDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="visible"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:layout_marginStart="20dp"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="24dp"
@@ -353,34 +282,44 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layout_addBook_bookDetail">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:orientation="horizontal"
-
-            android:gravity="center"
-            >
-
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:textSize="15sp"
-                android:text="읽기 시작한 날"
-                android:textColor="@color/myBlack"
-                />
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:text="읽기 시작한 날"
+            android:textColor="@color/myBlack"
+            android:textSize="15sp" />
 
 
-            <TextView
-                android:id="@+id/tv_addBook_read_finishedDate"
-                android:background="@drawable/underline_green"
-                android:layout_width="150dp"
-                android:paddingLeft="10dp"
-                android:textSize="15sp"
-                android:layout_height="wrap_content"
-                android:hint="2020.08.02" />
+        <TextView
+            android:id="@+id/tv_addBook_read_startDate"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/underline_green"
+            android:hint="2020.08.02"
+            android:paddingLeft="10dp"
+            android:textSize="15sp" />
 
-        </LinearLayout>
+    </LinearLayout>
+
+
+    <!--    읽은 책에 보여줄 내용-->
+
+    <LinearLayout
+        android:id="@+id/layout_addBook_read"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:orientation="vertical"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_startDate">
+
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="30dp"
@@ -399,7 +338,7 @@
 
 
             <TextView
-                android:id="@+id/tv_addBook_read_startDate"
+                android:id="@+id/tv_addBook_read_finishedDate"
                 android:background="@drawable/underline_green"
                 android:layout_width="150dp"
                 android:paddingLeft="10dp"
@@ -469,7 +408,8 @@
                 android:padding="5dp"
                 android:textSize="15sp"
                 android:maxLines="4"
-                android:hint="한줄 평을 입력하세요"
+                android:hint="한줄 평을 입력하세요
+                                \n\n\n"
                 android:background="@drawable/border_round_whole"
 
 

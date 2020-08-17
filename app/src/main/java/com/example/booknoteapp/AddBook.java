@@ -32,7 +32,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -93,20 +92,19 @@ public class AddBook extends AppCompatActivity {
     EditText et_page;
     EditText et_publisher;
 
-    LinearLayout layout_reading;
+
     LinearLayout layout_read;
     LinearLayout layout_interested;
+    LinearLayout layout_startDate;
 
     TextView tv_addBookCover;
     EditText et_addBook_read_ALineReview;
     RatingBar rating_addBook_read;
-    TextView tv_addBook_read_endDate;
+    TextView tv_addBook_read_finishDate;
 
-    TextView tv_addBook_reading_lastDate;
+    TextView tv_addBook_read_startDate;
     EditText et_addBook_interested_memo;
 
-    Button btn_addBook_cancel;
-    Button btn_addBook_done;
 
     SharedPreferences pref;
     SharedPreferences.Editor editor;
@@ -131,34 +129,10 @@ public class AddBook extends AppCompatActivity {
         actionBar.setTitle("책 추가하기");
 
 
+
         initialize();
         allListener();
 
-
-       /////////////////////////////////////////////////////책 정보 수정하기 버튼으로 온 경우 / 그냥 책 추가하기 경우
-        Intent intent = getIntent();
-        if(intent.getExtras()==null) {
-//            Toast.makeText(this, "든 게 없음", Toast.LENGTH_LONG).show();
-            //책 추가하기 버튼으로 이 화면을 부른 경우다
-        }else{
-//            Toast.makeText(this, "어, 뭐가 왔는데", Toast.LENGTH_LONG).show();
-            //책 수정하기 버튼으로 온 경우다
-//            tv_addBookCover.setVisibility(View.INVISIBLE);
-//
-//            Dictionary_reading dic = intent.getParcelableExtra("dict");
-//            //byte[] arr = intent.getByteArrayExtra("image");
-//            //Bitmap image = BitmapFactory.decodeByteArray(arr, 0, arr.length);
-//            Bitmap image = dic.getBookCover();
-//            backBitmap = image;
-//           // Drawable bookCover = new BitmapDrawable(image);
-//            Drawable bookCover = new BitmapDrawable(image);
-//            imageV_addBook_addBookCover.setBackground(bookCover);
-//            //백그라운드는 드로어블밖에 지정이 안된다. 짜증
-//            String title = dic.getBookTitle();
-//            et_title.setText(title);
-            actionBar.setTitle("책 수정하기");
-            btn_addBook_done.setText("수정하기");
-        }
 
 
     }//온크리에이트 여기까지
@@ -185,25 +159,25 @@ public class AddBook extends AppCompatActivity {
 
         status_spinner = findViewById(R.id.spinner_addBook);
 
-        layout_reading = findViewById(R.id.layout_addBook_reading);
+
         layout_read =findViewById(R.id.layout_addBook_read);
         layout_interested = findViewById(R.id.layout_addBook_interested);
-
+        layout_startDate =findViewById(R.id.layout_startDate);
 
 
         rating_addBook_read = findViewById(R.id.rating_addBook_read);
         et_addBook_read_ALineReview = findViewById(R.id. et_addBook_read_ALineReview);
-        tv_addBook_read_endDate = findViewById(R.id.tv_addBook_read_finishedDate);
+        tv_addBook_read_finishDate = findViewById(R.id.tv_addBook_read_finishedDate);
 
-        tv_addBook_reading_lastDate =findViewById(R.id.tv_addBook_reading_lastDate);
+        tv_addBook_read_startDate =findViewById(R.id.tv_addBook_read_startDate);
 
         et_addBook_interested_memo = findViewById(R.id.et_addBook_interested_memo);
 
         //뷰 초기화 끝
 
         //날짜 표시되는 부분 오늘 날짜로 세팅
-        tv_addBook_read_endDate.setHint(time);
-        tv_addBook_reading_lastDate.setHint(time);
+        tv_addBook_read_finishDate.setHint(time);
+        tv_addBook_read_startDate.setHint(time);
         //날짜 표시되는 부분 오늘 날짜로 세팅
 
     }//이니셜라이저 끝
@@ -223,7 +197,7 @@ public class AddBook extends AppCompatActivity {
                         read=true;
                         interested =false;
                         status = "read";
-                        layout_reading.setVisibility(View.INVISIBLE);
+                        layout_startDate.setVisibility(View.VISIBLE);
                         layout_read.setVisibility(View.VISIBLE);
                         layout_interested.setVisibility(View.INVISIBLE);
                         break;
@@ -233,8 +207,9 @@ public class AddBook extends AppCompatActivity {
                         read=false;
                         interested =false;
                         status ="reading";
-                        layout_reading.setVisibility(View.VISIBLE);
+
                         layout_read.setVisibility(View.INVISIBLE);
+                        layout_startDate.setVisibility(View.VISIBLE);
                         layout_interested.setVisibility(View.INVISIBLE);
 
                         break;
@@ -243,7 +218,7 @@ public class AddBook extends AppCompatActivity {
                         read=false;
                         interested =true;
                         status ="interested";
-                        layout_reading.setVisibility(View.INVISIBLE);
+                        layout_startDate.setVisibility(View.INVISIBLE);
                         layout_read.setVisibility(View.INVISIBLE);
                         layout_interested.setVisibility(View.VISIBLE);
                         //읽고싶은 책
@@ -261,7 +236,7 @@ public class AddBook extends AppCompatActivity {
 
         //다 읽은 날짜 클릭 리스너
 
-        tv_addBook_read_endDate.setOnClickListener(new View.OnClickListener() {
+        tv_addBook_read_finishDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -269,11 +244,12 @@ public class AddBook extends AppCompatActivity {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int date) {
 
-                        tv_addBook_read_endDate.setText(year+"."+(int)(month+1)+"."+date);
+                        tv_addBook_read_finishDate.setText(String.format("%2d.%02d.%02d",year,month+1,date));
                     }
                 }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
 
-                dialog.getDatePicker().setMaxDate(new Date().getTime());    //오늘 날짜 이후의 날짜는 선택 안되게 하기
+                dialog.getDatePicker().setMaxDate(new Date().getTime());//오늘 날짜 이후의 날짜는 선택 안되게 하기
+
                 dialog.show();
 
 
@@ -282,9 +258,9 @@ public class AddBook extends AppCompatActivity {
         /////////////////////////////////다 읽은 날짜 클릭 리스너
 
 
-        //////////////////////////////읽고 있는 책 마지막으로 읽은 날 클릭 리스너
+        //////////////////////////////읽기 시작한 날 리스너
 
-        tv_addBook_reading_lastDate.setOnClickListener(new View.OnClickListener() {
+        tv_addBook_read_startDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -292,7 +268,10 @@ public class AddBook extends AppCompatActivity {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int date) {
 
-                        tv_addBook_reading_lastDate.setText(year+"."+(int)(month+1)+"."+date);
+
+                            tv_addBook_read_startDate.setText(String.format("%2d.%02d.%02d",year,month+1,date));
+
+
                         //이 데이터값을 어디에 따로 표시해두는 게 나중에 편하겠다. 이미 텍스트가 된 날짜값을 다시 구해오는 것보다 훨씬 낫겠지
                     }
                 }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
@@ -303,58 +282,10 @@ public class AddBook extends AppCompatActivity {
 
             }
         });
-        //읽고 있는 책 마지막으로 읽은 날 클릭 리스너
-
-        //취소 버튼 눌렀을 때
-        btn_addBook_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-
-        //확인 버튼을 눌렀을 때
-        btn_addBook_done.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                ////////////////////////////////////////////////////////////////////////////////////////제목과 작가가 없다면 썩 꺼져라
-
-//
-//                    if(et_title.getText().toString().equals("")){
-//                    isTitle = false;
-//                }else{
-//                    isTitle = true;
-//                    Toast.makeText(AddBook.this,"제목 있음. 넘어갈 수 있음",Toast.LENGTH_LONG);
-//                }
-//
-//                if(et_author.getText().toString().equals("")){
-//                    isAuthor =false;
-//                }else{
-//                    isAuthor =true;
-//                }
-
-//                    if(isTitle){
-//
-//                        if(isAuthor){
-//
-//                            Toast.makeText(AddBook.this,"둘 다 있음. 넘어갈 수 있음",Toast.LENGTH_LONG);
-////
-//
-//                        }else{
-//                            //Toast.makeText(AddBook.this,"작가를 입력해주세요",Toast.LENGTH_LONG);
-//                        }
-//
-//                    }else{
-//                        //Toast.makeText(AddBook.this,"책 제목을 입력해주세요",Toast.LENGTH_LONG);
-//                    }
-                ///////////////////////////////////////////////////책 제목이나 저자를 입력하지 않은 경우에는 넘어갈 수 없음.
+        //읽기 시작한 날 리스너
 
 
 
-            }
-        });
-        ////////////////////////////확인 버튼 눌렀을 때 끝
 
 
 
@@ -401,7 +332,7 @@ public class AddBook extends AppCompatActivity {
                         //책장 상태에 따라서 책 리스트를 가져온다 (읽은/읽을/읽는 중)
                             getPrefToArray();
 
-                            //공통으로 꼭 들어가야 할 요소를 넣어준다
+                            //공통으로 꼭 들어가야 할 작가와 제목을 넣어준다
                             Dictionary_book dictionary_book = new Dictionary_book(status,et_title.getText().toString(),et_author.getText().toString());
                             //책 커버 이미지가 있다면 이미지를 넣어준다.
                             if(coverBitmap!=null){
@@ -410,11 +341,11 @@ public class AddBook extends AppCompatActivity {
 
                             //각 상태별로 다양한 내용을 더 넣어준다.
                             if(reading){
-
+                                 dictionary_book.setStartDate(tv_addBook_read_startDate.getText().toString());
 
                             }else if(read) {
-
-                                dictionary_book.setFinishedDate(tv_addBook_read_endDate.getText().toString());
+                                dictionary_book.setStartDate(tv_addBook_read_startDate.getText().toString());
+                                dictionary_book.setFinishedDate(tv_addBook_read_finishDate.getText().toString());
                                 dictionary_book.setRating(rating_addBook_read.getRating());
                                 dictionary_book.setReview( et_addBook_read_ALineReview.getText().toString());
 
