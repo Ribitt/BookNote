@@ -16,6 +16,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,6 +27,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -198,9 +200,9 @@ public class EditBook extends AppCompatActivity {
 
     private void initialize() {
 
-        pref = getSharedPreferences("book", MODE_PRIVATE);
+        String currentEmail = getSharedPreferences("users", Context.MODE_PRIVATE).getString("currentUser","");
+        pref = getSharedPreferences(currentEmail,MODE_PRIVATE);
         editor = pref.edit();
-
 
 
         //뷰 위에서부터 초기화~~
@@ -488,10 +490,17 @@ public class EditBook extends AppCompatActivity {
                 json = pref.getString("interested","EMPTY");
         }
 
-        Type type = new TypeToken<ArrayList<Dictionary_book>>() {
-        }.getType();
-        ArrayList<Dictionary_book> list = gson.fromJson(json,type);
-        return list;
+        if(!json.equals("EMPTY")){
+            Type type = new TypeToken<ArrayList<Dictionary_book>>() {
+            }.getType();
+            bookList = gson.fromJson(json,type);
+            Log.d("들어오는지 확인", json);
+            //   Log.d("대체 어레이 리스트가 존재는 하는지 확인 ", String.valueOf(getArrayList.size()));
+            //  Log.d("대체 어레이 리스트가 존재는 하는지 확인 ", getArrayList.get(0).getTitle());
+        }else{
+            // 내용이 없으면 가져오지 않음
+        }
+        return bookList;
     }
 
 

@@ -65,15 +65,15 @@ public class Login extends AppCompatActivity {
             //오토 로그인 설정이 되어 있으면 로그인 처리를 알아서 하고 넘어간다.
 
             //일단 마지막으로 로그인한 유저가 자동 로그인을 누르고 갔다는 소리기 때문에 그 유저 이메일 가져오고
-            String autoLogin = pref.getString("currentUser","");
+            String userEmail = pref.getString("currentUser","");
             //그 유저 이름으로 된 저장소를 불러온다.
             // 해당 닉네임으로 인사해준다.
-            SharedPreferences userPref = getSharedPreferences(autoLogin,MODE_PRIVATE);
+            SharedPreferences userPref = getSharedPreferences(userEmail,MODE_PRIVATE);
             String nickname = userPref.getString("nickname","");
             Toast.makeText(Login.this, nickname+"님 환영합니다", Toast.LENGTH_SHORT).show();
 
             //바로 드로워 탭으로 이동하면서 지금 액티비티는 끝내기
-            Intent intent = new Intent(getApplicationContext(), DrawerTap.class);
+            Intent intent = new Intent(getApplicationContext(), Home.class);
             startActivity(intent);
             finish();
         }

@@ -1,6 +1,7 @@
 package com.example.booknoteapp;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -72,7 +73,10 @@ public class Fragment_reading extends Fragment {
         recyclerView_reading.setLayoutManager(new GridLayoutManager(getActivity(),3));
         recyclerView_reading.setAdapter(adapter_reading);
         btn_addBook = rootView.findViewById(R.id.btn_addBook);
-        pref = this.getActivity().getSharedPreferences("book",this.getActivity().MODE_PRIVATE);
+
+
+        String currentEmail = this.getActivity().getSharedPreferences("users", Context.MODE_PRIVATE).getString("currentUser","");
+        pref = this.getActivity().getSharedPreferences(currentEmail,this.getActivity().MODE_PRIVATE);
         editor = pref.edit();
 
     }

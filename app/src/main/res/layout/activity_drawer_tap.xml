@@ -53,58 +53,48 @@
 
 
         <Button
-            android:id="@+id/btn_to_drawer"
-            android:layout_width="40dp"
+            android:id="@+id/btn_to_home"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_gravity="center"
+            android:background="#DFDBDB"
 
-            android:textStyle="bold"
-            android:background="#F1CF69"
-            android:text="내 책장"
+            android:text="홈"
             />
 
         <Button
-            android:id="@+id/btn_to_calender"
-            android:layout_width="103dp"
+            android:id="@+id/btn_to_drawer"
+
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:textStyle="bold"
+            android:background="#F1CF69"
+            android:text="책장" />
+
+        <Button
+            android:id="@+id/btn_to_calender"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            android:layout_gravity="center"
+            android:layout_weight="1"
             android:background="#DFDBDB"
-
-            android:text="독서 달력" />
-
-
+            android:text="독서달력" />
 
         <Button
             android:id="@+id/btn_to_assay"
-            android:layout_width="40dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
 
             android:layout_gravity="center"
-            android:layout_weight="1"
+
             android:background="#DFDBDB"
             android:text="에세이" />
 
-        <Button
-            android:id="@+id/btn_to_stat"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:background="#DFDBDB"
-            android:text="통계" />
-
-
-        <Button
-            android:id="@+id/btn_to_setting"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:background="#DFDBDB"
-            android:text="설정" />
 
     </LinearLayout>
 

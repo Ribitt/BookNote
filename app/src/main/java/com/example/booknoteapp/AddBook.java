@@ -16,6 +16,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -134,7 +135,9 @@ public class AddBook extends AppCompatActivity {
 
     private void initialize() {
 
-        pref = getSharedPreferences("book", MODE_PRIVATE);
+
+        String currentEmail = getSharedPreferences("users", Context.MODE_PRIVATE).getString("currentUser","");
+        pref = getSharedPreferences(currentEmail,MODE_PRIVATE);
         editor = pref.edit();
 
 

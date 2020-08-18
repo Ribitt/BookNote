@@ -1,6 +1,7 @@
 package com.example.booknoteapp;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -68,7 +69,9 @@ public class Fragment_read extends Fragment {
         recyclerView_read.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView_read.setAdapter(adapter_read);
         btn_addBook = rootView.findViewById(R.id.btn_addBook);
-        pref = this.getActivity().getSharedPreferences("book",this.getActivity().MODE_PRIVATE);
+
+        String currentEmail = this.getActivity().getSharedPreferences("users", Context.MODE_PRIVATE).getString("currentUser","");
+        pref = this.getActivity().getSharedPreferences(currentEmail,this.getActivity().MODE_PRIVATE);
         editor = pref.edit();
 
     }
@@ -127,12 +130,12 @@ public class Fragment_read extends Fragment {
         getPrefToArray();
     }
 
-    private void saveArrayToPref(ArrayList<Dictionary_read> arrayList) {
-        Gson gson = new Gson();
-        String json = gson.toJson(arrayList);
-        editor.putString("bookList",json);
-        editor.apply();
-    }
+//    private void saveArrayToPref(ArrayList<Dictionary_read> arrayList) {
+//        Gson gson = new Gson();
+//        String json = gson.toJson(arrayList);
+//        editor.putString("bookList",json);
+//        editor.apply();
+//    }
 
 /////읽은 책 목록 불러오기
     private void getPrefToArray() {
@@ -145,11 +148,6 @@ public class Fragment_read extends Fragment {
             readBooksList = gson.fromJson(json,type);
         }
 
-//        for(int i =0; i<temp.size(); i++){
-//            if(temp.get(i).status.equals("read")){
-//                readBooksList.add(temp.get(i));
-//            }
-//        }
 
 //        Log.d("들어오는지 확인", json);
 //        Log.d("대체 어레이 리스트가 존재는 하는지 확인 ", String.valueOf(getArrayList.size()));
