@@ -5,6 +5,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +53,7 @@ public class Adapter_read extends RecyclerView.Adapter<Adapter_read.readViewHold
         TextView endDate;
         ImageView edit_or_delete;
 
-        public readViewHolder(@NonNull View itemView) {
+        public readViewHolder(@NonNull final View itemView) {
             super(itemView);
             bookCover = itemView.findViewById(R.id.btn_readD_bookCover);
             title = itemView.findViewById(R.id.tv_readD_bookTitle);
@@ -134,14 +138,19 @@ public class Adapter_read extends RecyclerView.Adapter<Adapter_read.readViewHold
 
         Dictionary_book dic = mList.get(position);
 
-      //  holder.bookCover.setImageDrawable(dic.getBookCover());
         holder.title.setText(dic.getTitle());
         holder.ratingBar.setRating(dic.getRating());
         holder.ALineReview.setText(dic.getReview());
         holder.endDate.setText(dic.getFinishedDate());
-        if(dic.bookCover!=null){
+
+        if(dic.bookCover==null){
+
+        }else{
             holder.bookCover.setImageBitmap(dic.getBookCover());
         }
+
+
+
 
 
 

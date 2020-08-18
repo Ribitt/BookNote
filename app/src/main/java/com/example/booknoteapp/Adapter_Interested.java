@@ -5,6 +5,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -124,10 +128,12 @@ public class Adapter_Interested extends androidx.recyclerview.widget.RecyclerVie
 
         Dictionary_book dic = mList.get(position);
 
-        if(dic.bookCover!=null){
+
+        if(dic.bookCover==null){
+
+        }else{
             holder.bookCover.setImageBitmap(dic.getBookCover());
         }
-
         holder.title.setText(dic.getTitle());
         holder.memo.setText(dic.getMemo());
 

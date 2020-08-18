@@ -1,15 +1,24 @@
 package com.example.booknoteapp;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+
+import androidx.annotation.Nullable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Dictionary_book implements Serializable {
+public class Dictionary_book
+        implements Serializable {
+
 
 
     //필수로 들어가야 하는 항목
@@ -52,8 +61,9 @@ public class Dictionary_book implements Serializable {
     }
 
     public Bitmap getBookCover() {
-        byte[] decodeByte = Base64.decode(this.bookCover,0);
-        return BitmapFactory.decodeByteArray(decodeByte, 0, decodeByte.length);
+
+            byte[] decodeByte = Base64.decode(this.bookCover,0);
+            return BitmapFactory.decodeByteArray(decodeByte, 0, decodeByte.length);
 
     }
 

@@ -7,10 +7,16 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +26,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
@@ -38,10 +45,7 @@ public class SearchBook extends AppCompatActivity {
     RecyclerView recyclerView =null;
     Adapter_SearchBook adapter_searchBook = null;
 
-
-
     android.widget.SearchView searchView;
-    TextView tv;
 
 
     @Override
@@ -60,8 +64,6 @@ public class SearchBook extends AppCompatActivity {
     private void initialize() {
 
         searchView = findViewById(R.id.search_searchBook);
-        tv = findViewById(R.id.search_tv);
-
 
 
         //////툴바 적용하기
@@ -74,26 +76,24 @@ public class SearchBook extends AppCompatActivity {
 
         //////////////리사이클러뷰
         recyclerView = findViewById(R.id.recycler_bookSearch);
-//
-//        for(int i=0; i<5; i++){
-//            dictionary_book = new Dictionary_book("reading","책제목","작가이름~~");
-//            bookList.add(dictionary_book);
-//        }
-
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
         //////////////리사이클러뷰
+
+
     }////이니셜라이저 끝
 
 
     private void allListener() {
+
+        ///검색창 검색 클릭 이벤트
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(final String query) {
-                Toast.makeText(getApplicationContext(), "검색버튼 누름 : "+query, Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(getApplicationContext(), "검색버튼 누름 : "+query, Toast.LENGTH_SHORT).show();
 
+                //별도의 스레드를 돌려서 결과를 가져와야 한다.
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -106,9 +106,6 @@ public class SearchBook extends AppCompatActivity {
 
                     }
                 }).start();
-
-
-
                 return true;
             }
 
@@ -117,8 +114,45 @@ public class SearchBook extends AppCompatActivity {
                 return false;
             }
         });
+        ///////////검색창 검색 클릭 끝
+
+
 
     }//올리스너 끝
+
+
+
+
+    private String removeHTMLTag(String string){
+        Spanned mText = Html.fromHtml(string);
+        String text = mText.toString();
+        return text;
+    }
+
+    private Bitmap urlToBitmap(String string){
+        URL imgUrl;
+        HttpURLConnection connection = null;
+        InputStream is;
+        Bitmap bookCover =null;
+
+        try{
+            imgUrl = new URL(string);
+            connection = (HttpURLConnection) imgUrl.openConnection();
+            connection.setDoInput(true); //url로 input받는 flag 허용
+            connection.connect();
+            is = connection.getInputStream();
+            bookCover = BitmapFactory.decodeStream(is);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+
+        }finally {
+            if(connection!=null){
+                connection.disconnect();
+            }
+            return bookCover;
+        }
+    }
 
     Handler handler = new Handler(){
         @Override
@@ -172,16 +206,20 @@ public class SearchBook extends AppCompatActivity {
                                 break;
                             case "title":
                                 if(dictionary_book!=null)
-                                    dictionary_book.setTitle(xpp.nextText());
+                                    dictionary_book.setTitle(removeHTMLTag(xpp.nextText()));
                                 break;
                             case "author":
                                 if(dictionary_book!=null)
-                                    dictionary_book.setAuthor(xpp.nextText());
+                                    dictionary_book.setAuthor(removeHTMLTag(xpp.nextText()));
                                 break;
                             case "publisher":
                                 if(dictionary_book!=null)
-                                    dictionary_book.setPublisher(xpp.nextText());
+                                    dictionary_book.setPublisher(removeHTMLTag(xpp.nextText()));
                                 break;
+
+                            case "image":
+                                if(dictionary_book!=null)
+                                    dictionary_book.setBookCover(urlToBitmap(xpp.nextText()));
                         }
                         break;
                     }///스타트 태그인 경우 끝
@@ -189,8 +227,8 @@ public class SearchBook extends AppCompatActivity {
                     case XmlPullParser.END_TAG:{
                         tag = xpp.getName();
                         if(tag.equals("item")){
-                            list.add(dictionary_book);
 
+                            list.add(dictionary_book);
                             dictionary_book=null;
                         }
                     }
@@ -205,14 +243,19 @@ public class SearchBook extends AppCompatActivity {
 
         }catch (MalformedURLException e) {
             // TODO Auto-generated catch block
+            System.out.println("이건가//////////////////////////////////Malformed");
             e.printStackTrace();
         } catch (UnsupportedEncodingException e) {
             // TODO Auto-generated catch block
+            System.out.println("이건가//////////////////////////////////Unsupported");
             e.printStackTrace();
         } catch (IOException e) {
             // TODO Auto-generated catch block
+            System.out.println("이건가//////////////////////////////////IOE");
+            Toast.makeText(this, "인터넷 연결을 확인하세요", Toast.LENGTH_LONG).show();
             e.printStackTrace();
         } catch (XmlPullParserException e) {
+            System.out.println("이건가//////////////////////////////////XmlPullParser");
             // TODO Auto-generated catch block
             e.printStackTrace();
         }

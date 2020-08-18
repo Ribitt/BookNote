@@ -97,7 +97,8 @@ public class Fragment_toRead extends Fragment {
                                                 startActivity(intent);
                                                 break;
                                             case 1:
-                                                Toast.makeText(rootView.getContext(),list_howToAddBook[1]+"를 골랐습니다.",Toast.LENGTH_LONG).show();
+                                                Intent intent1 = new Intent(rootView.getContext(), SearchBook.class);
+                                                startActivity(intent1);
 
                                                 break;
                                             case 2:

@@ -412,6 +412,7 @@ public class EditBook extends AppCompatActivity {
                          //저장
                         }
 
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                         startActivity(intent);
                         finish();
 
@@ -449,13 +450,15 @@ public class EditBook extends AppCompatActivity {
         if(coverBitmap!=null){
             dictionary_book.setBookCover(coverBitmap);
         }
+        dictionary_book.setPageNum(et_page.getText().toString());
+        dictionary_book.setPublisher(et_publisher.getText().toString());
 
         //각 상태별로 다양한 내용을 더 넣어준다.
         if(reading){
 
-
+            dictionary_book.setStartDate(tv_addBook_read_startDate.getText().toString());
         }else if(read) {
-
+            dictionary_book.setStartDate(tv_addBook_read_startDate.getText().toString());
             dictionary_book.setFinishedDate(tv_addBook_read_finishDate.getText().toString());
             dictionary_book.setRating(rating_addBook_read.getRating());
             dictionary_book.setReview( et_addBook_read_ALineReview.getText().toString());

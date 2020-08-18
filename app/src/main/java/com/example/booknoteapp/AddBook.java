@@ -73,10 +73,6 @@ public class AddBook extends AppCompatActivity {
 
     ArrayList<Dictionary_book> bookList = new ArrayList<>();
 
-    ArrayList<Dictionary_book> readList = new ArrayList<>();
-    ArrayList<Dictionary_book> readingList = new ArrayList<>();
-    ArrayList<Dictionary_book> interestedList = new ArrayList<>();
-
 
     ////이미지/카메라 받아오기
     private static final int PICK_FROM_ALBUM =185;
@@ -92,7 +88,6 @@ public class AddBook extends AppCompatActivity {
     EditText et_page;
     EditText et_publisher;
 
-
     LinearLayout layout_read;
     LinearLayout layout_interested;
     LinearLayout layout_startDate;
@@ -104,7 +99,6 @@ public class AddBook extends AppCompatActivity {
 
     TextView tv_addBook_read_startDate;
     EditText et_addBook_interested_memo;
-
 
     SharedPreferences pref;
     SharedPreferences.Editor editor;
@@ -129,10 +123,9 @@ public class AddBook extends AppCompatActivity {
         actionBar.setTitle("책 추가하기");
 
 
-
         initialize();
+        getSearchedBook();
         allListener();
-
 
 
     }//온크리에이트 여기까지
@@ -181,6 +174,27 @@ public class AddBook extends AppCompatActivity {
         //날짜 표시되는 부분 오늘 날짜로 세팅
 
     }//이니셜라이저 끝
+
+    private void getSearchedBook() {
+
+        Intent intent = getIntent();
+
+        if(intent.getExtras()==null
+        ){
+            /////그냥 책 추가하기를 누른 경우. 아무 일도 안해도 된다.
+        }else{
+            //책 검색을 통해 넘어온 경우. 이미지, 저자, 책제목, 출판사를 세팅해준다.
+           Dictionary_book dict = (Dictionary_book) intent.getSerializableExtra("searchedBook");
+           et_title.setText(dict.getTitle());
+           imageV_addBook_addBookCover.setImageBitmap(dict.getBookCover());
+           coverBitmap = dict.getBookCover();
+           tv_addBookCover.setText("");
+           et_publisher.setText(dict.getPublisher());
+           et_author.setText(dict.getAuthor());
+
+        }
+
+    }
 
     private void allListener() {
 
@@ -361,6 +375,7 @@ public class AddBook extends AppCompatActivity {
                             //쉐어드에 저장해준다.
                             saveBookArrayToPref(bookList);
                             //이제 책 추가 액티비티는 종료
+                            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                             startActivity(intent);
                             finish();
                             ///////////////////////////////////////////////////////////////////////////////////////////////////책 저장하기 완료

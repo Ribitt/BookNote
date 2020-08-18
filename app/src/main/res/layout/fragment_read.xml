@@ -15,6 +15,7 @@
         android:id="@+id/recycler_read"
         android:scrollbars="vertical"
         android:scrollbarSize="5dp"
+        android:scrollbarThumbVertical="@color/yellowGreen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

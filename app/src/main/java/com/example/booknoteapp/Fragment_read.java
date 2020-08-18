@@ -91,14 +91,18 @@ public class Fragment_read extends Fragment {
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         switch (i) {
                                             case 0:
+                                                //직접 입력
                                                 Intent intent = new Intent(rootView.getContext(), AddBook.class);
                                                 startActivity(intent);
                                                 break;
                                             case 1:
-                                                Toast.makeText(rootView.getContext(),list_howToAddBook[1]+"를 골랐습니다.",Toast.LENGTH_LONG).show();
+                                                //검색해서 입력
+                                                Intent intent1 = new Intent(rootView.getContext(), SearchBook.class);
+                                                startActivity(intent1);
 
                                                 break;
                                             case 2:
+                                                //바코드 스캔
                                                 Toast.makeText(rootView.getContext(),list_howToAddBook[2]+"을 골랐습니다.",Toast.LENGTH_LONG).show();
 
 

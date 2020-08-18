@@ -28,16 +28,13 @@
         android:iconifiedByDefault="false"/>
 
 
-    <TextView
-        android:id="@+id/search_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="00:00"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_bookSearch"
         android:scrollbars="vertical"
-        android:scrollbarSize="10dp"
+        android:scrollbarSize="5dp"
+        android:scrollbarStyle="outsideInset"
+        android:scrollbarThumbVertical="@color/yellowGreen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

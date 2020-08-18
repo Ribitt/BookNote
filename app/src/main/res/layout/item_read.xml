@@ -13,8 +13,8 @@
         android:background="@drawable/empty_background"
         android:padding="2dp"
         android:scaleType="fitCenter"
+        app:srcCompat="@drawable/ic_book"/>
 
-        app:srcCompat="@drawable/ic_book" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,22 +30,20 @@
 
             <TextView
                 android:id="@+id/tv_readD_bookTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:layout_marginBottom="5dp"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="wrap_content"
+                android:maxLines="3"
                 android:ellipsize="end"
-                android:maxLines="1"
+
+                android:layout_marginBottom="5dp"
                 android:text="김지은입니다"
                 android:textStyle="bold"
                 android:textSize="16sp"
 
                 ></TextView>
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text=""/>
+
 
             <ImageView
                 android:id="@+id/btn_edit_or_delete"
@@ -93,7 +91,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
             android:ellipsize="end"
-            android:maxLines="2"
+            android:maxLines="3"
 
             android:text="한줄 평이 들어가는 자리인데 혹시 줄이 길어지면 이거 그냥 잘리나
 나는 두줄까지 "
