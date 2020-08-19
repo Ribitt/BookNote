@@ -60,12 +60,12 @@ public class Coordinator extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         for(int i=0; i<20; i++) {
-
-            dic = new Dictionary_note("123","2020.08.01","아주 재미가 있는 책이었다 이말입니다." +
-                    "\n완전 읽을 맛이 났다." +
-                    "\n얼른 과제 끝내고 또 보고 싶다. " +
-                    "\n후후후후후후후" +
-                    "\naskdjf;alsdj;fak","사실 여기가 제일 중요한 내용인데 ", myBlue);
+//
+//            dic = new Dictionary_note("123","2020.08.01","아주 재미가 있는 책이었다 이말입니다." +
+//                    "\n완전 읽을 맛이 났다." +
+//                    "\n얼른 과제 끝내고 또 보고 싶다. " +
+//                    "\n후후후후후후후" +
+//                    "\naskdjf;alsdj;fak","사실 여기가 제일 중요한 내용인데 ", myBlue);
 
             mList.add(dic);
             adapterNote.notifyDataSetChanged();

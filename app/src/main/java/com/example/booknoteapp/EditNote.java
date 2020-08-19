@@ -192,7 +192,7 @@ public class EditNote extends AppCompatActivity {
                 //노트 추가 화면에서 책 상세 화면으로 넘겨줘야 할 자료들 인텐트에 넣기
                 Intent intent = new Intent();
                 Dictionary_note dic;
-                dic = new Dictionary_note(page,date,quote,note,pickedColor);
+                dic = new Dictionary_note("네목",page,date,quote,note,pickedColor);
                 intent.putExtra("dictionary",dic);
                 intent.putExtra("note",note);
                 setResult(RESULT_OK,intent);
@@ -243,7 +243,7 @@ public class EditNote extends AppCompatActivity {
             //노트 추가 화면에서 책 상세 화면으로 넘겨줘야 할 자료들 인텐트에 넣기
             Intent intent = new Intent();
             Dictionary_note dic;
-            dic = new Dictionary_note(page,date,quote,note,pickedColor);
+            dic = new Dictionary_note("제목",page,date,quote,note,pickedColor);
             intent.putExtra("dictionary",dic);
             intent.putExtra("note",note);
             setResult(RESULT_OK,intent);

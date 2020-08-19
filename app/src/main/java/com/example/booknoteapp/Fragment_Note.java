@@ -1,11 +1,19 @@
 package com.example.booknoteapp;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.SearchView;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -13,6 +21,62 @@ import androidx.fragment.app.Fragment;
  * create an instance of this fragment.
  */
 public class Fragment_Note extends Fragment {
+
+
+    ViewGroup rootView;
+
+    SearchView searchView;
+    Button btn_sort_note;
+    Button btn_addNote;
+
+    RecyclerView recyclerView;
+
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
+    ArrayList<Dictionary_note> noteList;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        rootView = (ViewGroup)inflater.inflate(R.layout.fragment__note,container,false);
+
+        initialize();
+        allListener();
+
+        return rootView;
+    }
+
+
+    private void initialize(){
+        searchView = rootView.findViewById(R.id.searchView_note);
+        btn_sort_note = rootView.findViewById(R.id.btn_sort_note);
+        btn_addNote = rootView.findViewById(R.id.btn_addNote);
+
+        recyclerView = rootView.findViewById(R.id.recycler_notes);
+
+        String currentEmail = this.getActivity().getSharedPreferences("users", Context.MODE_PRIVATE).getString("currentUser","");
+        pref = this.getActivity().getSharedPreferences(currentEmail,this.getActivity().MODE_PRIVATE);
+        editor = pref.edit();
+    }
+
+    private void allListener() {
+
+        //노트추가 버튼
+        btn_addNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(rootView.getContext(), AddNote.class);
+                startActivity(intent);
+
+            }
+        });
+      //  노트추가 버튼 끝
+
+    }
+
+
+
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -54,10 +118,5 @@ public class Fragment_Note extends Fragment {
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment__note, container, false);
-    }
+
 }

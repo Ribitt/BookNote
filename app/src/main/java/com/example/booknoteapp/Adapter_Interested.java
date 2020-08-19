@@ -137,7 +137,8 @@ public class Adapter_Interested extends androidx.recyclerview.widget.RecyclerVie
         Adapter_Interested.interestedViewHolder holder = new Adapter_Interested.interestedViewHolder(view);
 
         //쉐어드를 쓰고 싶다면 온크리에이트 뷰홀더에~~
-        pref = mContext.getSharedPreferences("book", MODE_PRIVATE);
+        String currentEmail = mContext.getSharedPreferences("users", Context.MODE_PRIVATE).getString("currentUser","");
+        pref = mContext.getSharedPreferences(currentEmail,mContext.MODE_PRIVATE);
         editor = pref.edit();
 
 

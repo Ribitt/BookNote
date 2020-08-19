@@ -144,7 +144,8 @@ public class Adapter_read extends RecyclerView.Adapter<Adapter_read.readViewHold
         Adapter_read.readViewHolder holder = new Adapter_read.readViewHolder(view);
 
         //쉐어드를 쓰고 싶다면 온크리에이트 뷰홀더에~~
-        pref = mContext.getSharedPreferences("book", MODE_PRIVATE);
+        String currentEmail = mContext.getSharedPreferences("users", Context.MODE_PRIVATE).getString("currentUser","");
+        pref = mContext.getSharedPreferences(currentEmail,mContext.MODE_PRIVATE);
         editor = pref.edit();
 
 

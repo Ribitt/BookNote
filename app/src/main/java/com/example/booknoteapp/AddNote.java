@@ -3,15 +3,19 @@ package com.example.booknoteapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NavUtils;
 import androidx.core.content.ContextCompat;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,7 +28,12 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -52,6 +61,11 @@ public class AddNote extends AppCompatActivity {
     int myRed;
     int pickedColor;
 
+    String title;
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
+    ArrayList<Dictionary_note> noteList = new ArrayList<>();
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -67,16 +81,29 @@ public class AddNote extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_note);
 
+
+        initialize();
+        allListener();
+
+        //////툴바 적용하기
+        Toolbar toolbar = (Toolbar)findViewById(R.id.app_toolbar);
+        toolbar.setTitleTextColor(getResources().getColor(R.color.green));
+        setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("노트 작성");
-       actionBar.setDisplayHomeAsUpEnabled(false);
-        //뒤로가기 버튼 생성
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle("노트 추가하기");
 
 
 
+    }
 
-        Toast.makeText(this, "onCreate 호출 됨",Toast.LENGTH_LONG).show();
-       ////////////생명주기 테스트
+
+    private void initialize() {
+
+        String currentEmail = getSharedPreferences("users", Context.MODE_PRIVATE).getString("currentUser","");
+        pref = getSharedPreferences(currentEmail,this.MODE_PRIVATE);
+        editor = pref.edit();
+        title = pref.getString("bookNow","");
 
 
         //라디오 버튼 선언
@@ -101,8 +128,16 @@ public class AddNote extends AppCompatActivity {
         tv_addNote_date = findViewById(R.id.tv_addNote_date);
 
 
-        //////////////////////////////////////////////////노트 쓰는 날짜 고르기
         tv_addNote_date.setHint(time);
+
+
+    }
+
+
+    private void allListener() {
+
+
+        //읽은 날짜
         tv_addNote_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,14 +153,10 @@ public class AddNote extends AppCompatActivity {
                 dialog.getDatePicker().setMaxDate(new Date().getTime());    //입력한 날짜 이후로 클릭 안되게 옵션
                 dialog.show();
 
-
             }
         });
         /////////////////////////////////////////////////////노트 쓰는 날짜 고르기
-
     }
-
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
@@ -147,39 +178,29 @@ public class AddNote extends AppCompatActivity {
 //            }
 //        });
        switch (item.getItemId()) {
-//           case android.R.id.home:
-//               boolean a=false;
-//
-//               if(a){
-//                   AlertDialog alert = reallyGoOutAlert.create();
-//                   alert.setTitle("정말로 나가시겠습니까?");
-//                   alert.show();
-//
-//
-//                   a= check[0];
-//               }
-//
-//
-//          return a;
+           case android.R.id.home:
+               Intent intent1 = new Intent(getApplicationContext(), BookLog_Notes.class);
+               intent1.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+               startActivity(intent1);
+               finish();
+
+          return true;
 
            case R.id.btn_done:
+
+               //완료 버튼을 누른 경우 (저장하기)
 
 //            String message = editText_userNote.getText().toString();
 //            String page =editText_page.getText().toString();
 
-               String note = editText_userNote.getText().toString();
-               String page =editText_page.getText().toString();
-               String date = tv_addNote_date.getText().toString();
-               String quote = editText_quote.getText().toString();
+               getPrefToArray();
+               //쉐어드에 저장된 리스트를 불러온다.
+               saveNewNoteToArray();
+               //리스트에 지금 노트를 추가한다.
+               saveArrayToPref();
+               //리스트를 다시 저장한다.
 
-              //노트 추가 화면에서 책 상세 화면으로 넘겨줘야 할 자료들 인텐트에 넣기
-               Intent intent = new Intent();
-               Dictionary_note dic;
-               dic = new Dictionary_note(page,date,quote,note,pickedColor);
-               intent.putExtra("dictionary",dic);
-               intent.putExtra("note",note);
-               setResult(RESULT_OK,intent);
-               finish();
+
 
                return true;
 
@@ -189,6 +210,48 @@ public class AddNote extends AppCompatActivity {
 
 
     }
+
+    private void saveArrayToPref() {
+        Gson gson = new Gson();
+        String json = gson.toJson(noteList);
+        editor.putString("note",json);
+        editor.commit();
+    }
+
+
+    //지금 받은 정보 어레이 리스트에 저장하기
+    private void saveNewNoteToArray() {
+        String note = editText_userNote.getText().toString();
+        String page =editText_page.getText().toString();
+        String date = tv_addNote_date.getText().toString();
+        String quote = editText_quote.getText().toString();
+
+        Dictionary_note newNote = new Dictionary_note(title,page,date,quote,note,pickedColor);
+        noteList.add(0,newNote);
+
+    }
+    //지금 받은 정보 저장하기 끝
+
+    ///쉐어드 프리퍼런스 가져와서 어레이 리스트로 바꿔주기
+    private void getPrefToArray() {
+        Gson gson = new Gson();
+        String json ="EMPTY";
+        json = pref.getString("note","EMPTY");
+
+        if(!json.equals("EMPTY")){
+            Type type = new TypeToken<ArrayList<Dictionary_note>>() {
+            }.getType();
+            noteList = gson.fromJson(json,type);
+            Log.d("들어오는지 확인", json);
+            //   Log.d("대체 어레이 리스트가 존재는 하는지 확인 ", String.valueOf(getArrayList.size()));
+            //  Log.d("대체 어레이 리스트가 존재는 하는지 확인 ", getArrayList.get(0).getTitle());
+        }else{
+            // 내용이 없으면 가져오지 않음
+        }
+
+    }
+    ///쉐어드 프리퍼런스 가져와서 어레이 리스트로 바꿔주기 끝
+
 
     @Override
     public void onBackPressed() {
@@ -223,14 +286,14 @@ public class AddNote extends AppCompatActivity {
             String quote = editText_quote.getText().toString();
 
 
-            //노트 추가 화면에서 책 상세 화면으로 넘겨줘야 할 자료들 인텐트에 넣기
-            Intent intent = new Intent();
-            Dictionary_note dic;
-            dic = new Dictionary_note(page,date,quote,note,pickedColor);
-            intent.putExtra("dictionary",dic);
-            intent.putExtra("note",note);
-            setResult(RESULT_OK,intent);
-            finish();
+//            //노트 추가 화면에서 책 상세 화면으로 넘겨줘야 할 자료들 인텐트에 넣기
+//            Intent intent = new Intent();
+//            Dictionary_note dic;
+//            dic = new Dictionary_note(page,date,quote,note,pickedColor);
+//            intent.putExtra("dictionary",dic);
+//            intent.putExtra("note",note);
+//            setResult(RESULT_OK,intent);
+//            finish();
         }
 
     }

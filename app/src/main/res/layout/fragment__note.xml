@@ -18,6 +18,7 @@
             android:gravity="center_vertical">
 
             <SearchView
+                android:id="@+id/searchView_note"
                 android:layout_width="0dp"
                 android:layout_weight="8"
                 android:layout_height="20dp"
@@ -26,6 +27,7 @@
                 />
 
             <Button
+                android:id="@+id/btn_sort_note"
                 android:layout_width="0dp"
                 android:layout_weight="2"
                 android:layout_height="40dp"
@@ -67,11 +69,10 @@
 
 
     <Button
-        android:id="@+id/btn_addBook"
-
+        android:id="@+id/btn_addNote"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:background="@drawable/button_yello"
+        android:background="@drawable/button_yellowgreen"
         android:layout_gravity="right|bottom"
         android:layout_marginEnd="50dp"
         android:layout_marginBottom="60dp"

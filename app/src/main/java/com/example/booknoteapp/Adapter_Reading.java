@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -111,6 +112,9 @@ public class Adapter_Reading extends androidx.recyclerview.widget.RecyclerView.A
                     Dictionary_book selectedBook = readingArrayList.get(getAdapterPosition());
                     intent.putExtra("selectedBook",selectedBook);
                     intent.putExtra("position",getAdapterPosition());
+
+                    editor.putString("bookNow",selectedBook.getTitle());
+                    editor.commit();
                     mContext.startActivity(intent);
 
                 }
@@ -159,7 +163,10 @@ public class Adapter_Reading extends androidx.recyclerview.widget.RecyclerView.A
         //그 뷰 자리를 가지고 있는 뷰 홀더를 만들어서 리턴
 
         //쉐어드를 쓰고 싶다면 온크리에이트 뷰홀더에~~
-        pref = mContext.getSharedPreferences("book", MODE_PRIVATE);
+
+
+        String currentEmail = mContext.getSharedPreferences("users", Context.MODE_PRIVATE).getString("currentUser","");
+        pref = mContext.getSharedPreferences(currentEmail,mContext.MODE_PRIVATE);
         editor = pref.edit();
 
         return viewHolder;

@@ -7,11 +7,21 @@ import java.io.Serializable;
 
 public class Dictionary_note implements Serializable {
 
+    String title;
     String pageNum;
     String date;
     String note;
     String quote;
     int color;
+
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public int getColor() {
 
@@ -54,7 +64,8 @@ public class Dictionary_note implements Serializable {
         this.note = note;
     }
 
-    public Dictionary_note(String pageNum, String date, String quote,String note, int color) {
+    public Dictionary_note(String title,String pageNum, String date, String quote,String note, int color) {
+        this.title = title;
         this.pageNum = pageNum;
         this.date = date;
         this.note = note;
