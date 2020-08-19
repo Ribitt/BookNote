@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -73,7 +72,7 @@ public class Login extends AppCompatActivity {
             Toast.makeText(Login.this, nickname+"님 환영합니다", Toast.LENGTH_SHORT).show();
 
             //바로 드로워 탭으로 이동하면서 지금 액티비티는 끝내기
-            Intent intent = new Intent(getApplicationContext(), Home.class);
+            Intent intent = new Intent(getApplicationContext(), MainHome.class);
             startActivity(intent);
             finish();
         }

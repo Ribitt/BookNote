@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Home"
+    tools:context=".MainHome"
     android:orientation="vertical">
 
 
@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:background="@drawable/border_underline"
+        android:background="@drawable/thick_green_underline"
       >
 
         <LinearLayout
@@ -341,7 +341,7 @@
                     android:layout_marginBottom="15dp"/>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_home_reading"
+                    android:id="@+id/recycler_reading"
                     android:layout_width="match_parent"
                     android:layout_height="200dp">
 

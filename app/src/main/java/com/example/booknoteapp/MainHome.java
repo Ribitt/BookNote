@@ -9,21 +9,38 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class Home extends AppCompatActivity {
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+
+public class MainHome extends AppCompatActivity {
 
     TextView nickname;
-
-    SharedPreferences currentUserPref;
-    SharedPreferences.Editor currentUserPrefEditor;
 
     Button btn_toDrawer;
     Button btn_toEssay;
     Button btn_toCalender;
     Button btn_toHome;
     ImageView btn_toSetting;
+
+
+   RecyclerView recentReadingRecycler;
+    Adapter_Reading adapter_reading=null;
+    ArrayList<Dictionary_book> readingList;
+
+
+    SharedPreferences currentUserPref;
+    SharedPreferences.Editor currentUserPrefEditor;
+
+
 
 
 
@@ -35,6 +52,8 @@ public class Home extends AppCompatActivity {
 
         initialize();
         allListener();
+        getReadingPrefToArray();
+        showReadingRecycler();
     }
 
     private void initialize() {
@@ -47,6 +66,10 @@ public class Home extends AppCompatActivity {
         btn_toEssay =findViewById(R.id.btn_to_assay);
         btn_toHome = findViewById(R.id.btn_to_home);
         btn_toSetting = findViewById(R.id.btn_home_setting);
+
+        //리사이클러뷰
+        recentReadingRecycler = findViewById(R.id.recycler_reading);
+
 
 
         //관리자용 쉐어드를 불러온다
@@ -67,7 +90,7 @@ public class Home extends AppCompatActivity {
         btn_toHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), Home.class);
+                Intent intent = new Intent(getApplicationContext(), MainHome.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
             }
@@ -117,4 +140,27 @@ public class Home extends AppCompatActivity {
         });
 
     }//올리스너 끝
+
+
+    private void getReadingPrefToArray() {
+        Gson gson = new Gson();
+        String json = currentUserPref.getString("reading","EMPTY");
+        Type type = new TypeToken<ArrayList<Dictionary_book>>() {
+        }.getType();
+        if(!json.equals("EMPTY")){
+            readingList= gson.fromJson(json,type);
+        }
+
+    }
+
+    private void showReadingRecycler() {
+        adapter_reading = new Adapter_Reading(readingList);
+        recentReadingRecycler.setAdapter(adapter_reading);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recentReadingRecycler.setLayoutManager(layoutManager);
+
+    }
+
+
+
 }
