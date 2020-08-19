@@ -8,11 +8,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**
@@ -30,10 +36,11 @@ public class Fragment_Note extends Fragment {
     Button btn_addNote;
 
     RecyclerView recyclerView;
+    Adapter_Note adapter;
 
     SharedPreferences pref;
     SharedPreferences.Editor editor;
-    ArrayList<Dictionary_note> noteList;
+    ArrayList<Dictionary_note> noteList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,12 +54,15 @@ public class Fragment_Note extends Fragment {
     }
 
 
+
     private void initialize(){
         searchView = rootView.findViewById(R.id.searchView_note);
         btn_sort_note = rootView.findViewById(R.id.btn_sort_note);
         btn_addNote = rootView.findViewById(R.id.btn_addNote);
 
         recyclerView = rootView.findViewById(R.id.recycler_notes);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
 
         String currentEmail = this.getActivity().getSharedPreferences("users", Context.MODE_PRIVATE).getString("currentUser","");
         pref = this.getActivity().getSharedPreferences(currentEmail,this.getActivity().MODE_PRIVATE);
@@ -75,8 +85,40 @@ public class Fragment_Note extends Fragment {
     }
 
 
+    private void getArrayFromPref(){
+
+        Gson gson = new Gson();
+        String json = pref.getString("note","EMPTY");
+        noteList.clear();
+        //클리어를 해줘야 반복해서 내용이 저장되지 않는다. 
 
 
+        if(!json.equals("EMPTY")){
+            Type type = new TypeToken<ArrayList<Dictionary_note>>() {
+            }.getType();
+
+            ArrayList<Dictionary_note> allList = gson.fromJson(json,type);
+            String bookNow = pref.getString("bookNow","");
+
+            for(int i=0; i<allList.size();i++){
+                if(allList.get(i).getTitle().equals(bookNow)){
+                    noteList.add(allList.get(i));
+                }
+
+            }
+        }
+        adapter = new Adapter_Note(noteList);
+        recyclerView.setAdapter(adapter);
+
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getArrayFromPref();
+
+    }
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

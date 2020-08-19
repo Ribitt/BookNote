@@ -128,7 +128,7 @@ public class AddNote extends AppCompatActivity {
         tv_addNote_date = findViewById(R.id.tv_addNote_date);
 
 
-        tv_addNote_date.setHint(time);
+        tv_addNote_date.setText(time);
 
 
     }
@@ -199,8 +199,7 @@ public class AddNote extends AppCompatActivity {
                //리스트에 지금 노트를 추가한다.
                saveArrayToPref();
                //리스트를 다시 저장한다.
-
-
+               finish();
 
                return true;
 
@@ -363,15 +362,15 @@ public class AddNote extends AppCompatActivity {
         public void onCheckedChanged(RadioGroup radioGroup, int i) {
 
             if(i==R.id.radioBtn_addnote_black) {
-                Toast.makeText(getApplicationContext(), "검은색 버튼을 누르셨습니다.", Toast.LENGTH_SHORT).show();
+
                 editText_userNote.setTextColor(myBlack);
                 pickedColor = myBlack;
             }else if(i==R.id.radioBtn_addnote_blue){
-                Toast.makeText(getApplicationContext(), "파란색 버튼을 누르셨습니다.", Toast.LENGTH_SHORT).show();
+
                 editText_userNote.setTextColor(myBlue);
                 pickedColor = myBlue;
             }else if(i==R.id.radioBtn_addnote_red){
-                Toast.makeText(getApplicationContext(), "빨간색 버튼을 누르셨습니다.", Toast.LENGTH_SHORT).show();
+
                 editText_userNote.setTextColor(myRed);
                 pickedColor = myRed;
             }

@@ -44,7 +44,7 @@ public class Adapter_Note extends RecyclerView.Adapter<Adapter_Note.noteViewHold
 
 
         holder.btn_edit.setTag(holder.getAdapterPosition());
-        holder.btn_edit.setOnClickListener(mEditListener);
+       // holder.btn_edit.setOnClickListener(mEditListener);
         //태그 달고 외부에서 리스너를 받아 설정
 
         //태그를 달아라. 걍 달고 다닐 수 있고 부를 수 있는 뭐 그런건갑지?
@@ -93,8 +93,8 @@ public class Adapter_Note extends RecyclerView.Adapter<Adapter_Note.noteViewHold
     }
 
 
-    public Adapter_Note(ArrayList<Dictionary_note> mList, View.OnClickListener mEditListener) {
+    public Adapter_Note(ArrayList<Dictionary_note> mList) {
         this.mList = mList;
-        this.mEditListener = mEditListener;
+      //  this.mEditListener = mEditListener;
     }
 }

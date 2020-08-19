@@ -239,8 +239,6 @@ public class SearchBook extends AppCompatActivity {
 
 
 
-
-
         }catch (MalformedURLException e) {
             // TODO Auto-generated catch block
             System.out.println("이건가//////////////////////////////////Malformed");

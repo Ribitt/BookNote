@@ -2,6 +2,7 @@ package com.example.booknoteapp;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -43,8 +44,6 @@ public class BookLog_Notes extends AppCompatActivity  {
     TextView tv_p;
     //노트 추가 버튼
     Button btn_addNote;
-
-
     int position;
     //수정하려고 하는 리사이클러 뷰 인덱스 넘버
 
@@ -79,6 +78,8 @@ public class BookLog_Notes extends AppCompatActivity  {
 
 
     private void initialize() {
+
+
         tv_bookLog_title = findViewById(R.id.tv_bookLog_title);
         bookCoverImg =findViewById(R.id.bookCoverImg);
         tv_author = findViewById(R.id.tv_bookLog_author);
@@ -106,6 +107,10 @@ public class BookLog_Notes extends AppCompatActivity  {
     }//이니셜라이저 끝
 
 
+    private void getNote() {
+
+
+    }
     //전달받은 책 정보 띄우기
     private void setIntentDate() {
         Intent intent = getIntent();
