@@ -105,6 +105,7 @@
             android:layout_width="match_parent"
             android:background="@drawable/border_underline"
             android:layout_height="wrap_content"
+            android:maxLines="3"
             android:padding="5dp"
             android:ellipsize="end"
             android:text="책에서 인용한 내용이 들어갈 부분"></TextView>
@@ -116,6 +117,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="5dp"
+            android:maxLines="4"
             android:ellipsize="end"
             android:text="여기에 메모 내용이 들어갑니다. 아 참으로 재미있는 책이었다. 울룰루 뚤루루 "></TextView>
 

@@ -1,12 +1,12 @@
 package com.example.booknoteapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.ViewPager;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -26,6 +26,13 @@ public class DrawerTap extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawer_tap);
 
+        initialize();
+        allListener();
+
+
+    }//온크리에이트 끝
+
+    private void initialize() {
         ViewPager vp = findViewById(R.id.viewpager);
         Adapter_ViewPager adapter_viewPager = new Adapter_ViewPager(getSupportFragmentManager());
         vp.setAdapter(adapter_viewPager);
@@ -38,7 +45,9 @@ public class DrawerTap extends AppCompatActivity {
         btn_toCalender =findViewById(R.id.btn_to_calender);
         btn_toEssay =findViewById(R.id.btn_to_assay);
         btn_toHome = findViewById(R.id.btn_to_home);
+    }
 
+    private void allListener() {
         // 하단 메뉴바 버튼 선언 끝
         // 하단 메뉴바 클릭 이벤트
         btn_toHome.setOnClickListener(new View.OnClickListener() {
@@ -76,7 +85,7 @@ public class DrawerTap extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
 
-                        Intent intent = new Intent(getApplicationContext(),Essay.class);
+                        Intent intent = new Intent(getApplicationContext(), Essay.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                         startActivity(intent);
                     }
@@ -84,8 +93,7 @@ public class DrawerTap extends AppCompatActivity {
         );
 
         // 하단 메뉴바 클릭 이벤트 끝
-
-    }//온크리에이트 끝
+    }
 
 }
 

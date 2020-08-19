@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragment_PageLog">
+
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/border_without_top"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="**기록을 길게 누르면 수정/삭제할 수 있습니다**"
+            android:gravity="center"
+            android:layout_marginBottom="5dp"></TextView>
+
+        <!--페이지 기록에 뭐뭐 있는지 설명하는 부분 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/underline_green"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:paddingLeft="5dp"
+                android:text="읽은 날"
+                android:textColor="@color/myBlack">
+
+            </TextView>
+
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:gravity="end"
+                android:paddingEnd="5dp"
+                android:text="읽은 페이지"
+                android:textColor="@color/myBlack">
+
+            </TextView>
+
+        </LinearLayout>
+
+        <!--페이지 기록에 뭐뭐 있는지 설명하는 부분 끝 -->
+
+
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_pageLog"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </androidx.recyclerview.widget.RecyclerView>
+        </ScrollView>
+
+
+
+
+
+    </LinearLayout>
+    <!--        하단부 내용 컨텐츠 레이아웃 -->
+
+</FrameLayout>

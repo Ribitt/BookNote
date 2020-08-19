@@ -1,10 +1,7 @@
 package com.example.booknoteapp;
 
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,9 +12,8 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import java.util.ArrayList;
 
@@ -92,11 +88,16 @@ public class BookLog_Notes extends AppCompatActivity  {
         tv_pageNum = findViewById(R.id.tv_bookLog_bookPages);
         tv_publisher = findViewById(R.id.tv_bookLog_publisher);
 
-        recyclerView = findViewById(R.id.recycler_notes);
-        adapterNote = new Adapter_Note(mList,mEditListener);
-        recyclerView.setAdapter(adapterNote);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
+        //뷰페이저
+        ViewPager vp = findViewById(R.id.viewpager);
+        Adapter_ViewPager_BookDetail adapter_viewPager = new Adapter_ViewPager_BookDetail(getSupportFragmentManager());
+        vp.setAdapter(adapter_viewPager);
+//
+//        recyclerView = findViewById(R.id.recycler_notes);
+//        adapterNote = new Adapter_Note(mList,mEditListener);
+//        recyclerView.setAdapter(adapterNote);
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+//        recyclerView.setLayoutManager(layoutManager);
 
 
     }//이니셜라이저 끝
@@ -131,37 +132,34 @@ public class BookLog_Notes extends AppCompatActivity  {
     private void allListener() {
 
 
+//        //  독서 페이지 기록 페이지로 버튼
+//        tv_toBookLogPages = (TextView)findViewById(R.id.tv_toBookLogPages);
+//        tv_toBookLogPages.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(getApplicationContext(),BookLog_Pages.class);
+//                startActivity(intent);
+//                finish();
+//
+//            }
+//        });
 
 
-        //  독서 페이지 기록 페이지로 버튼
-        tv_toBookLogPages = (TextView)findViewById(R.id.tv_toBookLogPages);
-        tv_toBookLogPages.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(),BookLog_Pages.class);
-                startActivity(intent);
-                finish();
-
-            }
-        });
-
-        //노트 추가버튼
-        btn_addNote = (Button)findViewById(R.id.btn_bookdetail_addNote);
         //노트 프리뷰,페이지 뷰
         tv_notePreview = (TextView)findViewById(R.id.tv_note_userNote) ;
 //        tv_bookPage = (TextView)findViewById(R.id.tv_bookPage);
 //        tv_p = (TextView)findViewById(R.id.tv_p);
 
         //노트 추가 버튼 클릭 이벤트
-        btn_addNote.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(getApplicationContext(), AddNote.class);
-                        startActivityForResult(intent, 1);
-                    }
-                }
-        );
+//        btn_addNote.setOnClickListener(
+//                new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        Intent intent = new Intent(getApplicationContext(), AddNote.class);
+//                        startActivityForResult(intent, 1);
+//                    }
+//                }
+//        );
 
     }
 

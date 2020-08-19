@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 public class Bookdetail_note_byPage extends AppCompatActivity  {
 
@@ -45,13 +44,10 @@ public class Bookdetail_note_byPage extends AppCompatActivity  {
 //            PreferenceManager.setString(this,"rebuild","암것도 없습니다.");
 //        }
 
-        //버튼 클릭할때 나올 색상
-        myYellow = ContextCompat.getColor(this,R.color.myYellow);
-        grey = ContextCompat.getColor(this,R.color.grey);
 
 
         //노트 추가버튼
-        btn_addNote = (Button)findViewById(R.id.btn_bookdetail_addNote);
+        //btn_addNote = (Button)findViewById(R.id.btn_bookdetail_addNote);
         //노트 프리뷰,페이지 뷰
 
 //        tv_bookPage = (TextView)findViewById(R.id.tv_bookPage);
@@ -73,7 +69,7 @@ public class Bookdetail_note_byPage extends AppCompatActivity  {
         tv_notePreview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(),Note.class);
+                Intent intent = new Intent(getApplicationContext(), Note.class);
                 startActivity(intent);
             }
         });
@@ -104,7 +100,7 @@ public class Bookdetail_note_byPage extends AppCompatActivity  {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent);
                     }
                 }
@@ -113,7 +109,7 @@ public class Bookdetail_note_byPage extends AppCompatActivity  {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(getApplicationContext(),Essay.class);
+                        Intent intent = new Intent(getApplicationContext(), Essay.class);
                         startActivity(intent);
                     }
                 }
@@ -132,7 +128,7 @@ public class Bookdetail_note_byPage extends AppCompatActivity  {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(getApplicationContext(),Stat.class);
+                        Intent intent = new Intent(getApplicationContext(), Stat.class);
                         startActivity(intent);
                     }
                 }
@@ -160,7 +156,7 @@ public class Bookdetail_note_byPage extends AppCompatActivity  {
         if(requestCode==1){
             String message = data.getStringExtra("MESSAGE");
             String page = data.getStringExtra("PAGE");
-            Integer color = data.getIntExtra("COLOR",R.color.myBlack);
+            Integer color = data.getIntExtra("COLOR", R.color.myBlack);
             //뒤에 R.color.myBlack자리는 만약 인텐트로 넘어온 값이 없을 경우 디폴트로 정해둘 값이다.
             tv_p.setText("P. ");
             tv_notePreview.setText(message);

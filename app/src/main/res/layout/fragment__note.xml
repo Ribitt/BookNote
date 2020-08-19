@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragment_Note">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <SearchView
+                android:layout_width="0dp"
+                android:layout_weight="8"
+                android:layout_height="20dp"
+                android:queryHint="노트 내용을 검색하세요"
+                android:iconifiedByDefault="false"
+                />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="40dp"
+                android:padding="10dp"
+                android:paddingLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:drawableStart="@drawable/ic_sort_small"
+                android:drawableTint="@color/myBlack"
+                android:text="정렬"/>
+
+        </LinearLayout>
+
+
+
+
+    <ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+        android:scrollbarSize="3dp"
+        android:scrollbarThumbVertical="@color/myYellow">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_notes"
+        android:scrollbars="vertical"
+        android:scrollbarSize="5dp"
+        android:scrollbarThumbVertical="@color/myYellow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    </ScrollView>
+
+
+
+
+    </LinearLayout>
+
+
+
+
+
+    <Button
+        android:id="@+id/btn_addBook"
+
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/button_yello"
+        android:layout_gravity="right|bottom"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="60dp"
+        android:paddingLeft="20dp"
+        android:drawableStart="@drawable/ic_edit_24px"
+        android:drawableTint="@color/myBlack"
+        android:textSize="20sp"
+        />
+
+</FrameLayout>

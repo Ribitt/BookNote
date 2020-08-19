@@ -22,6 +22,8 @@
         app:layout_constraintTop_toTopOf="parent">
 
 
+
+<!--        삳단 책 상세 정보-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="150dp"
@@ -126,38 +128,47 @@
 
 
         </LinearLayout>
+        <!--        삳단 책 상세 정보 끝-->
 
+<!--        탭메뉴-->
 
-        <LinearLayout
-            android:id="@+id/align"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="독서 노트" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="페이지 기록" />
+
+            <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tv_toBookLogPages"
-                android:layout_width="0dp"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-
-                android:background="@drawable/border_non_selected"
-                android:gravity="center"
-                android:text="페이지 기록"
-                android:textSize="14sp"></TextView>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="30dp"
-                android:layout_weight="1"
+            android:text="서평" />
 
 
+        </com.google.android.material.tabs.TabLayout>
 
-                android:background="@drawable/border_selected"
-                android:gravity="center"
-                android:text="독서 노트"
-                ></TextView>
+        <!--        탭메뉴 끝-->
+
+
+        <!--        뷰페이저 -->
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+         >
+
+        </androidx.viewpager.widget.ViewPager>
+<!--        뷰페이저 끝-->
+
+
 
         </LinearLayout>
 
@@ -167,116 +178,116 @@
 <!--        하단부 내용 컨텐츠 레이아웃 -->
 
 
-        <LinearLayout
-            android:id="@+id/layout_wrapContents"
+<!--        <LinearLayout-->
+<!--            android:id="@+id/layout_wrapContents"-->
 
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:background="@drawable/border_without_top"
-            android:padding="10dp">
-
-
-            <!--            검색 & 정렬-->
-            <LinearLayout
-                android:id="@+id/layout_bookDetail_searchAndAlign"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/searchInput"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/align"
-
-                    android:layout_toLeftOf="@id/searchBtn"
-
-                    android:hint="검색어를 입력하세요."
-                    android:text="" />
-
-                <ImageButton
-                    android:id="@+id/searchBtn"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_below="@+id/align"
-                    android:layout_alignParentRight="true"
-                    android:background="@drawable/empty_background"
-
-                    app:srcCompat="@drawable/ic_search_24px" />
-
-                <Button
-                    android:id="@+id/byPage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:background="#ffffff"
-                    android:text="페이지 순"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-
-                    />
-
-                <Button
-                    android:id="@+id/byColor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:background="#ffffff"
-                    android:text="색상 순"
-                    android:textSize="14sp" />
-            </LinearLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintHeight_max="100dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycler_notes"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:layout_constrainedHeight="true"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:orientation="vertical"-->
+<!--            android:background="@drawable/border_without_top"-->
+<!--            android:padding="10dp">-->
 
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+<!--            &lt;!&ndash;            검색 & 정렬&ndash;&gt;-->
+<!--            <LinearLayout-->
+<!--                android:id="@+id/layout_bookDetail_searchAndAlign"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="5dp"-->
+<!--                android:layout_marginEnd="5dp"-->
+<!--                android:gravity="center"-->
+<!--                android:orientation="horizontal">-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/searchInput"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_below="@+id/align"-->
+
+<!--                    android:layout_toLeftOf="@id/searchBtn"-->
+
+<!--                    android:hint="검색어를 입력하세요."-->
+<!--                    android:text="" />-->
+
+<!--                <ImageButton-->
+<!--                    android:id="@+id/searchBtn"-->
+<!--                    android:layout_width="40dp"-->
+<!--                    android:layout_height="40dp"-->
+<!--                    android:layout_below="@+id/align"-->
+<!--                    android:layout_alignParentRight="true"-->
+<!--                    android:background="@drawable/empty_background"-->
+
+<!--                    app:srcCompat="@drawable/ic_search_24px" />-->
+
+<!--                <Button-->
+<!--                    android:id="@+id/byPage"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="20dp"-->
+<!--                    android:background="#ffffff"-->
+<!--                    android:text="페이지 순"-->
+<!--                    android:textSize="14sp"-->
+<!--                    android:textStyle="bold"-->
+
+<!--                    />-->
+
+<!--                <Button-->
+<!--                    android:id="@+id/byColor"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="20dp"-->
+<!--                    android:background="#ffffff"-->
+<!--                    android:text="색상 순"-->
+<!--                    android:textSize="14sp" />-->
+<!--            </LinearLayout>-->
+
+<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent">-->
+
+<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    app:layout_constraintHeight_max="100dp"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent">-->
+
+<!--                    <androidx.recyclerview.widget.RecyclerView-->
+<!--                        android:id="@+id/recycler_notes"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        app:layout_constrainedHeight="true"-->
+<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                        app:layout_constraintTop_toTopOf="parent" />-->
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-            <!--            검색 & 정렬-->
+<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+
+<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
+<!--            &lt;!&ndash;            검색 & 정렬&ndash;&gt;-->
 
 
 
-        </LinearLayout>
-        <!--        하단부 내용 컨텐츠 레이아웃 -->
-
-    </LinearLayout>
+<!--        </LinearLayout>-->
+<!--        &lt;!&ndash;        하단부 내용 컨텐츠 레이아웃 &ndash;&gt;-->
 
 
-    <Button
-        android:id="@+id/btn_bookdetail_addNote"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginBottom="52dp"
-        android:text="+"
-        android:textSize="20sp"
 
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+
+<!--    <Button-->
+<!--        android:id="@+id/btn_bookdetail_addNote"-->
+<!--        android:layout_width="60dp"-->
+<!--        android:layout_height="60dp"-->
+<!--        android:layout_marginEnd="40dp"-->
+<!--        android:layout_marginBottom="52dp"-->
+<!--        android:text="+"-->
+<!--        android:textSize="20sp"-->
+
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -294,3 +305,39 @@
     <!--android:layout_height="wrap_content"-->
     <!--android:text="Button" />-->
 
+
+
+<!--원래 탭메뉴처럼 만들고자 했던 부분..-->
+
+<!--<LinearLayout-->
+<!--android:id="@+id/align"-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:gravity="center"-->
+<!--android:layout_marginTop="10dp"-->
+<!--android:orientation="horizontal">-->
+
+<!--<TextView-->
+<!--    android:id="@+id/tv_toBookLogPages"-->
+<!--    android:layout_width="0dp"-->
+<!--    android:layout_height="30dp"-->
+<!--    android:layout_weight="1"-->
+
+<!--    android:background="@drawable/border_non_selected"-->
+<!--    android:gravity="center"-->
+<!--    android:text="페이지 기록"-->
+<!--    android:textSize="14sp"></TextView>-->
+
+<!--<TextView-->
+<!--    android:layout_width="0dp"-->
+<!--    android:layout_height="30dp"-->
+<!--    android:layout_weight="1"-->
+
+
+
+<!--    android:background="@drawable/border_selected"-->
+<!--    android:gravity="center"-->
+<!--    android:text="독서 노트"-->
+<!--    ></TextView>-->
+
+<!--</LinearLayout>-->
