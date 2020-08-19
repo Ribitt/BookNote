@@ -100,42 +100,24 @@ public class Adapter_Reading extends androidx.recyclerview.widget.RecyclerView.A
             }
                 });
 
-            /////////////커버에 롱클릭 이벤트로 다이얼로그 띄우기
+            /////////////커버에 롱클릭 이벤트로 다이얼로그 띄우기 끝
 
-
+            //북 커버 그냥 클릭 리스너
             bookCover.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                        Intent intent = new Intent(view.getContext(),BookLog_Notes.class);
-                        BitmapDrawable d = (BitmapDrawable)bookCover.getDrawable();
-                        Bitmap b = d.getBitmap();
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    //스트림이 무슨 뜻인지 모르겠네
-                    b.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                    byte[] byteArray = stream.toByteArray();
-                    intent.putExtra("image", byteArray);
 
-                        intent.putExtra("title", bookTitle.getText());
-                        view.getContext().startActivity(intent);
+                    Intent intent = new Intent(mContext,BookLog_Notes.class);
+                    Dictionary_book selectedBook = readingArrayList.get(getAdapterPosition());
+                    intent.putExtra("selectedBook",selectedBook);
+                    intent.putExtra("position",getAdapterPosition());
+                    mContext.startActivity(intent);
+
                 }
             });
 
-//
-//            deleteBtn.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    int position = getAdapterPosition();
-//                    readingArrayList.remove(position);
-//                    notifyItemRemoved(position);
-//                    notifyDataSetChanged();
-//                }
-//            });
-
-
-
+            //북 커버 클릭 리스너 끝
         }
-
-
 
     }
 

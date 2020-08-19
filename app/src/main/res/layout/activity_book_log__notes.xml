@@ -14,9 +14,6 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
 
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
@@ -30,7 +27,6 @@
             android:layout_height="150dp"
             android:orientation="horizontal"
             android:background="@color/grey"
-            android:gravity="center"
             android:padding="10dp">
 
             <ImageView
@@ -41,17 +37,22 @@
                 app:srcCompat="@drawable/book_crazylady" />
 
             <LinearLayout
+                android:paddingTop="5dp"
                 android:id="@+id/bookDetailLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
 
 
 
                 <TextView
                     android:id="@+id/tv_bookLog_title"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:text="책 제목" />
 
                 <TextView
@@ -69,54 +70,57 @@
 
                     android:text="출판사" />
 
-                <TextView
-                    android:id="@+id/startDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-
-                    android:text="읽기 시작한 달" />
-
-
-                <ProgressBar
-                    android:id="@+id/progressBar_bookLog"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/startDate"
-                    android:max="367"
-                    android:progress="0" />
-
-
                 <LinearLayout
+                    android:id="@+id/layout_bookMark"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tv_bookLog_progress_readPage"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0" />
-
-                    <TextView
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=" / " />
-
-                    <TextView
-                        android:id="@+id/tv_bookLog_bookPages"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="367" />
-
+                    android:orientation="vertical">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=" pages" />
 
+                        android:text="책갈피" />
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_bookLog_progress_readPage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0" />
+
+                        <TextView
+
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=" / " />
+
+                        <TextView
+                            android:id="@+id/tv_bookLog_bookPages"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="367" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=" pages" />
+
+
+                    </LinearLayout>
+
+                    <SeekBar
+                        android:id="@+id/seekBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        />
 
                 </LinearLayout>
+
 
             </LinearLayout>
 
@@ -255,103 +259,6 @@
             <!--            검색 & 정렬-->
 
 
-            <!--            <LinearLayout-->
-
-<!--                android:id="@+id/layout_bookdetail_noteList"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_marginStart="5dp"-->
-<!--                android:layout_marginEnd="5dp"-->
-
-<!--                android:orientation="vertical"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintHorizontal_bias="0.0"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintVertical_bias="0.0">-->
-
-<!--                <LinearLayout-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginBottom="10dp"-->
-<!--                    android:orientation="horizontal">-->
-
-<!--                    <TextView-->
-<!--                        android:id="@+id/tv_p"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:textColor="#393939"-->
-<!--                        android:textStyle="bold">-->
-
-<!--                    </TextView>-->
-
-<!--                    <TextView-->
-<!--                        android:id="@+id/tv_bookPage"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_weight="1"-->
-<!--                        android:textColor="#393939"-->
-<!--                        android:textStyle="bold"-->
-
-<!--                        ></TextView>-->
-
-<!--                    <TextView-->
-<!--                        android:id="@+id/tv_notePreview"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_weight="8">-->
-
-<!--                    </TextView>-->
-
-<!--                </LinearLayout>-->
-
-<!--                <TextView-->
-
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginBottom="10dp"-->
-<!--                    android:ellipsize="end"-->
-<!--                    android:ems="21"-->
-<!--                    android:maxLines="1"-->
-<!--                    android:text="p.320      이 단어 모른다..!"-->
-<!--                    android:textColor="#830C25" />-->
-
-<!--                <TextView-->
-<!--                    android:id="@+id/tv_forTest"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginBottom="10dp"-->
-<!--                    android:ellipsize="end"-->
-<!--                    android:ems="21"-->
-<!--                    android:maxLines="1"-->
-<!--                    android:text="p.115    집 앞 청소해주면서 모자 눌러쓰는 게 웃기다"-->
-<!--                    android:textColor="#393939" />-->
-
-
-<!--                <TextView-->
-
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginBottom="10dp"-->
-<!--                    android:ellipsize="end"-->
-<!--                    android:ems="21"-->
-<!--                    android:maxLines="1"-->
-<!--                    android:text="p.80      이 책도 읽어보기"-->
-<!--                    android:textColor="#031C97" />-->
-
-
-<!--                <TextView-->
-<!--                    android:id="@+id/tv_sample"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginBottom="10dp"-->
-<!--                    android:ellipsize="end"-->
-<!--                    android:ems="21"-->
-<!--                    android:maxLines="1"-->
-<!--                    android:textColor="#393939"></TextView>-->
-
-
-<!--            </LinearLayout>-->
 
         </LinearLayout>
         <!--        하단부 내용 컨텐츠 레이아웃 -->
@@ -359,83 +266,12 @@
     </LinearLayout>
 
 
-    <!--    하단 화면 전환 버튼 레이아웃 -->
-
-    <LinearLayout
-        android:id="@+id/linearLayout3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-
-
-        <Button
-            android:id="@+id/btn_to_drawer"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-
-            android:textStyle="bold"
-            android:background="#F1CF69"
-            android:text="내 책장"
-            />
-
-        <Button
-            android:id="@+id/btn_to_calender"
-            android:layout_width="103dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="#DFDBDB"
-
-            android:text="독서 달력" />
-
-
-
-        <Button
-            android:id="@+id/btn_to_assay"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:background="#DFDBDB"
-            android:text="에세이" />
-
-        <Button
-            android:id="@+id/btn_to_stat"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:background="#DFDBDB"
-            android:text="통계" />
-
-
-        <Button
-            android:id="@+id/btn_to_setting"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:background="#DFDBDB"
-            android:text="설정" />
-
-    </LinearLayout>
-
-
-
-
     <Button
         android:id="@+id/btn_bookdetail_addNote"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="52dp"
         android:text="+"
         android:textSize="20sp"
 

@@ -33,6 +33,23 @@ public class Dictionary_book
     String bookCoverUri="";
     String bookCoverUrl="";
     String publisher="";
+    Integer bookMark=0;
+
+    public Integer getBookMark() {
+        return bookMark;
+    }
+
+    public void setBookMark(Integer bookMark) {
+        this.bookMark = bookMark;
+    }
+
+    public void setStrBookMarkIntoInt(String bookMarkStr){
+        this.bookMark = Integer.parseInt(bookMarkStr);
+    }
+
+    public String getBookMarkStr() {
+        return String.valueOf(this.bookMark);
+    }
 
     String startDate="";
 

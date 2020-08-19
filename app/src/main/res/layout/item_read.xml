@@ -6,32 +6,37 @@
     android:orientation="horizontal"
     android:background="@drawable/border_underline">
 
-    <ImageButton
-        android:id="@+id/btn_readD_bookCover"
-        android:layout_width="70dp"
-        android:layout_height="120dp"
-        android:background="@drawable/empty_background"
-        android:padding="2dp"
-        android:scaleType="fitCenter"
-        app:srcCompat="@drawable/ic_book"/>
-
-
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:orientation="vertical"
-        android:padding="5dp"
-        android:paddingLeft="20dp">
+        android:id="@+id/layout_read_toBook"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="5dp">
+
+        <ImageButton
+            android:id="@+id/btn_readD_bookCover"
+            android:layout_width="70dp"
+            android:layout_height="120dp"
+            android:background="@drawable/empty_background"
+            android:padding="2dp"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/ic_book"/>
+
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="120dp"
+            android:orientation="vertical"
+            android:padding="8dp"
+            android:paddingLeft="20dp">
+
+
 
             <TextView
                 android:id="@+id/tv_readD_bookTitle"
-                android:layout_width="0dp"
-                android:layout_weight="3"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="3"
                 android:ellipsize="end"
@@ -45,65 +50,65 @@
 
 
 
-            <ImageView
-                android:id="@+id/btn_edit_or_delete"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:background="@drawable/empty_background"
-                android:src="@drawable/ic_more"
-                android:tint="@color/myBlack"/>
-
-        </LinearLayout>
 
 
 
 
+            <RatingBar
+                android:id="@+id/rating_readD"
+                style="@style/Widget.AppCompat.RatingBar.Small"
+                android:layout_marginBottom="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:rating="3.5"
+                android:stepSize="0.5"
+                >
 
+            </RatingBar>
 
-        <RatingBar
-            android:id="@+id/rating_readD"
-            style="@style/Widget.AppCompat.RatingBar.Small"
-            android:layout_marginBottom="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:numStars="5"
-            android:rating="3.5"
-            android:stepSize="0.5"
-           >
+            <TextView
+                android:id="@+id/tv_readD_endDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:layout_marginLeft="3dp"
+                android:textSize="13sp"
+                android:text="2020.8.4"
 
-        </RatingBar>
+                ></TextView>
 
-        <TextView
-        android:id="@+id/tv_readD_endDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:maxLines="2"
-        android:layout_marginLeft="3dp"
-        android:textSize="13sp"
-        android:text="2020.8.4"
+            <TextView
+                android:id="@+id/tv_readD_ALineReview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:ellipsize="end"
+                android:maxLines="3"
 
-        ></TextView>
-
-        <TextView
-            android:id="@+id/tv_readD_ALineReview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="3dp"
-            android:ellipsize="end"
-            android:maxLines="3"
-
-            android:text="한줄 평이 들어가는 자리인데 혹시 줄이 길어지면 이거 그냥 잘리나
+                android:text="한줄 평이 들어가는 자리인데 혹시 줄이 길어지면 이거 그냥 잘리나
 나는 두줄까지 "
 
-            ></TextView>
+                ></TextView>
 
 
 
 
 
+        </LinearLayout>
     </LinearLayout>
 
+
+
+    <ImageView
+        android:id="@+id/btn_edit_or_delete"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/empty_background"
+        android:src="@drawable/ic_more"
+        android:tint="@color/myBlack"/>
 
 
 </LinearLayout>

@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -52,6 +53,7 @@ public class Adapter_read extends RecyclerView.Adapter<Adapter_read.readViewHold
         TextView ALineReview;
         TextView endDate;
         ImageView edit_or_delete;
+        LinearLayout layout;
 
         public readViewHolder(@NonNull final View itemView) {
             super(itemView);
@@ -61,6 +63,22 @@ public class Adapter_read extends RecyclerView.Adapter<Adapter_read.readViewHold
             ratingBar = itemView.findViewById(R.id.rating_readD);
             endDate = itemView.findViewById(R.id.tv_readD_endDate);
             edit_or_delete = itemView.findViewById(R.id.btn_edit_or_delete);
+            layout = itemView.findViewById(R.id.layout_read_toBook);
+
+
+            //책 상세로 이동하는 클릭 리스너
+            layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(mContext,BookLog_Notes.class);
+                    Dictionary_book selectedBook = mList.get(getAdapterPosition());
+                    intent.putExtra("selectedBook",selectedBook);
+                    intent.putExtra("position",getAdapterPosition());
+                    mContext.startActivity(intent);
+                }
+            });
+
+            //책 상세로 이동하는 클릭 리스너
 
             ////수정삭제 클릭 리스너
             edit_or_delete.setOnClickListener(new View.OnClickListener() {

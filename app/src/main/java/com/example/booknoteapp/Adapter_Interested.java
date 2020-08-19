@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -34,10 +35,11 @@ public class Adapter_Interested extends androidx.recyclerview.widget.RecyclerVie
 
     public class interestedViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
 
-        ImageButton bookCover;
+        ImageView bookCover;
         TextView title;
         TextView memo;
         ImageView edit_or_delete;
+        LinearLayout layout;
 
 
         public interestedViewHolder(@NonNull View itemView) {
@@ -46,6 +48,25 @@ public class Adapter_Interested extends androidx.recyclerview.widget.RecyclerVie
             title = itemView.findViewById(R.id.tv_interestedD_bookTitle);
             memo = itemView.findViewById(R.id.tv_interestedD_memo);
             edit_or_delete = itemView.findViewById(R.id.btn_edit_or_delete);
+            layout = itemView.findViewById(R.id.layout_interested_toBook);
+
+
+
+            //레이아웃 클릭으로 책상세 리스너
+            layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(mContext,BookLog_Notes.class);
+                    Dictionary_book selectedBook = mList.get(getAdapterPosition());
+                    intent.putExtra("selectedBook",selectedBook);
+                    intent.putExtra("position",getAdapterPosition());
+                    mContext.startActivity(intent);
+
+                }
+            });
+
+            //레이아웃 클릭으로 책상세 리스너 끝
+
 
             ////수정삭제 클릭 리스너
             edit_or_delete.setOnClickListener(new View.OnClickListener() {
