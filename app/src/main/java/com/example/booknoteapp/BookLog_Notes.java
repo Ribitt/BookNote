@@ -83,7 +83,7 @@ public class BookLog_Notes extends AppCompatActivity  {
         tv_bookLog_title = findViewById(R.id.tv_bookLog_title);
         bookCoverImg =findViewById(R.id.bookCoverImg);
         tv_author = findViewById(R.id.tv_bookLog_author);
-        tv_pageNum = findViewById(R.id.tv_bookLog_bookPages);
+     //   tv_pageNum = findViewById(R.id.tv_bookLog_bookPages);
         tv_publisher = findViewById(R.id.tv_bookLog_publisher);
 
         //노트 프리뷰,페이지 뷰
@@ -125,9 +125,9 @@ public class BookLog_Notes extends AppCompatActivity  {
                 bookCoverImg.setImageBitmap(dict.getBookCover());
             }
             if(dict.getPageNum().equals("")){
-                tv_pageNum.setText("0");
+             //   tv_pageNum.setText("0");
             }else{
-                tv_pageNum.setText(dict.getPageNum());
+             //   tv_pageNum.setText(dict.getPageNum());
             }
 
             tv_author.setText(dict.getAuthor());

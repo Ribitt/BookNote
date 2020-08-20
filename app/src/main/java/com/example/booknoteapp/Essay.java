@@ -9,66 +9,81 @@ import android.widget.Button;
 
 public class Essay extends AppCompatActivity {
     //하단 메뉴 버튼
-    Button btu_to_calendar;
-    Button btn_to_drawer;
-    Button btn_to_setting;
-    Button btn_to_stat;
+
+    Button btn_toDrawer;
+    Button btn_toEssay;
+    Button btn_toCalender;
+    Button btn_toHome;
+
     /////////////////////////////
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_essay);
 
-        // 하단 메뉴바 버튼 선언
-        btu_to_calendar = (Button)findViewById(R.id.btn_to_calender);
-        btn_to_drawer = (Button)findViewById(R.id.btn_to_drawer);
-        btn_to_setting = (Button)findViewById(R.id.btn_to_setting);
-        btn_to_stat = (Button)findViewById(R.id.btn_to_stat);
+        initialize();
+        allListener();
+
+
+
+    }
+
+    private void initialize(){
+
+        //아래 메뉴 버튼
+        btn_toDrawer =findViewById(R.id.btn_to_drawer);
+        btn_toCalender =findViewById(R.id.btn_to_calender);
+        btn_toEssay =findViewById(R.id.btn_to_assay);
+        btn_toHome = findViewById(R.id.btn_to_home);
+
         // 하단 메뉴바 버튼 선언 끝
+    }
+
+
+    private void allListener(){
+
         // 하단 메뉴바 클릭 이벤트
-        btu_to_calendar.setOnClickListener(
+        btn_toHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), MainHome.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent);
+            }
+        });
+
+        btn_toDrawer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), DrawerTap.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent);
+            }
+        });
+
+        btn_toCalender.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+
                         Intent intent = new Intent(getApplicationContext(), Calendar.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                }
-        );
-        btn_to_drawer.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                         startActivity(intent);
-
                     }
                 }
         );
 
-        btn_to_setting.setOnClickListener(
+        btn_toEssay.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-//                        Intent intent = new Intent(getApplicationContext(),SettingsActivity.class);
-//                        startActivity(intent);
-                    }
-                }
-        );
 
-        btn_to_stat.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(getApplicationContext(),Stat.class);
+                        Intent intent = new Intent(getApplicationContext(),Essay.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                         startActivity(intent);
-                        finish();
                     }
                 }
         );
-
         // 하단 메뉴바 클릭 이벤트 끝
     }
 }

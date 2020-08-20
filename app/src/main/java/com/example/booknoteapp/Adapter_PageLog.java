@@ -56,8 +56,9 @@ public class Adapter_PageLog extends RecyclerView.Adapter<Adapter_PageLog.pageLo
 
             if(!dialog.getStartP().equals("") && !dialog.getEndP().equals("")){//둘 다 값이 있을 때만 일하자 !!
 
+                String title = mList.get(position).getTitle();
                 //ArrayList에 넣어준다
-                Dictionary_pageLog dic = new Dictionary_pageLog(dialog.getDate(),dialog.getStartP(),dialog.getEndP());
+                Dictionary_pageLog dic = new Dictionary_pageLog(title,dialog.getDate(),dialog.getStartP(),dialog.getEndP());
                 mList.set(position,dic);
                 //수정한 내용이 해당 자리에 반영되도록 한다.
                 notifyItemChanged(position);

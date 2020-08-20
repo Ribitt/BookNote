@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -15,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -94,7 +92,7 @@ public class BookLog_Pages extends AppCompatActivity  {
         btn_bookLog_insertPageLog = (Button)findViewById(R.id.btn_bookLog_insertPageLog);
         //책 상세 페이지에 있는 프로그레스 바와 밑에 있는 읽은 숫자
         progressBar_bookLog = (ProgressBar)findViewById(R.id.progressBar_bookLog);
-        tv_progress_readPageNum=(TextView)findViewById(R.id.tv_bookLog_progress_readPage);
+        tv_progress_readPageNum=(TextView)findViewById(R.id.tv_bookLog_bookmark);
 
         //기록 추가 버튼 클릭 이벤트
         btn_bookLog_insertPageLog.setOnClickListener(
@@ -211,7 +209,7 @@ public class BookLog_Pages extends AppCompatActivity  {
            if(!dialog.getStartP().equals("") && !dialog.getEndP().equals("")){//둘 다 값이 있을 때만 일하자 !!
 
                //ArrayList에 넣어준다
-               dic = new Dictionary_pageLog(dialog.getDate(),dialog.getStartP(),dialog.getEndP());
+               dic = new Dictionary_pageLog("제목",dialog.getDate(),dialog.getStartP(),dialog.getEndP());
                mList.add(0,dic);
                //새로 추가한 내용이 맨 위로 가도록 한다. 그냥 dict넣어주면 맨 밑으로 간다.
 

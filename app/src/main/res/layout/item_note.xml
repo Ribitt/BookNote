@@ -86,29 +86,47 @@
 
             </TextView>
 
+            <ImageView
+                android:visibility="invisible"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_more"
+                android:tint="@color/border"
+                />
 
-            <TextView
 
-                android:layout_weight="3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textStyle="bold">
 
-            </TextView>
 
 
         </LinearLayout>
-        <TextView
-            android:textColor="@color/myBlack"
-            android:id="@+id/tv_note_quote"
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
-            android:background="@drawable/border_underline"
             android:layout_height="wrap_content"
-            android:maxLines="3"
-            android:padding="5dp"
-            android:ellipsize="end"
-            android:text="책에서 인용한 내용이 들어갈 부분"></TextView>
+            android:orientation="horizontal"
+            android:paddingBottom="15dp">
+
+            <ImageView
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_quote"
+                android:tint="@color/border"/>
+
+            <TextView
+                android:textColor="@color/myBlack"
+                android:id="@+id/tv_note_quote"
+                android:layout_width="match_parent"
+                android:background="@drawable/border_underline"
+                android:layout_height="wrap_content"
+                android:maxLines="3"
+                android:padding="5dp"
+                android:ellipsize="end"
+                android:text="책에서 인용한 내용이 들어갈 부분"></TextView>
+        </LinearLayout>
+
 
 
         <TextView

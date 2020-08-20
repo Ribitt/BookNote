@@ -220,6 +220,7 @@ public class SearchBook extends AppCompatActivity {
                             case "image":
                                 if(dictionary_book!=null)
                                     dictionary_book.setBookCover(urlToBitmap(xpp.nextText()));
+                                break;
                         }
                         break;
                     }///스타트 태그인 경우 끝

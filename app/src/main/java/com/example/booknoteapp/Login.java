@@ -60,7 +60,7 @@ public class Login extends AppCompatActivity {
     private void autoLogin() {
 
 
-        if(pref.getBoolean("autoLogin",false)){
+        if(pref.getBoolean("autoLogin",true)){
             //오토 로그인 설정이 되어 있으면 로그인 처리를 알아서 하고 넘어간다.
 
             //일단 마지막으로 로그인한 유저가 자동 로그인을 누르고 갔다는 소리기 때문에 그 유저 이메일 가져오고
@@ -75,6 +75,11 @@ public class Login extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), MainHome.class);
             startActivity(intent);
             finish();
+
+
+//            // 자동 로그인 취소하기
+//            editor.putBoolean("autoLogin",false);
+//            editor.commit();
         }
 
 
@@ -201,7 +206,7 @@ public class Login extends AppCompatActivity {
                     SharedPreferences userPref = getSharedPreferences(savedEmail,MODE_PRIVATE);
                     String nickname = userPref.getString("nickname","");
                     Toast.makeText(Login.this, nickname+"님 환영합니다", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getApplicationContext(), DrawerTap.class);
+                    Intent intent = new Intent(getApplicationContext(), MainHome.class);
                     startActivity(intent);
                     finish();
 
