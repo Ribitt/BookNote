@@ -58,6 +58,7 @@
                 android:id="@+id/rating_readD"
                 style="@style/Widget.AppCompat.RatingBar.Small"
                 android:layout_marginBottom="5dp"
+                android:theme="@style/RatingBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:numStars="5"
