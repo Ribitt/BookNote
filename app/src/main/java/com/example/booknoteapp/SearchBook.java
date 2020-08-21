@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -28,6 +29,9 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -46,6 +50,9 @@ public class SearchBook extends AppCompatActivity {
     Adapter_SearchBook adapter_searchBook = null;
 
     android.widget.SearchView searchView;
+    String error="";
+
+    TextView tv_noResult;
 
 
     @Override
@@ -64,7 +71,7 @@ public class SearchBook extends AppCompatActivity {
     private void initialize() {
 
         searchView = findViewById(R.id.search_searchBook);
-
+        tv_noResult =findViewById(R.id.tv_noResult);
 
         //////툴바 적용하기
         Toolbar toolbar = (Toolbar)findViewById(R.id.app_toolbar);
@@ -121,50 +128,104 @@ public class SearchBook extends AppCompatActivity {
     }//올리스너 끝
 
 
-
-
-    private String removeHTMLTag(String string){
-        Spanned mText = Html.fromHtml(string);
-        String text = mText.toString();
-        return text;
-    }
-
-    private Bitmap urlToBitmap(String string){
-        URL imgUrl;
-        HttpURLConnection connection = null;
-        InputStream is;
-        Bitmap bookCover =null;
-
-        try{
-            imgUrl = new URL(string);
-            connection = (HttpURLConnection) imgUrl.openConnection();
-            connection.setDoInput(true); //url로 input받는 flag 허용
-            connection.connect();
-            is = connection.getInputStream();
-            bookCover = BitmapFactory.decodeStream(is);
-        }catch (Exception e){
-            e.printStackTrace();
-            return null;
-
-        }finally {
-            if(connection!=null){
-                connection.disconnect();
-            }
-            return bookCover;
-        }
-    }
-
     Handler handler = new Handler(){
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             Bundle bun = msg.getData();
             bookList = (ArrayList<Dictionary_book>)bun.getSerializable("list");
-            adapter_searchBook = new Adapter_SearchBook(bookList);
-            recyclerView.setAdapter(adapter_searchBook);
+            if(bookList.size()==0){
+                if(error.equals("")){
+                    tv_noResult.setVisibility(View.VISIBLE);
+                }else if(error.equals("IOException")){
+                    Toast.makeText(getApplicationContext(), "인터넷 연결을 확인하세요", Toast.LENGTH_LONG).show();
+                }else{
+                    Toast.makeText(getApplicationContext(), "오류 발생 : " +error, Toast.LENGTH_LONG).show();
+                }
+            }else{
+                adapter_searchBook = new Adapter_SearchBook(bookList);
+                recyclerView.setAdapter(adapter_searchBook);
+
+            }
 
         }
     };
+
+    private String removeHTMLTag(String string){
+
+
+        Spanned mText = Html.fromHtml(string);
+        String text = mText.toString();
+        return text;
+    }
+
+    private Bitmap urlToBitmap(String urlFrom){
+
+        Bitmap bookCover =null;
+
+
+        try{
+            URL url = new URL(urlFrom);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream inputStream = connection.getInputStream();
+            bookCover = BitmapFactory.decodeStream(inputStream);
+            return bookCover;
+
+        }catch (IOException e){
+            e.printStackTrace();
+            bookCover = BitmapFactory.decodeResource(getResources(),R.drawable.ic_book);
+            return bookCover;
+        }
+
+
+//
+//        try{
+//            imgUrl = new URL(string);
+//          Log.d("대체 무슨 링크가 오길래 /////////////////////", string);
+//            connection = (HttpURLConnection) imgUrl.openConnection();
+//            connection.setDoInput(true); //url로 input받는 flag 허용
+//            connection.connect();
+//            is = connection.getInputStream();
+//            bookCover = BitmapFactory.decodeStream(is);
+//
+//            if(!string.contains("http")){
+//                string = "http://"+string;
+//            }
+//
+//        }catch (OutOfMemoryError e){
+//            try {
+//                imgUrl = new URL(string);
+//                //  Log.d("대체 무슨 링크가 오길래 /////////////////////", string);
+//                connection = (HttpURLConnection) imgUrl.openConnection();
+//                connection.setDoInput(true); //url로 input받는 flag 허용
+//                connection.connect();
+//                is = connection.getInputStream();
+//                options = new BitmapFactory.Options();
+//                options.inSampleSize = 2;
+//                Bitmap bitmap = BitmapFactory.decodeStream(is,null,options);
+//                bookCover = bitmap;
+//
+//            }catch (Exception ex){
+//                ex.printStackTrace();
+//            }
+//        }catch(Exception e){
+//            StringWriter sw = new StringWriter();
+//            e.printStackTrace(new PrintWriter(sw));
+//            String exceptionAsStrting = sw.toString();
+//            Log.e("대체 뭐가 문제신지?????????????????", exceptionAsStrting);
+//        }
+//        finally {
+//            if(connection!=null){
+//                connection.disconnect();
+//            }
+//
+//        }
+
+    }
+
+
 
     private ArrayList<Dictionary_book> getNaverBookSearch(String query) {
         String clientID = "5Jz3oA5urXwB2YOWdz67";
@@ -219,7 +280,9 @@ public class SearchBook extends AppCompatActivity {
 
                             case "image":
                                 if(dictionary_book!=null)
-                                    dictionary_book.setBookCover(urlToBitmap(xpp.nextText()));
+                                    Log.d("모든 링크 다 보자 ... ", xpp.nextText());
+                                String imgUrl = URLEncoder.encode(xpp.nextText(), "UTF-8");
+                                 dictionary_book.setBookCover(urlToBitmap(imgUrl));
                                 break;
                         }
                         break;
@@ -244,19 +307,23 @@ public class SearchBook extends AppCompatActivity {
             // TODO Auto-generated catch block
             System.out.println("이건가//////////////////////////////////Malformed");
             e.printStackTrace();
+            error = "MalformedURLException";
+
         } catch (UnsupportedEncodingException e) {
             // TODO Auto-generated catch block
             System.out.println("이건가//////////////////////////////////Unsupported");
             e.printStackTrace();
+            error = "UnsupportedEncodingException";
         } catch (IOException e) {
             // TODO Auto-generated catch block
             System.out.println("이건가//////////////////////////////////IOE");
-            Toast.makeText(this, "인터넷 연결을 확인하세요", Toast.LENGTH_LONG).show();
+            error = "IOException";
             e.printStackTrace();
         } catch (XmlPullParserException e) {
             System.out.println("이건가//////////////////////////////////XmlPullParser");
             // TODO Auto-generated catch block
             e.printStackTrace();
+            error = "XmlPullParserException";
         }
 
     return list;

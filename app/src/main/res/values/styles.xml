@@ -25,7 +25,7 @@
     </style>
 
     <style name="ToolbarStyle" parent="Widget.AppCompat.Toolbar">
-        <item name="android:background">@color/yellowGreen</item>
+        <item name="android:background">@color/almostWhite</item>
         <item name="android:textColor">@color/green</item>
         <item name="android:textSize">20sp</item>
         <item name="android:textStyle">bold</item>

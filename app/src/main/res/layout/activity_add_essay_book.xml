@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddEssayBook"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/app_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:elevation="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+
+    <SearchView
+        android:id="@+id/search_searchBook"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:queryHint="새 책을 검색해서 추가할 수 있습니다"
+        android:iconifiedByDefault="false"/>
+
+    <LinearLayout
+        android:id="@+id/layout_myDrawer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="읽고 있는 책"
+            android:paddingLeft="10dp"
+            android:paddingBottom="8dp"
+            android:background="@drawable/border_underline"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_everyBooks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="읽은 책"
+            android:paddingLeft="10dp"
+            android:paddingBottom="8dp"
+            android:background="@drawable/border_underline"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_read"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+
+
+
+
+</LinearLayout>

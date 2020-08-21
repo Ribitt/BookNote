@@ -27,6 +27,17 @@
 
         android:iconifiedByDefault="false"/>
 
+    <TextView
+        android:id="@+id/tv_noResult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginLeft="15dp"
+        android:text="검색 결과가 없습니다."
+        />
+
+
+
 
 
     <androidx.recyclerview.widget.RecyclerView

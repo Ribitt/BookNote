@@ -410,16 +410,6 @@
             android:text="에세이" />
 
 
-        <Button
-            android:id="@+id/btn_to_setting"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:background="#DFDBDB"
-            android:layout_gravity="center"
-
-
-            android:text="설정" />
 
 
 
