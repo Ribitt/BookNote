@@ -100,7 +100,7 @@ public class Fragment_read extends Fragment {
                                                 break;
                                             case 1:
                                                 //검색해서 입력
-                                                Intent intent1 = new Intent(rootView.getContext(), SearchBook.class);
+                                                Intent intent1 = new Intent(rootView.getContext(), Search.class);
                                                 startActivity(intent1);
 
                                                 break;

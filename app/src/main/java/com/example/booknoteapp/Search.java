@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -29,9 +28,6 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -41,7 +37,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class SearchBook extends AppCompatActivity {
+public class Search extends AppCompatActivity {
 
 //    private static Handler mHandler;
 
@@ -50,9 +46,6 @@ public class SearchBook extends AppCompatActivity {
     Adapter_SearchBook adapter_searchBook = null;
 
     android.widget.SearchView searchView;
-    String error="";
-
-    TextView tv_noResult;
 
 
     @Override
@@ -71,7 +64,7 @@ public class SearchBook extends AppCompatActivity {
     private void initialize() {
 
         searchView = findViewById(R.id.search_searchBook);
-        tv_noResult =findViewById(R.id.tv_noResult);
+
 
         //////툴바 적용하기
         Toolbar toolbar = (Toolbar)findViewById(R.id.app_toolbar);
@@ -98,7 +91,7 @@ public class SearchBook extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(final String query) {
-              //  Toast.makeText(getApplicationContext(), "검색버튼 누름 : "+query, Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(getApplicationContext(), "검색버튼 누름 : "+query, Toast.LENGTH_SHORT).show();
 
                 //별도의 스레드를 돌려서 결과를 가져와야 한다.
                 new Thread(new Runnable() {
@@ -128,35 +121,9 @@ public class SearchBook extends AppCompatActivity {
     }//올리스너 끝
 
 
-    Handler handler = new Handler(){
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-            Bundle bun = msg.getData();
-            bookList = (ArrayList<Dictionary_book>)bun.getSerializable("list");
-            adapter_searchBook = new Adapter_SearchBook(bookList);
-                recyclerView.setAdapter(adapter_searchBook);
 
-//            if(bookList.size()==0){
-//                if(error.equals("")){
-//                    tv_noResult.setVisibility(View.VISIBLE);
-//                }else if(error.equals("IOException")){
-//                    Toast.makeText(getApplicationContext(), "인터넷 연결을 확인하세요", Toast.LENGTH_LONG).show();
-//                }else{
-//                    Toast.makeText(getApplicationContext(), "오류 발생 : " +error, Toast.LENGTH_LONG).show();
-//                }
-//            }else{
-//                adapter_searchBook = new Adapter_SearchBook(bookList);
-//                recyclerView.setAdapter(adapter_searchBook);
-//
-//            }
-
-        }
-    };
 
     private String removeHTMLTag(String string){
-
-
         Spanned mText = Html.fromHtml(string);
         String text = mText.toString();
         return text;
@@ -177,7 +144,7 @@ public class SearchBook extends AppCompatActivity {
             bookCover = BitmapFactory.decodeStream(is);
         }catch (Exception e){
             e.printStackTrace();
-            return BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.ic_book);
+            return null;
 
         }finally {
             if(connection!=null){
@@ -187,7 +154,17 @@ public class SearchBook extends AppCompatActivity {
         }
     }
 
+    Handler handler = new Handler(){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            Bundle bun = msg.getData();
+            bookList = (ArrayList<Dictionary_book>)bun.getSerializable("list");
+            adapter_searchBook = new Adapter_SearchBook(bookList);
+            recyclerView.setAdapter(adapter_searchBook);
 
+        }
+    };
 
     private ArrayList<Dictionary_book> getNaverBookSearch(String query) {
         String clientID = "5Jz3oA5urXwB2YOWdz67";
@@ -242,10 +219,7 @@ public class SearchBook extends AppCompatActivity {
 
                             case "image":
                                 if(dictionary_book!=null)
-                                    Log.d("모든 링크 다 보자 ... ", xpp.nextText());
-                               // String imgUrl = URLEncoder.encode(xpp.nextText(), "UTF-8");
-                                 dictionary_book.setBookCover(urlToBitmap(xpp.nextText()));
-                                break;
+                                    dictionary_book.setBookCover(urlToBitmap(xpp.nextText()));
                         }
                         break;
                     }///스타트 태그인 경우 끝
@@ -265,30 +239,28 @@ public class SearchBook extends AppCompatActivity {
 
 
 
+
+
         }catch (MalformedURLException e) {
             // TODO Auto-generated catch block
             System.out.println("이건가//////////////////////////////////Malformed");
             e.printStackTrace();
-            error = "MalformedURLException";
-
         } catch (UnsupportedEncodingException e) {
             // TODO Auto-generated catch block
             System.out.println("이건가//////////////////////////////////Unsupported");
             e.printStackTrace();
-            error = "UnsupportedEncodingException";
         } catch (IOException e) {
             // TODO Auto-generated catch block
             System.out.println("이건가//////////////////////////////////IOE");
-            error = "IOException";
+            Toast.makeText(this, "인터넷 연결을 확인하세요", Toast.LENGTH_LONG).show();
             e.printStackTrace();
         } catch (XmlPullParserException e) {
             System.out.println("이건가//////////////////////////////////XmlPullParser");
             // TODO Auto-generated catch block
             e.printStackTrace();
-            error = "XmlPullParserException";
         }
 
-    return list;
+        return list;
 
     }
 

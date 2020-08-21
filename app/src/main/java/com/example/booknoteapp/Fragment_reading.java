@@ -103,7 +103,7 @@ public class Fragment_reading extends Fragment {
                                                 startActivity(intent);
                                                 break;
                                             case 1:
-                                                Intent intent1 = new Intent(rootView.getContext(), SearchBook.class);
+                                                Intent intent1 = new Intent(rootView.getContext(), Search.class);
                                                 startActivity(intent1);
 
 
