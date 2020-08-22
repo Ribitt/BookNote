@@ -23,15 +23,23 @@ public class Dictionary_Essay {
     String date;
     String likeNum="0";
 
+    Boolean isOpen=true;
 
+    public Boolean getOpen() {
+        return isOpen;
+    }
 
+    public void setOpen(Boolean open) {
+        isOpen = open;
+    }
 
-    Dictionary_Essay(Dictionary_book book){
+    Dictionary_Essay(Dictionary_book book, Boolean isOpen){
 
         this.bookTitle = book.getTitle();
         this.bookAuthor = book.getAuthor();
         this.bookCover = book.bookCover;
         this.bookPublisher = book.getPublisher();
+        this.isOpen = isOpen;
 
     }
 

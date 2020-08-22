@@ -7,10 +7,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -30,8 +31,12 @@ public class Essay extends AppCompatActivity {
     //현재시간 가져오는 메소드
 
    Button btn_writeEssay;
+
+   Boolean myEssay = true;
    Button btn_myEssay;
    Button btn_everyEssay;
+
+   TextView tv_warning_noEssay;
 
    RecyclerView recyclerView;
    Adapter_Essay adapter_essay;
@@ -40,7 +45,10 @@ public class Essay extends AppCompatActivity {
    ArrayList<Dictionary_Essay> essayArrayList = new ArrayList<>();
 
    SharedPreferences userPref;
-   SharedPreferences.Editor editor;
+   SharedPreferences.Editor userPrefEditor;
+
+   SharedPreferences devPref;
+   SharedPreferences.Editor devPrefEditor;
 
     //하단 메뉴 버튼
 
@@ -61,9 +69,18 @@ public class Essay extends AppCompatActivity {
 
     private void initialize(){
 
+        devPref = getSharedPreferences("users", Context.MODE_PRIVATE);
+        devPrefEditor = devPref.edit();
+
+        String currentEmail = devPref.getString("currentUser","");
+        userPref = getSharedPreferences(currentEmail,this.MODE_PRIVATE);
+        userPrefEditor = userPref.edit();
+
         btn_writeEssay = findViewById(R.id.btn_write_essay);
         btn_myEssay = findViewById(R.id.btn_myEssay);
         btn_everyEssay = findViewById(R.id.btn_everyEssay);
+
+        tv_warning_noEssay = findViewById(R.id.tv_warning_noEssay);
 
         recyclerView = findViewById(R.id.recycler_essay);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -76,14 +93,48 @@ public class Essay extends AppCompatActivity {
 
         // 하단 메뉴바 버튼 선언 끝
 
-
-        String currentEmail = getSharedPreferences("users", Context.MODE_PRIVATE).getString("currentUser","");
-        userPref = getSharedPreferences(currentEmail,this.MODE_PRIVATE);
-        editor = userPref.edit();
     }
 
 
     private void allListener(){
+
+        //내 에세이만 보기 버튼
+        btn_myEssay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myEssay = true;
+                btn_everyEssay.setBackground(getDrawable(R.drawable.button_grey));
+                btn_myEssay.setBackground(getDrawable(R.drawable.button_yellowgreen));
+                getArrayFromPref(userPref);
+
+            }
+        });
+        //내 에세이 버튼 끝
+
+        //모두의 에세이 보기 버튼
+        btn_everyEssay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myEssay=false;
+                btn_everyEssay.setBackground(getDrawable(R.drawable.button_yellowgreen));
+                btn_myEssay.setBackground(getDrawable(R.drawable.button_grey));
+
+                Gson gson = new Gson();
+                essayArrayList.clear();
+                String json = devPref.getString("essay","EMPTY");
+
+                Type type = new TypeToken<ArrayList<Dictionary_Essay>>() {
+                }.getType();
+                if(!json.equals("EMPTY")){
+                    essayArrayList = gson.fromJson(json,type);
+                }
+                adapter_essay = new Adapter_Essay(essayArrayList);
+                recyclerView.setAdapter(adapter_essay);
+
+            }
+        });
+        //모두의 에세이
+
         //에세이 쓰기 버튼
         btn_writeEssay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,21 +142,6 @@ public class Essay extends AppCompatActivity {
 
                 Intent intent = new Intent(getApplicationContext(), AddEssayBook.class);
                 startActivity(intent);
-
-//                dictionary_book = new Dictionary_book("read","와일드","셰릴 스트레이드");
-//                dictionary_book.setBookCover(BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.book_jieun));
-//                dictionary_essay = new Dictionary_Essay(dictionary_book);
-//                dictionary_essay.setDate(time);
-//                dictionary_essay.setEssayTitle("내가 길을 잃었을 때");
-//                dictionary_essay.setEssayContent("이 책을 읽으면 될 것 같다. 미친듯이 힘들어서 이이이이이이이디디디디디댜댣" +
-//                        "ㄷㄹㄷㅀㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷ" +
-//                        "ㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㅎㄷ다다다다다ㅏㄷㄷㄷㄷㄷㄷㄷㄷ" +
-//                        "ㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷ" +
-//                        "ㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷ" +
-//                        "너무재밌다");
-//                essayArrayList.add(dictionary_essay);
-//                adapter_essay = new Adapter_Essay(essayArrayList);
-//                recyclerView.setAdapter(adapter_essay);
 
             }
         });
@@ -161,20 +197,39 @@ public class Essay extends AppCompatActivity {
     protected void onPostResume() {
         super.onPostResume();
 
-        getArrayFromPref();
+        if(myEssay){
+            getArrayFromPref(userPref);
+        }else{
+            getArrayFromPref(devPref);
+        }
 
     }
 
-    private void getArrayFromPref() {
+    private void getArrayFromPref(SharedPreferences pref) {
         Gson gson = new Gson();
-        String json = userPref.getString("essay","EMPTY");
+
+       // 프레프 비우기용
+//        essayArrayList.clear();
+//        String json = gson.toJson(essayArrayList);
+//        userPrefEditor.putString("essay",json);
+//        userPrefEditor.commit();
+//        devPrefEditor.putString("essay",json);
+//        devPrefEditor.commit();
+
+        essayArrayList.clear();
+        String json = pref.getString("essay","EMPTY");
+
         Type type = new TypeToken<ArrayList<Dictionary_Essay>>() {
         }.getType();
         if(!json.equals("EMPTY")){
             essayArrayList = gson.fromJson(json,type);
         }
 
-
+        if(myEssay&& essayArrayList.size()==0){
+           tv_warning_noEssay.setVisibility(View.VISIBLE);
+        }else if(myEssay&& essayArrayList.size()>0){
+            tv_warning_noEssay.setVisibility(View.GONE);
+        }
         adapter_essay = new Adapter_Essay(essayArrayList);
         recyclerView.setAdapter(adapter_essay);
         adapter_essay.notifyDataSetChanged();

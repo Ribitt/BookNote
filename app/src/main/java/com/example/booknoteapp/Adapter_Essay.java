@@ -48,6 +48,7 @@ public class Adapter_Essay extends androidx.recyclerview.widget.RecyclerView.Ada
         TextView date;
         TextView likeNum;
         ImageView like;
+        TextView tv_isOpen;
 
 
 
@@ -64,6 +65,7 @@ public class Adapter_Essay extends androidx.recyclerview.widget.RecyclerView.Ada
             date =view.findViewById(R.id.tv_date);
             likeNum =view.findViewById(R.id.tv_likeNum);
             like =view.findViewById(R.id.iv_like_btn);
+            tv_isOpen = view.findViewById(R.id.tv_isOpen);
         }
     }
 
@@ -103,6 +105,13 @@ public class Adapter_Essay extends androidx.recyclerview.widget.RecyclerView.Ada
         holder.essayTitle.setText(dictionary_essay.getEssayTitle());
 
         holder.date.setText(dictionary_essay.getDate());
+
+        if(dictionary_essay.isOpen){
+            holder.tv_isOpen.setText("공개 에세이");
+        }else{
+            holder.tv_isOpen.setText("비공개 에세이");
+        }
+
 
 
 

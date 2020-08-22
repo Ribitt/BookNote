@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,12 +35,18 @@ public class AddEssay extends AppCompatActivity {
     SharedPreferences userPref;
     SharedPreferences.Editor userPrefEditor;
 
-    ArrayList<Dictionary_Essay> essayArrayList = new ArrayList<>();
+    SharedPreferences devPref;
+    SharedPreferences.Editor devPrefEditor;
+
+    ArrayList<Dictionary_Essay> userEssayArrayList = new ArrayList<>();
+    ArrayList<Dictionary_Essay> everyEssayList = new ArrayList<>();
     Dictionary_book bookDict;
 
 
     Button btn_open;
     Button btn_private;
+
+    Boolean isOpen=true;
 
     ImageView iv_bookCover;
     TextView tv_bookTitle;
@@ -73,7 +81,10 @@ public class AddEssay extends AppCompatActivity {
 
     private void initialize(){
 
-        String userEmail = getSharedPreferences("users", MODE_PRIVATE).getString("currentUser","");
+        devPref = getSharedPreferences("users",MODE_PRIVATE);
+        devPrefEditor = devPref.edit();
+
+        String userEmail = devPref.getString("currentUser","");
         userPref = getSharedPreferences(userEmail,MODE_PRIVATE);
         userPrefEditor = userPref.edit();
 
@@ -102,6 +113,24 @@ public class AddEssay extends AppCompatActivity {
 
     private void allListener(){
 
+        btn_open.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isOpen =true;
+                btn_open.setBackground(getDrawable(R.drawable.button_yello));
+                btn_private.setBackground(getDrawable(R.drawable.button_grey));
+            }
+        });
+
+        btn_private.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isOpen = false;
+                btn_open.setBackground(getDrawable(R.drawable.button_grey));
+                btn_private.setBackground(getDrawable(R.drawable.button_yello));
+            }
+        });
+
     }//올리스너 끝
 
 
@@ -117,16 +146,26 @@ public class AddEssay extends AppCompatActivity {
 
             case R.id.btn_done://완료 버튼을 누른 경우 (저장하기)
 
-                getPrefToArray();
-                //쉐어드에 저장된 리스트를 불러온다.
-                saveNewEssayToArray();
+
+                getArrayFromUserPref(userPref);
+                saveNewEssayToArray(userEssayArrayList);
                 //리스트에 지금 노트를 추가한다.
-                saveArrayToPref();
+                saveArrayToPref(userPrefEditor, userEssayArrayList);
                 //리스트를 다시 저장한다.
+
+                if(isOpen){
+                    //공개 리스트의 경우
+                    getArrayFromDevPref(devPref);
+                    saveNewEssayToArray(everyEssayList);
+                    saveArrayToPref(devPrefEditor, everyEssayList);
+                    //내 쉐어드 가져와서 추가하고
+                    //에세이 쉐어드 가져와서 추가하고
+                }
+
+
                 Intent intent1 = new Intent(getApplicationContext(), Essay.class);
                 intent1.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                //
                 startActivity(intent1);
                 finish();
 
@@ -139,17 +178,39 @@ public class AddEssay extends AppCompatActivity {
     //상단 메뉴 버튼 리스너
 
 
+    private void getArrayFromUserPref(SharedPreferences pref){
+        Gson gson = new Gson();
+        String json = pref.getString("essay","EMPTY");
+
+        Type type = new TypeToken<ArrayList<Dictionary_Essay>>() {
+        }.getType();
+        if(!json.equals("EMPTY")){
+            userEssayArrayList = gson.fromJson(json,type);
+        }
+
+    }
+
+    private void getArrayFromDevPref(SharedPreferences pref){
+        Gson gson = new Gson();
+        String json = pref.getString("essay","EMPTY");
+
+        Type type = new TypeToken<ArrayList<Dictionary_Essay>>() {
+        }.getType();
+        if(!json.equals("EMPTY")){
+            everyEssayList = gson.fromJson(json,type);
+        }
+
+    }
 
     //지금 에세이 어레이 리스트에 저장하기
-    private void saveNewEssayToArray() {
-
+    private void saveNewEssayToArray(ArrayList<Dictionary_Essay> list) {
         getTime();
 
-        Dictionary_Essay newEssay = new Dictionary_Essay(bookDict);
+        Dictionary_Essay newEssay = new Dictionary_Essay(bookDict,isOpen);
         newEssay.setDate(time);
         newEssay.setEssayTitle(et_essayTitle.getText().toString());
         newEssay.setEssayContent(et_essayContent.getText().toString());
-        essayArrayList.add(0,newEssay);
+        list.add(0,newEssay);
 
     }
     //지금 에세이 저장하기 끝
@@ -166,35 +227,17 @@ public class AddEssay extends AppCompatActivity {
     }
     //현재시간 가져오는 메소드 끝
 
-    ///쉐어드 프리퍼런스 가져와서 어레이 리스트로 바꿔주기
-    private void getPrefToArray() {
-        Gson gson = new Gson();
-        String json ="EMPTY";
-        json = userPref.getString("essay","EMPTY");
-
-        if(!json.equals("EMPTY")){
-            Type type = new TypeToken<ArrayList<Dictionary_Essay>>() {
-            }.getType();
-            essayArrayList = gson.fromJson(json,type);
-            Log.d("들어오는지 확인", json);
-            //   Log.d("대체 어레이 리스트가 존재는 하는지 확인 ", String.valueOf(getArrayList.size()));
-            //  Log.d("대체 어레이 리스트가 존재는 하는지 확인 ", getArrayList.get(0).getTitle());
-        }else{
-            // 내용이 없으면 가져오지 않음
-        }
-
-    }
-    ///쉐어드 프리퍼런스 가져와서 어레이 리스트로 바꿔주기 끝
 
 
     //쉐어드에 저장하기
-    private void saveArrayToPref() {
+    private void saveArrayToPref(SharedPreferences.Editor editor, ArrayList<Dictionary_Essay> list) {
         Gson gson = new Gson();
-        String json = gson.toJson(essayArrayList);
-        userPrefEditor.putString("essay",json);
-        userPrefEditor.commit();
+        String json = gson.toJson(list);
+        editor.putString("essay",json);
+        editor.commit();
     }
     //쉐어드에 저장하기
+
 
 
     //정말 나가시겠습니까?

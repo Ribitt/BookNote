@@ -70,11 +70,23 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="최신 에세이"/>
+                    android:text="모든 에세이"/>
 
 
             </LinearLayout>
 
+            <SearchView
+                android:id="@+id/searchView"
+                android:layout_marginBottom="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"/>
+
+            <TextView
+                android:id="@+id/tv_warning_noEssay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="아직 쓴 에세이가 없습니다. \n에세이 쓰기를 눌러 새로운 에세이를 써보세요"/>
             <androidx.recyclerview.widget.RecyclerView
                android:padding="5dp"
                 android:id="@+id/recycler_essay"
