@@ -1,17 +1,47 @@
 package com.example.booknoteapp;
 
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+import android.util.Log;
+
+import java.io.ByteArrayOutputStream;
+
 public class Dictionary_Essay {
 
-    String nickname;
+    String userEmail;
+
     String bookTitle;
     String bookAuthor;
     String bookCover;
     String bookPublisher;
+
+    String nickname;
     String essayTitle;
     String essayContent;
     String date;
-    String likeNum;
+    String likeNum="0";
 
+
+
+
+    Dictionary_Essay(Dictionary_book book){
+
+        this.bookTitle = book.getTitle();
+        this.bookAuthor = book.getAuthor();
+        this.bookCover = book.bookCover;
+        this.bookPublisher = book.getPublisher();
+
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
     public String getNickname() {
         return nickname;
     }
@@ -36,12 +66,21 @@ public class Dictionary_Essay {
         this.bookAuthor = bookAuthor;
     }
 
-    public String getBookCover() {
-        return bookCover;
+    public Bitmap getBookCover() {
+
+        byte[] decodeByte = Base64.decode(this.bookCover,0);
+        return BitmapFactory.decodeByteArray(decodeByte, 0, decodeByte.length);
+
     }
 
-    public void setBookCover(String bookCover) {
-        this.bookCover = bookCover;
+    public void setBookCover(Bitmap bitmapImg) {
+        Bitmap bitmap = bitmapImg;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100,baos);
+        byte[] b= baos.toByteArray();
+        String imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
+        Log.d("Image Log........................", imageEncoded);
+        this.bookCover = imageEncoded;
     }
 
     public String getBookPublisher() {
