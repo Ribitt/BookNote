@@ -1,6 +1,8 @@
 package com.example.booknoteapp;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -130,10 +132,9 @@ public class Adapter_PageLog extends RecyclerView.Adapter<Adapter_PageLog.pageLo
                         break;
                     case 1002:
                         //삭제를 고른 경우
-                        System.out.println("지금 리스트 길이/////////////////////////////////////////// "+mList.size());
-                        mList.remove(getAdapterPosition());
-                        notifyItemRemoved(getAdapterPosition());
-                        notifyDataSetChanged();
+                        position = getAdapterPosition();
+                        alert();
+
                       //  itemView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.almostWhite));
 
                         break;
@@ -142,6 +143,30 @@ public class Adapter_PageLog extends RecyclerView.Adapter<Adapter_PageLog.pageLo
             }
         };
     }
+
+
+    //정말 삭제하시겠습니까?
+    private void alert() {
+        AlertDialog.Builder reallyGoOutAlert = new AlertDialog.Builder(mContext);
+        reallyGoOutAlert.setTitle("정말 삭제하시겠습니까?")
+                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                })
+                .setPositiveButton("삭제하기", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        mList.remove(position);
+                        notifyItemRemoved(position);
+                        notifyDataSetChanged();
+
+
+                    }
+                }).show();
+    }
+    //정말 삭제하시겠습니까? 끝
 
     public Adapter_PageLog(ArrayList<Dictionary_pageLog> mList ) {
 

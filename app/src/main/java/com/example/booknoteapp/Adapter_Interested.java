@@ -31,6 +31,7 @@ public class Adapter_Interested extends androidx.recyclerview.widget.RecyclerVie
     Context mContext;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
+    int position;
     CharSequence[] list_edit_or_delete = {"책 정보 수정하기","책 삭제하기"};
 
     public class interestedViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
@@ -91,10 +92,8 @@ public class Adapter_Interested extends androidx.recyclerview.widget.RecyclerVie
                                             break;
                                         case 1:
                                             //삭제하기
-                                            mList.remove(getAdapterPosition());
-                                            notifyItemRemoved(getAdapterPosition());
-                                            notifyDataSetChanged();
-                                            saveBookArrayToPref(mList);
+                                            position = getAdapterPosition();
+                                            alert();
 
                                             break;
 
@@ -113,6 +112,29 @@ public class Adapter_Interested extends androidx.recyclerview.widget.RecyclerVie
 
         }
     }
+
+
+    private void alert() {
+        AlertDialog.Builder reallyGoOutAlert = new AlertDialog.Builder(mContext);
+        reallyGoOutAlert.setTitle("정말 나가시겠습니까?")
+                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+                .setPositiveButton("나가기", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        mList.remove(position);
+                        notifyItemRemoved(position);
+                        notifyDataSetChanged();
+                        saveBookArrayToPref(mList);
+                    }
+                }).show();
+    }
+
 
     //지금 어레이를 쉐어드에 저장하기
     private void saveBookArrayToPref(ArrayList<Dictionary_book> arrayList) {

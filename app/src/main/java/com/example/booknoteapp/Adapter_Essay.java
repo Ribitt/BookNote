@@ -1,20 +1,22 @@
 package com.example.booknoteapp;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import org.w3c.dom.Text;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.zip.Inflater;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -22,12 +24,25 @@ public class Adapter_Essay extends androidx.recyclerview.widget.RecyclerView.Ada
 
 
 
-    ArrayList<Dictionary_Essay> mList =null;
+    ArrayList<Dictionary_Essay> mList =new ArrayList<>();
+    ArrayList<Dictionary_Essay> wholeList=new ArrayList<>();
     Context mContext;
 
-    SharedPreferences currentUserPref;
-    SharedPreferences pref;
+    SharedPreferences userPref;
+    SharedPreferences.Editor userPrefEditor;
+    SharedPreferences devPref;
+    SharedPreferences.Editor devPrefEditor;
+
+    Boolean isOpen;
+
     String nickname;
+    String userEmail;
+
+    int position;
+    int positionInWhole;
+
+    CharSequence[] list_edit_or_delete = {"에세이 수정하기","삭제하기"};
+
 
 
     Adapter_Essay(ArrayList<Dictionary_Essay> list) {
@@ -39,7 +54,7 @@ public class Adapter_Essay extends androidx.recyclerview.widget.RecyclerView.Ada
     public class essayViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder{
 
         TextView nickname;
-        ImageView btn_edit_or_delete;
+        ImageView edit_or_delete;
         TextView bookTitle;
         TextView bookAuthor;
         ImageView bookCover;
@@ -55,8 +70,9 @@ public class Adapter_Essay extends androidx.recyclerview.widget.RecyclerView.Ada
         public essayViewHolder(@NonNull View view) {
             super(view);
 
+
             nickname = view.findViewById(R.id.tv_nickname);
-            btn_edit_or_delete = view.findViewById(R.id.iv_more);
+            edit_or_delete = view.findViewById(R.id.iv_more);
             bookTitle = view.findViewById(R.id.tv_book_title);
             bookAuthor=view.findViewById(R.id.tv_book_author);
             bookCover = view.findViewById(R.id.iv_book_cover);
@@ -66,6 +82,105 @@ public class Adapter_Essay extends androidx.recyclerview.widget.RecyclerView.Ada
             likeNum =view.findViewById(R.id.tv_likeNum);
             like =view.findViewById(R.id.iv_like_btn);
             tv_isOpen = view.findViewById(R.id.tv_isOpen);
+
+            ////수정삭제 클릭 리스너
+            edit_or_delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+
+                    builder
+                            .setItems(list_edit_or_delete, new DialogInterface.OnClickListener() {
+                                //선택목록이랑 클릭 이벤트 리스너를 같이 주는군
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    switch (i) {
+                                        case 0:
+                                            //수정하기
+//                                            Intent intent = new Intent(mContext,EditBook.class);
+//                                            Dictionary_Essay selectedBook = mList.get(getAdapterPosition());
+//                                            intent.putExtra("selectedBook",selectedBook);
+//                                            intent.putExtra("position",getAdapterPosition());
+//                                            mContext.startActivity(intent);
+                                            break;
+                                        case 1:
+                                            //삭제하기
+                                            position = getAdapterPosition();
+                                            alert();
+                                            break;
+
+                                    }
+
+                                }
+                            });
+
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+
+                }
+            });
+            ////수정삭제 클릭 리스너
+
+
+        }
+    }
+
+    //지금 어레이를 쉐어드에 저장하기
+    private void saveArrayToPref(ArrayList<Dictionary_Essay> arrayList, SharedPreferences.Editor editor) {
+        Gson gson = new Gson();
+        String json = gson.toJson(arrayList);
+        editor.putString("essay",json);
+        editor.apply();
+    }
+
+    //정말 삭제하시겠습니까?
+    private void alert() {
+        AlertDialog.Builder reallyGoOutAlert = new AlertDialog.Builder(mContext);
+        reallyGoOutAlert.setTitle("정말 삭제하시겠습니까?")
+                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                })
+                .setPositiveButton("삭제하기", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        if(mList.get(position).isOpen){
+                            //공개인 경우
+                            //이미 리스트에서 해당 아이템을 지운 다음에는 포지션 값이 이상해진다. 먼저 공개리스트부터 처리
+                            getArrayFromPref(devPref);
+                            wholeList.remove(positionInWhole);
+                            saveArrayToPref(wholeList, devPrefEditor);
+                        }
+                        //비공개인 경우
+                        mList.remove(position);
+                        notifyItemRemoved(position);
+                        notifyDataSetChanged();
+                        saveArrayToPref(mList, userPrefEditor);
+
+
+                    }
+                }).show();
+    }
+    //정말 삭제하시겠습니까? 끝
+
+
+    private void getArrayFromPref(SharedPreferences pref){
+        Gson gson = new Gson();
+        String json = pref.getString("essay","EMPTY");
+
+        Type type = new TypeToken<ArrayList<Dictionary_Essay>>() {
+        }.getType();
+
+        if(!json.equals("EMPTY")){
+            wholeList = gson.fromJson(json,type);
+            for(int i=0; i<wholeList.size(); i++){
+                if(mList.get(position).getEssayTitle().equals(wholeList.get(i).getEssayTitle())){
+                    positionInWhole = i;
+                }
+            }
         }
     }
 
@@ -80,11 +195,15 @@ public class Adapter_Essay extends androidx.recyclerview.widget.RecyclerView.Ada
         View view = inflater.inflate(R.layout.item_essay,parent,false);
         Adapter_Essay.essayViewHolder holder = new Adapter_Essay.essayViewHolder(view);
 
-       pref = parent.getContext().getSharedPreferences("users", MODE_PRIVATE);
-        String userEmail = pref.getString("currentUser","");
-        currentUserPref= parent.getContext().getSharedPreferences(userEmail,MODE_PRIVATE);
+       devPref = parent.getContext().getSharedPreferences("users", MODE_PRIVATE);
+       devPrefEditor = devPref.edit();
+       userEmail = devPref.getString("currentUser","");
+        userPref= parent.getContext().getSharedPreferences(userEmail,MODE_PRIVATE);
         //저장되어있는 닉네임을 불러온다
-        nickname = currentUserPref.getString("nickname","");
+        userPrefEditor = userPref.edit();
+        nickname = userPref.getString("nickname","");
+
+
 
         return holder;
     }
@@ -110,6 +229,12 @@ public class Adapter_Essay extends androidx.recyclerview.widget.RecyclerView.Ada
             holder.tv_isOpen.setText("공개 에세이");
         }else{
             holder.tv_isOpen.setText("비공개 에세이");
+        }
+
+        if(!userEmail.equals(dictionary_essay.getUserEmail())){
+            holder.edit_or_delete.setVisibility(View.GONE);
+        }else{
+            holder.edit_or_delete.setVisibility(View.VISIBLE);
         }
 
 

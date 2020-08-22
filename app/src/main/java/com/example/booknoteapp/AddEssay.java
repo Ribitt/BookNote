@@ -47,6 +47,7 @@ public class AddEssay extends AppCompatActivity {
     Button btn_private;
 
     Boolean isOpen=true;
+    String userEmail;
 
     ImageView iv_bookCover;
     TextView tv_bookTitle;
@@ -84,7 +85,7 @@ public class AddEssay extends AppCompatActivity {
         devPref = getSharedPreferences("users",MODE_PRIVATE);
         devPrefEditor = devPref.edit();
 
-        String userEmail = devPref.getString("currentUser","");
+        userEmail = devPref.getString("currentUser","");
         userPref = getSharedPreferences(userEmail,MODE_PRIVATE);
         userPrefEditor = userPref.edit();
 
@@ -208,9 +209,11 @@ public class AddEssay extends AppCompatActivity {
 
         Dictionary_Essay newEssay = new Dictionary_Essay(bookDict,isOpen);
         newEssay.setDate(time);
+        newEssay.setUserEmail(userEmail);
         newEssay.setEssayTitle(et_essayTitle.getText().toString());
         newEssay.setEssayContent(et_essayContent.getText().toString());
         list.add(0,newEssay);
+
 
     }
     //지금 에세이 저장하기 끝

@@ -43,11 +43,13 @@ public class Adapter_read extends RecyclerView.Adapter<Adapter_read.readViewHold
     SharedPreferences.Editor editor;
     CharSequence[] list_edit_or_delete = {"책 정보 수정하기","책 삭제하기"};
 
+    int position;
+
 
 
     public class readViewHolder extends RecyclerView.ViewHolder{
 
-        ImageButton bookCover;
+        ImageView bookCover;
         TextView title;
         RatingBar ratingBar;
         TextView ALineReview;
@@ -74,6 +76,10 @@ public class Adapter_read extends RecyclerView.Adapter<Adapter_read.readViewHold
                     Dictionary_book selectedBook = mList.get(getAdapterPosition());
                     intent.putExtra("selectedBook",selectedBook);
                     intent.putExtra("position",getAdapterPosition());
+                   // intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+
+                    editor.putString("bookNow",selectedBook.getTitle());
+                    editor.commit();
                     mContext.startActivity(intent);
                 }
             });
@@ -103,10 +109,10 @@ public class Adapter_read extends RecyclerView.Adapter<Adapter_read.readViewHold
                                             break;
                                         case 1:
                                             //삭제하기
-                                            mList.remove(getAdapterPosition());
-                                            notifyItemRemoved(getAdapterPosition());
-                                            notifyDataSetChanged();
-                                            saveBookArrayToPref(mList);
+                                            position = getAdapterPosition();
+                                            alert();
+
+
 
                                             break;
 
@@ -124,6 +130,29 @@ public class Adapter_read extends RecyclerView.Adapter<Adapter_read.readViewHold
 
         }
     }//////뷰홀더는 여기까지
+
+    private void alert() {
+        AlertDialog.Builder reallyGoOutAlert = new AlertDialog.Builder(mContext);
+        reallyGoOutAlert.setTitle("정말 나가시겠습니까?")
+                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+                .setPositiveButton("나가기", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        mList.remove(position);
+                        notifyItemRemoved(position);
+                        notifyDataSetChanged();
+                        saveBookArrayToPref(mList);
+                    }
+                }).show();
+    }
+
+
 
 
     //지금 어레이를 쉐어드에 저장하기

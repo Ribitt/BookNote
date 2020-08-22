@@ -208,7 +208,7 @@ public class Essay extends AppCompatActivity {
     private void getArrayFromPref(SharedPreferences pref) {
         Gson gson = new Gson();
 
-       // 프레프 비우기용
+//        //프레프 비우기용
 //        essayArrayList.clear();
 //        String json = gson.toJson(essayArrayList);
 //        userPrefEditor.putString("essay",json);
@@ -217,7 +217,7 @@ public class Essay extends AppCompatActivity {
 //        devPrefEditor.commit();
 
         essayArrayList.clear();
-        String json = pref.getString("essay","EMPTY");
+       String json = pref.getString("essay","EMPTY");
 
         Type type = new TypeToken<ArrayList<Dictionary_Essay>>() {
         }.getType();
@@ -230,6 +230,7 @@ public class Essay extends AppCompatActivity {
         }else if(myEssay&& essayArrayList.size()>0){
             tv_warning_noEssay.setVisibility(View.GONE);
         }
+
         adapter_essay = new Adapter_Essay(essayArrayList);
         recyclerView.setAdapter(adapter_essay);
         adapter_essay.notifyDataSetChanged();

@@ -325,6 +325,7 @@ public class AddBook extends AppCompatActivity {
         switch (item.getItemId()){
             case android.R.id.home: {
 
+                alert();
                 return true;
             }
             case R.id.btn_done: {
@@ -400,6 +401,30 @@ public class AddBook extends AppCompatActivity {
       }
         return super.onOptionsItemSelected(item);
     }
+
+
+    //정말 나가시겠습니까?
+    private void alert() {
+        AlertDialog.Builder reallyGoOutAlert = new AlertDialog.Builder(AddBook.this);
+        reallyGoOutAlert.setTitle("정말 나가시겠습니까?")
+                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                })
+                .setPositiveButton("나가기", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent1 = new Intent(getApplicationContext(), DrawerTap.class);
+                        intent1.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent1);
+                        finish();
+                    }
+                }).show();
+    }
+    //정말 나가시겠습니까? 끝
+
 
     ///쉐어드 프리퍼런스 가져와서 어레이 리스트로 바꿔주기
     private void getPrefToArray() {

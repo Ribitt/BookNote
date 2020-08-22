@@ -12,7 +12,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 
@@ -21,7 +20,7 @@ import java.util.ArrayList;
 public class Adapter_Reading extends androidx.recyclerview.widget.RecyclerView.Adapter<Adapter_Reading.readingViewHolder> {
 
     //1. 어레이 리스트 정하고 그 애는 일단 비어있다. 이 리스트는 딕셔너리 객체들이 들어간다.
-    ArrayList<Dictionary_book> readingArrayList = null;
+    ArrayList<Dictionary_book> mList = null;
 
     SharedPreferences pref;
     SharedPreferences.Editor editor;
@@ -52,19 +51,58 @@ public class Adapter_Reading extends androidx.recyclerview.widget.RecyclerView.A
             bookCover = (ImageButton) itemView.findViewById(R.id.btn_readingD_bookcover);
             bookTitle = (TextView)itemView.findViewById(R.id.tv_readingD_bookTitle);
 
-            position = getAdapterPosition();
+
 
 
             if(from.equals("drawer")){
 
-                bookCover.setOnLongClickListener(longClickListener);
+                bookCover.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+
+                        builder
+                                .setItems(list_edit_or_delete, new DialogInterface.OnClickListener() {
+                                    //선택목록이랑 클릭 이벤트 리스너를 같이 주는군
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        switch (i) {
+                                            case 0:
+                                                //수정하기
+                                                Intent intent = new Intent(mContext,EditBook.class);
+                                                Dictionary_book selectedBook = mList.get(getAdapterPosition());
+                                                intent.putExtra("selectedBook",selectedBook);
+                                                intent.putExtra("position",getAdapterPosition());
+                                                mContext.startActivity(intent);
+                                                break;
+                                            case 1:
+                                                //삭제하기
+                                                position =getAdapterPosition();
+                                                alert();
+
+
+                                                break;
+                                        }
+                                    }
+                                });
+
+                        AlertDialog alertDialog = builder.create();
+                        alertDialog.show();
+
+                        return true;
+                    }
+                });
+
+
                 //북 커버 그냥 클릭 리스너
                 bookCover.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
                         Intent intent = new Intent(mContext,BookLog_Notes.class);
-                        Dictionary_book selectedBook = readingArrayList.get(getAdapterPosition());
+                        Dictionary_book selectedBook = mList.get(getAdapterPosition());
                         intent.putExtra("selectedBook",selectedBook);
                         intent.putExtra("position",getAdapterPosition());
 
@@ -83,7 +121,7 @@ public class Adapter_Reading extends androidx.recyclerview.widget.RecyclerView.A
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(mContext, AddEssay.class);
-                        Dictionary_book selectedBook = readingArrayList.get(getAdapterPosition());
+                        Dictionary_book selectedBook = mList.get(getAdapterPosition());
                         intent.putExtra("bookDict",selectedBook);
                         mContext.startActivity(intent);
                     }
@@ -96,46 +134,29 @@ public class Adapter_Reading extends androidx.recyclerview.widget.RecyclerView.A
         }
 
     }
-
-    View.OnLongClickListener longClickListener = new View.OnLongClickListener() {
-    @Override
-    public boolean onLongClick(View view) {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-
-        builder
-                .setItems(list_edit_or_delete, new DialogInterface.OnClickListener() {
-                    //선택목록이랑 클릭 이벤트 리스너를 같이 주는군
+    //정말 삭제하시겠습니까?
+    private void alert() {
+        AlertDialog.Builder reallyGoOutAlert = new AlertDialog.Builder(mContext);
+        reallyGoOutAlert.setTitle("정말 삭제하시겠습니까?")
+                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        switch (i) {
-                            case 0:
-                                //수정하기
-                                Intent intent = new Intent(mContext,EditBook.class);
-                                Dictionary_book selectedBook = readingArrayList.get(position);
-                                intent.putExtra("selectedBook",selectedBook);
-                                intent.putExtra("position",position);
-                                mContext.startActivity(intent);
-                                break;
-                            case 1:
-                                //삭제하기
-                                readingArrayList.remove(position);
-                                notifyItemRemoved(position);
-                                notifyDataSetChanged();
-                                saveBookArrayToPref(readingArrayList);
-
-                                break;
-                        }
                     }
-                });
+                })
+                .setPositiveButton("삭제하기", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
 
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
+                        mList.remove(position);
+                        notifyItemRemoved(position);
+                        notifyDataSetChanged();
+                        saveBookArrayToPref(mList);
 
-        return true;
+
+                    }
+                }).show();
     }
-};
-
+    //정말 삭제하시겠습니까? 끝
 
     //지금 어레이를 쉐어드에 저장하기
     private void saveBookArrayToPref(ArrayList<Dictionary_book> arrayList) {
@@ -149,7 +170,7 @@ public class Adapter_Reading extends androidx.recyclerview.widget.RecyclerView.A
    //5. 어댑터의 생성자 어레이 리스트를 받는다.
 
     public Adapter_Reading(ArrayList<Dictionary_book> mList, String from) {
-        this.readingArrayList = mList;
+        this.mList = mList;
         this.from = from;
 
         //, View.OnClickListener editListener
@@ -190,7 +211,7 @@ public class Adapter_Reading extends androidx.recyclerview.widget.RecyclerView.A
     public void onBindViewHolder(@NonNull readingViewHolder holder, int position) {
 
         //실제 데이터를 뷰홀더의 아이템뷰에 표시해준다.
-        Dictionary_book readingItem = readingArrayList.get(position);
+        Dictionary_book readingItem = mList.get(position);
 
         if(readingItem.bookCover==null){
 
@@ -207,7 +228,7 @@ public class Adapter_Reading extends androidx.recyclerview.widget.RecyclerView.A
     //전체 데이터 갯수 리턴
     @Override
     public int getItemCount() {
-        return readingArrayList.size();
+        return mList.size();
     }
 
 

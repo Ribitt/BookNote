@@ -1,6 +1,8 @@
 package com.example.booknoteapp;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +21,14 @@ public class Adapter_Note extends RecyclerView.Adapter<Adapter_Note.noteViewHold
     ArrayList<Dictionary_note> mList = null;
     View.OnClickListener mEditListener;
 
+    int position;
+    Context mContext;
+
     @NonNull
     @Override
     public noteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
-        LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mContext = parent.getContext();
+        LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View view = inflater.inflate(R.layout.item_note,parent,false);
 
@@ -55,9 +60,7 @@ public class Adapter_Note extends RecyclerView.Adapter<Adapter_Note.noteViewHold
             @Override
             public void onClick(View view) {
                 int position = (int)view.getTag();
-                mList.remove(position);
-                notifyItemRemoved(position);
-                notifyItemRangeChanged(position,mList.size());
+
 
             }
         });
@@ -83,14 +86,48 @@ public class Adapter_Note extends RecyclerView.Adapter<Adapter_Note.noteViewHold
         public noteViewHolder(@NonNull View itemView) {
             super(itemView);
 
+
+
             pageNum = itemView.findViewById(R.id.tv_note_pageNum);
             date = itemView.findViewById(R.id.tv_note_date);
             note = itemView.findViewById(R.id.tv_note_userNote);
             btn_delete = itemView.findViewById(R.id.btn_note_delete);
             quote = itemView.findViewById(R.id.tv_note_quote);
             btn_edit = itemView.findViewById(R.id.btn_note_edit);
+
+            btn_delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    position = getAdapterPosition();
+                    alert();
+                }
+            });
         }
     }
+
+    //정말 삭제하시겠습니까?
+    private void alert() {
+        AlertDialog.Builder reallyGoOutAlert = new AlertDialog.Builder(mContext);
+        reallyGoOutAlert.setTitle("정말 삭제하시겠습니까?")
+                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                })
+                .setPositiveButton("삭제하기", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        mList.remove(position);
+                        notifyItemRemoved(position);
+                        notifyItemRangeChanged(position,mList.size());
+                      //  saveBookArrayToPref(mList);
+
+
+                    }
+                }).show();
+    }
+    //정말 삭제하시겠습니까? 끝
 
 
     public Adapter_Note(ArrayList<Dictionary_note> mList) {

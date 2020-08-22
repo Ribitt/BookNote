@@ -32,6 +32,9 @@
                 android:value=".Essay" />
         </activity>
         <activity android:name=".SearchBook">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".DrawerTap" />
 
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
