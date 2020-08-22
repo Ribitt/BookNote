@@ -19,8 +19,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/MyToolTheme">
-        <activity android:name=".AddEssay"></activity>
-        <activity android:name=".AddEssayBook" />
+        <activity android:name=".AddEssay">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".AddEssayBook" />
+        </activity>
+
+        <activity android:name=".AddEssayBook">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Essay" />
+        </activity>
         <activity android:name=".SearchBook">
 
             <!-- <intent-filter> -->

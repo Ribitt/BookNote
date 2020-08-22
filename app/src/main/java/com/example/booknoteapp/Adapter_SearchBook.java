@@ -20,9 +20,12 @@ public class Adapter_SearchBook extends androidx.recyclerview.widget.RecyclerVie
     ArrayList<Dictionary_book> mList = null;
     Context mContext;
 
+    String from = "";
 
-    public Adapter_SearchBook(ArrayList<Dictionary_book> mList) {
+
+    public Adapter_SearchBook(ArrayList<Dictionary_book> mList, String from) {
         this.mList = mList;
+        this.from = from;
 
     }
 
@@ -45,19 +48,37 @@ public class Adapter_SearchBook extends androidx.recyclerview.widget.RecyclerVie
             publisher =view.findViewById(R.id.tv_search_publisher);
             btn_addBook =view.findViewById(R.id.btn_search_addBook);
 
-            ////책 추가 버튼 클릭 리스너
-            btn_addBook.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Dictionary_book dict = mList.get(getAdapterPosition());
-                    Intent intent = new Intent(mContext,AddBook.class);
-                    intent.putExtra("searchedBook",dict);
-                    mContext.startActivity(intent);
-                    ((Activity)mContext).finish();
+            if(from.equals("add")){
+                ////책 추가 버튼 클릭 리스너
+                btn_addBook.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Dictionary_book dict = mList.get(getAdapterPosition());
+                        Intent intent = new Intent(mContext,AddBook.class);
+                        intent.putExtra("searchedBook",dict);
+                        mContext.startActivity(intent);
+                        ((Activity)mContext).finish();
 
-                }
-            });
-            ////책 추가 버튼 클릭 리스너
+                    }
+                });
+                ////책 추가 버튼 클릭 리스너
+            }else if(from.equals("essay")){
+                ////책 추가 버튼 클릭 리스너
+                btn_addBook.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Dictionary_book dict = mList.get(getAdapterPosition());
+                        Intent intent = new Intent(mContext,AddEssay.class);
+                        intent.putExtra("bookDict",dict);
+                        mContext.startActivity(intent);
+                       // ((Activity)mContext).finish();
+
+                    }
+                });
+                ////책 추가 버튼 클릭 리스너
+            }
+
+
         }///뷰홀더 생성자 여기까지
     }
 

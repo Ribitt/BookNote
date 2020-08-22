@@ -4,12 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,6 +38,9 @@ public class Essay extends AppCompatActivity {
    Dictionary_book dictionary_book;
    Dictionary_Essay dictionary_essay;
    ArrayList<Dictionary_Essay> essayArrayList = new ArrayList<>();
+
+   SharedPreferences userPref;
+   SharedPreferences.Editor editor;
 
     //하단 메뉴 버튼
 
@@ -66,6 +75,11 @@ public class Essay extends AppCompatActivity {
         btn_toHome = findViewById(R.id.btn_to_home);
 
         // 하단 메뉴바 버튼 선언 끝
+
+
+        String currentEmail = getSharedPreferences("users", Context.MODE_PRIVATE).getString("currentUser","");
+        userPref = getSharedPreferences(currentEmail,this.MODE_PRIVATE);
+        editor = userPref.edit();
     }
 
 
@@ -75,20 +89,23 @@ public class Essay extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                dictionary_book = new Dictionary_book("read","와일드","셰릴 스트레이드");
-                dictionary_book.setBookCover(BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.book_jieun));
-                dictionary_essay = new Dictionary_Essay(dictionary_book);
-                dictionary_essay.setDate(time);
-                dictionary_essay.setEssayTitle("내가 길을 잃었을 때");
-                dictionary_essay.setEssayContent("이 책을 읽으면 될 것 같다. 미친듯이 힘들어서 이이이이이이이디디디디디댜댣" +
-                        "ㄷㄹㄷㅀㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷ" +
-                        "ㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㅎㄷ다다다다다ㅏㄷㄷㄷㄷㄷㄷㄷㄷ" +
-                        "ㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷ" +
-                        "ㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷ" +
-                        "너무재밌다");
-                essayArrayList.add(dictionary_essay);
-                adapter_essay = new Adapter_Essay(essayArrayList);
-                recyclerView.setAdapter(adapter_essay);
+                Intent intent = new Intent(getApplicationContext(), AddEssayBook.class);
+                startActivity(intent);
+
+//                dictionary_book = new Dictionary_book("read","와일드","셰릴 스트레이드");
+//                dictionary_book.setBookCover(BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.book_jieun));
+//                dictionary_essay = new Dictionary_Essay(dictionary_book);
+//                dictionary_essay.setDate(time);
+//                dictionary_essay.setEssayTitle("내가 길을 잃었을 때");
+//                dictionary_essay.setEssayContent("이 책을 읽으면 될 것 같다. 미친듯이 힘들어서 이이이이이이이디디디디디댜댣" +
+//                        "ㄷㄹㄷㅀㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷ" +
+//                        "ㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㄷㅎㅎㄷ다다다다다ㅏㄷㄷㄷㄷㄷㄷㄷㄷ" +
+//                        "ㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷ" +
+//                        "ㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷ" +
+//                        "너무재밌다");
+//                essayArrayList.add(dictionary_essay);
+//                adapter_essay = new Adapter_Essay(essayArrayList);
+//                recyclerView.setAdapter(adapter_essay);
 
             }
         });
@@ -138,5 +155,29 @@ public class Essay extends AppCompatActivity {
                 }
         );
         // 하단 메뉴바 클릭 이벤트 끝
+    }//올리스너 끝
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+
+        getArrayFromPref();
+
+    }
+
+    private void getArrayFromPref() {
+        Gson gson = new Gson();
+        String json = userPref.getString("essay","EMPTY");
+        Type type = new TypeToken<ArrayList<Dictionary_Essay>>() {
+        }.getType();
+        if(!json.equals("EMPTY")){
+            essayArrayList = gson.fromJson(json,type);
+        }
+
+
+        adapter_essay = new Adapter_Essay(essayArrayList);
+        recyclerView.setAdapter(adapter_essay);
+        adapter_essay.notifyDataSetChanged();
+
     }
 }

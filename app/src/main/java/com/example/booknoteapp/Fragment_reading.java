@@ -9,7 +9,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -61,7 +60,7 @@ public class Fragment_reading extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        getPrefToArray();
+        getArrayFromPref();
     }
 
     //이니셜라이즈
@@ -128,7 +127,7 @@ public class Fragment_reading extends Fragment {
     }//올 리스너 끝
 
 
-    private void getPrefToArray() {
+    private void getArrayFromPref() {
         Gson gson = new Gson();
         String json = pref.getString("reading","EMPTY");
         Type type = new TypeToken<ArrayList<Dictionary_book>>() {

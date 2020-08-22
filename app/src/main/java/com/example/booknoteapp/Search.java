@@ -160,7 +160,7 @@ public class Search extends AppCompatActivity {
             super.handleMessage(msg);
             Bundle bun = msg.getData();
             bookList = (ArrayList<Dictionary_book>)bun.getSerializable("list");
-            adapter_searchBook = new Adapter_SearchBook(bookList);
+            adapter_searchBook = new Adapter_SearchBook(bookList,"add");
             recyclerView.setAdapter(adapter_searchBook);
 
         }
