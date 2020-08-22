@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -20,6 +21,9 @@ import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -28,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -45,8 +50,13 @@ public class AddEssayBook extends AppCompatActivity {
     RecyclerView read_recycler;
 
     Adapter_SearchBook adapter_searchBook;
+    Adapter_Reading adapter_reading;
 
+    ArrayList<Dictionary_book> drawerBookList = new ArrayList<>();
     ArrayList<Dictionary_book> searchedBookList = new ArrayList<>();
+
+    SharedPreferences userPref;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +75,7 @@ public class AddEssayBook extends AppCompatActivity {
 
         initialize();
         allListener();
+
     }
 
 
@@ -75,8 +86,18 @@ public class AddEssayBook extends AppCompatActivity {
         search_recycler = findViewById(R.id.recycler_bookSearch);
         search_recycler.setLayoutManager(new LinearLayoutManager(this));
 
+        String userEmail = getSharedPreferences("users", MODE_PRIVATE).getString("currentUser","");
+        userPref = getSharedPreferences(userEmail,MODE_PRIVATE);
+
         read_recycler =findViewById(R.id.recycler_read);
-        read_recycler =findViewById(R.id.recycler_reading);
+        read_recycler.setLayoutManager(new LinearLayoutManager(getApplicationContext(),RecyclerView.HORIZONTAL,false));
+        getArrayFromPref(read_recycler,"read");
+
+        reading_recycler =findViewById(R.id.recycler_reading);
+        reading_recycler.setLayoutManager(new LinearLayoutManager(getApplicationContext(),RecyclerView.HORIZONTAL,false));
+        getArrayFromPref(reading_recycler,"reading");
+
+
     }
 
     private void allListener() {
@@ -113,6 +134,25 @@ public class AddEssayBook extends AppCompatActivity {
 
 
     }//올리스너 끝
+
+
+
+
+    private void getArrayFromPref(RecyclerView recyclerView, String status) {
+        Gson gson = new Gson();
+
+        String json = userPref.getString(status,"EMPTY");
+        Type type = new TypeToken<ArrayList<Dictionary_book>>() {
+        }.getType();
+        if(!json.equals("EMPTY")){
+           drawerBookList= gson.fromJson(json,type);
+        }
+
+        adapter_reading = new Adapter_Reading(drawerBookList,"essay");
+        recyclerView.setAdapter(adapter_reading);
+        adapter_reading.notifyDataSetChanged();
+
+    }
 
 
 

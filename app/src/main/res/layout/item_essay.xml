@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="8dp"
+    android:layout_marginBottom="15dp"
     android:background="@drawable/underline_green">
 
 
@@ -148,8 +149,9 @@
     <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:background="@color/lightGrey"
     android:orientation="vertical">
 
 
@@ -164,18 +166,21 @@
             android:textSize="15sp"
             android:ellipsize="end"/>
 
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingRight="10dp"
+            android:text="2020.08.21"
+            android:textColor="@color/border"
+            android:background="@drawable/underline_lightgrey"
+            android:gravity="right"
+            android:textSize="12dp"/>
+
+
     </LinearLayout>
 
-
-    <TextView
-        android:id="@+id/tv_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="2020.08.21"
-        android:textColor="@color/border"
-        android:background="@drawable/underline_lightgrey"
-        android:gravity="right"
-        android:textSize="12dp"/>
 
 
     <LinearLayout

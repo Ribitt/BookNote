@@ -1,33 +1,22 @@
 package com.example.booknoteapp;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class Adapter_Reading extends androidx.recyclerview.widget.RecyclerView.Adapter<Adapter_Reading.readingViewHolder> {
 
@@ -39,6 +28,8 @@ public class Adapter_Reading extends androidx.recyclerview.widget.RecyclerView.A
 
     View.OnClickListener editListener;
     Context mContext;
+    int position=0;
+    String from;
 
     CharSequence[] list_edit_or_delete = {"책 정보 수정하기","책 삭제하기"};
 
@@ -61,69 +52,90 @@ public class Adapter_Reading extends androidx.recyclerview.widget.RecyclerView.A
             bookCover = (ImageButton) itemView.findViewById(R.id.btn_readingD_bookcover);
             bookTitle = (TextView)itemView.findViewById(R.id.tv_readingD_bookTitle);
 
+            position = getAdapterPosition();
 
-            /////////////커버에 롱클릭 이벤트로 다이얼로그 띄우기
-            bookCover.setOnLongClickListener(new View.OnLongClickListener(){
-            @Override
-            public boolean onLongClick(View view){
-                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 
-                builder
-                        .setItems(list_edit_or_delete, new DialogInterface.OnClickListener() {
-                            //선택목록이랑 클릭 이벤트 리스너를 같이 주는군
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                switch (i) {
-                                    case 0:
-                                        //수정하기
-                                        Intent intent = new Intent(mContext,EditBook.class);
-                                        Dictionary_book selectedBook = readingArrayList.get(getAdapterPosition());
-                                        intent.putExtra("selectedBook",selectedBook);
-                                        intent.putExtra("position",getAdapterPosition());
-                                        mContext.startActivity(intent);
-                                        break;
-                                    case 1:
-                                        //삭제하기
-                                        readingArrayList.remove(getAdapterPosition());
-                                        notifyItemRemoved(getAdapterPosition());
-                                        notifyDataSetChanged();
-                                        saveBookArrayToPref(readingArrayList);
+            if(from.equals("drawer")){
 
-                                        break;
-                                }
-                            }
-                        });
+                bookCover.setOnLongClickListener(longClickListener);
+                //북 커버 그냥 클릭 리스너
+                bookCover.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
 
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
+                        Intent intent = new Intent(mContext,BookLog_Notes.class);
+                        Dictionary_book selectedBook = readingArrayList.get(getAdapterPosition());
+                        intent.putExtra("selectedBook",selectedBook);
+                        intent.putExtra("position",getAdapterPosition());
 
-            return true;
-            }
+                        editor.putString("bookNow",selectedBook.getTitle());
+                        editor.commit();
+                        mContext.startActivity(intent);
+
+                    }
                 });
 
-            /////////////커버에 롱클릭 이벤트로 다이얼로그 띄우기 끝
+                //북 커버 클릭 리스너 끝
 
-            //북 커버 그냥 클릭 리스너
-            bookCover.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            }else if(from.equals("essay")){
 
-                    Intent intent = new Intent(mContext,BookLog_Notes.class);
-                    Dictionary_book selectedBook = readingArrayList.get(getAdapterPosition());
-                    intent.putExtra("selectedBook",selectedBook);
-                    intent.putExtra("position",getAdapterPosition());
+                bookCover.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(mContext, AddEssay.class);
+                        Dictionary_book selectedBook = readingArrayList.get(getAdapterPosition());
+                        intent.putExtra("bookDict",selectedBook);
+                        mContext.startActivity(intent);
+                    }
+                });
 
-                    editor.putString("bookNow",selectedBook.getTitle());
-                    editor.commit();
-                    mContext.startActivity(intent);
+            }
 
-                }
-            });
 
-            //북 커버 클릭 리스너 끝
+
         }
 
     }
+
+    View.OnLongClickListener longClickListener = new View.OnLongClickListener() {
+    @Override
+    public boolean onLongClick(View view) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+
+        builder
+                .setItems(list_edit_or_delete, new DialogInterface.OnClickListener() {
+                    //선택목록이랑 클릭 이벤트 리스너를 같이 주는군
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        switch (i) {
+                            case 0:
+                                //수정하기
+                                Intent intent = new Intent(mContext,EditBook.class);
+                                Dictionary_book selectedBook = readingArrayList.get(position);
+                                intent.putExtra("selectedBook",selectedBook);
+                                intent.putExtra("position",position);
+                                mContext.startActivity(intent);
+                                break;
+                            case 1:
+                                //삭제하기
+                                readingArrayList.remove(position);
+                                notifyItemRemoved(position);
+                                notifyDataSetChanged();
+                                saveBookArrayToPref(readingArrayList);
+
+                                break;
+                        }
+                    }
+                });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        return true;
+    }
+};
+
 
     //지금 어레이를 쉐어드에 저장하기
     private void saveBookArrayToPref(ArrayList<Dictionary_book> arrayList) {
@@ -136,8 +148,9 @@ public class Adapter_Reading extends androidx.recyclerview.widget.RecyclerView.A
 
    //5. 어댑터의 생성자 어레이 리스트를 받는다.
 
-    public Adapter_Reading(ArrayList<Dictionary_book> mList) {
+    public Adapter_Reading(ArrayList<Dictionary_book> mList, String from) {
         this.readingArrayList = mList;
+        this.from = from;
 
         //, View.OnClickListener editListener
         //  this.editListener = editListener;

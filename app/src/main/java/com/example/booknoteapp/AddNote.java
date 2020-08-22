@@ -45,6 +45,7 @@ public class AddNote extends AppCompatActivity {
     Button btn_addNote_done;
     TextView tv_addNote_date;
 
+    boolean wantToGo=false;
 
     //현재시간 가져오는 메소드
     long now = System.currentTimeMillis();
@@ -160,39 +161,17 @@ public class AddNote extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-//
-//        final boolean[] check = new boolean[1];
-//
-//        AlertDialog.Builder reallyGoOutAlert = new AlertDialog.Builder(this);
-//        reallyGoOutAlert.setPositiveButton("나가기", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialogInterface, int i) {
-//                NavUtils.navigateUpFromSameTask(thisActivity);
-//                check[0] = true;
-//            }
-//        });
-//        reallyGoOutAlert.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialogInterface, int i) {
-//                check[0] = false;
-//            }
-//        });
+
        switch (item.getItemId()) {
            case android.R.id.home:
-               Intent intent1 = new Intent(getApplicationContext(), BookLog_Notes.class);
-               intent1.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-               startActivity(intent1);
-               finish();
+
+                alert();
 
           return true;
 
            case R.id.btn_done:
 
                //완료 버튼을 누른 경우 (저장하기)
-
-//            String message = editText_userNote.getText().toString();
-//            String page =editText_page.getText().toString();
-
                getPrefToArray();
                //쉐어드에 저장된 리스트를 불러온다.
                saveNewNoteToArray();
@@ -208,6 +187,27 @@ public class AddNote extends AppCompatActivity {
        return super.onOptionsItemSelected(item);
 
 
+    }
+
+    private void alert() {
+        AlertDialog.Builder reallyGoOutAlert = new AlertDialog.Builder(AddNote.this);
+        reallyGoOutAlert.setTitle("정말 나가시겠습니까?")
+                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        wantToGo = false;
+                    }
+                })
+                .setPositiveButton("나가기", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        wantToGo = true;
+                        Intent intent1 = new Intent(getApplicationContext(), BookLog_Notes.class);
+                        intent1.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        startActivity(intent1);
+                        finish();
+                    }
+                }).show();
     }
 
     private void saveArrayToPref() {

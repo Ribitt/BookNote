@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         ///////////////////////////////////////////////////리사이클러뷰
         mRecylerView = findViewById(R.id.recycler_reading);
         //리사이클러뷰에 어댑터 객체 지정
-        mAdapter = new Adapter_Reading(mList);
+        mAdapter = new Adapter_Reading(mList,"drawer");
         mRecylerView.setAdapter(mAdapter);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
         mRecylerView.setLayoutManager(gridLayoutManager);

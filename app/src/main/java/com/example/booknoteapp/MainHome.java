@@ -154,7 +154,7 @@ public class MainHome extends AppCompatActivity {
     }
 
     private void showReadingRecycler() {
-        adapter_reading = new Adapter_Reading(readingList);
+        adapter_reading = new Adapter_Reading(readingList,"drawer");
         recentReadingRecycler.setAdapter(adapter_reading);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recentReadingRecycler.setLayoutManager(layoutManager);

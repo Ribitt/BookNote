@@ -67,7 +67,7 @@ public class Fragment_reading extends Fragment {
     private void initialize() {
 
         recyclerView_reading = (RecyclerView)rootView.findViewById(R.id.recycler_reading);
-        adapter_reading = new Adapter_Reading(readingBooksList);
+        adapter_reading = new Adapter_Reading(readingBooksList,"drawer");
 
         recyclerView_reading.setLayoutManager(new GridLayoutManager(getActivity(),3));
         recyclerView_reading.setAdapter(adapter_reading);
@@ -137,7 +137,7 @@ public class Fragment_reading extends Fragment {
         }
 
 
-        adapter_reading = new Adapter_Reading(readingBooksList);
+        adapter_reading = new Adapter_Reading(readingBooksList,"drawer");
         recyclerView_reading.setAdapter(adapter_reading);
         adapter_reading.notifyDataSetChanged();
 
