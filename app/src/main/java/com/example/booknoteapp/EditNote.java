@@ -3,28 +3,31 @@ package com.example.booknoteapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NavUtils;
 import androidx.core.content.ContextCompat;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -33,16 +36,22 @@ public class EditNote extends AppCompatActivity {
     EditText editText_userNote;
     EditText editText_quote;
     EditText editText_page;
-    Button btn_addNote_done;
     TextView tv_addNote_date;
 
+    //라디오 버튼 선언
+    RadioButton radioBtn_black;
+    RadioButton radioBtn_blue;
+    RadioButton radioBtn_red;
 
-    //현재시간 가져오는 메소드
-    long now = System.currentTimeMillis();
-    Date date = new Date(now);
-    SimpleDateFormat mFormat = new SimpleDateFormat("yyyy.MM.dd");
-    String time = mFormat.format(date);
-    //현재시간 가져오는 메소드
+    SharedPreferences userPref;
+    SharedPreferences.Editor userEditor;
+
+    int position;
+    ArrayList<Dictionary_note> mList; //해당 책 노트 리스트
+    ArrayList<Dictionary_note> wholeExceptNowList; //전체에서 지금것만 뺀 리스트
+    ArrayList<Dictionary_note> wholeList = new ArrayList<>(); //전체 노트 리스트
+
+
 
     //달력
     java.util.Calendar cal = Calendar.getInstance();
@@ -70,23 +79,64 @@ public class EditNote extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_note);
 
+        initialize();
+        allListener();
+        getIntentExtras();
+
+    }
+
+    private void getIntentExtras() {
         intent = getIntent();
-        dictionary_note = (Dictionary_note) intent.getSerializableExtra("dicForEdit");
 
+        //노트 내용 채우기
+        dictionary_note = (Dictionary_note) intent.getSerializableExtra("selectedNote");
+
+        tv_addNote_date.setText(dictionary_note.getDate());
+        editText_page.setText(dictionary_note.getPageNum());
+        editText_userNote.setText(dictionary_note.getNote());
+        editText_quote.setText(dictionary_note.getQuote());
+
+
+        if(dictionary_note.color==myBlack){
+            radioBtn_black.toggle();
+
+        } else if(dictionary_note.color==myBlue){
+            radioBtn_blue.toggle();
+        }else {
+            radioBtn_red.toggle();
+        }
+        //노트 내용 채우기 끝
+
+        //리스트 가져오기
+        mList = (ArrayList<Dictionary_note>) intent.getSerializableExtra("mList");
+        wholeExceptNowList = (ArrayList<Dictionary_note>) intent.getSerializableExtra("wholeExceptNowList");
+        position = intent.getIntExtra("position",0);
+
+
+    }
+
+    private void initialize() {
+
+
+        //////툴바 적용하기
+        Toolbar toolbar = (Toolbar)findViewById(R.id.app_toolbar);
+        toolbar.setTitleTextColor(getResources().getColor(R.color.green));
+        setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("노트 수정");
-//        actionBar.setDisplayHomeAsUpEnabled(false);
-//        //뒤로가기 버튼 생성
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle("노트 수정하기");
 
 
-
-        //라디오 버튼 선언
-        RadioButton radioBtn_black = findViewById(R.id.radioBtn_addnote_black);
-        RadioButton radioBtn_blue = findViewById(R.id.radioBtn_addnote_blue);
-        RadioButton radioBtn_red =  findViewById(R.id.radioBtn_addnote_red);
+        String currentEmail = getSharedPreferences("users", Context.MODE_PRIVATE).getString("currentUser","");
+        userPref = getSharedPreferences(currentEmail,this.MODE_PRIVATE);
+        userEditor = userPref.edit();
 
 
         //라디오 그룹 설정
+        radioBtn_black  = findViewById(R.id.radioBtn_addnote_black);
+        radioBtn_blue = findViewById(R.id.radioBtn_addnote_blue);
+        radioBtn_red  =  findViewById(R.id.radioBtn_addnote_red);
+
         RadioGroup radioGroup = findViewById(R.id.radioGroup_addnote_txtcolor);
         radioGroup.setOnCheckedChangeListener(radioGroupButtonChangeListener);
 
@@ -102,24 +152,9 @@ public class EditNote extends AppCompatActivity {
         editText_quote = findViewById(R.id.tv_note_quote);
         tv_addNote_date = findViewById(R.id.tv_addNote_date);
 
-        editText_userNote.setText(dictionary_note.note);
-        editText_page.setText(dictionary_note.pageNum);
-        tv_addNote_date.setText(dictionary_note.date);
-        editText_quote.setText(dictionary_note.quote);
+    }//이니셜라이징 끝
 
-
-
-        if(dictionary_note.color==myBlack){
-            radioBtn_black.toggle();
-
-        } else if(dictionary_note.color==myBlue){
-            radioBtn_blue.toggle();
-        }else {
-            radioBtn_red.toggle();
-        }
-
-        //////////////////////////////////////////////////노트 쓰는 날짜 고르기
-        tv_addNote_date.setHint(time);
+    private void allListener() {
         tv_addNote_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -139,65 +174,22 @@ public class EditNote extends AppCompatActivity {
             }
         });
         /////////////////////////////////////////////////////노트 쓰는 날짜 고르기
-
     }
-
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-//
-//        final boolean[] check = new boolean[1];
-//
-//        AlertDialog.Builder reallyGoOutAlert = new AlertDialog.Builder(this);
-//        reallyGoOutAlert.setPositiveButton("나가기", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialogInterface, int i) {
-//                NavUtils.navigateUpFromSameTask(thisActivity);
-//                check[0] = true;
-//            }
-//        });
-//        reallyGoOutAlert.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialogInterface, int i) {
-//                check[0] = false;
-//            }
-//        });
         switch (item.getItemId()) {
-//           case android.R.id.home:
-//               boolean a=false;
-//
-//               if(a){
-//                   AlertDialog alert = reallyGoOutAlert.create();
-//                   alert.setTitle("정말로 나가시겠습니까?");
-//                   alert.show();
-//
-//
-//                   a= check[0];
-//               }
-//
-//
-//          return a;
+
+            case android.R.id.home:
+                alert();
+                return true;
 
             case R.id.btn_done:
 
-//            String message = editText_userNote.getText().toString();
-//            String page =editText_page.getText().toString();
-
-                String note = editText_userNote.getText().toString();
-                String page =editText_page.getText().toString();
-                String date = tv_addNote_date.getText().toString();
-                String quote = editText_quote.getText().toString();
-
-                //노트 추가 화면에서 책 상세 화면으로 넘겨줘야 할 자료들 인텐트에 넣기
-                Intent intent = new Intent();
-                Dictionary_note dic;
-                dic = new Dictionary_note("네목",page,date,quote,note,pickedColor);
-                intent.putExtra("dictionary",dic);
-                intent.putExtra("note",note);
-                setResult(RESULT_OK,intent);
+                saveNote();
+                saveArrayToPref();
                 finish();
-
                 return true;
 
 
@@ -207,48 +199,102 @@ public class EditNote extends AppCompatActivity {
 
     }
 
+    private void saveNote(){
+
+        String note = editText_userNote.getText().toString();
+        String page =editText_page.getText().toString();
+        String date = tv_addNote_date.getText().toString();
+        String quote = editText_quote.getText().toString();
+        int color = pickedColor;
+
+        dictionary_note.setNote(note);
+        dictionary_note.setPageNum(page);
+        dictionary_note.setDate(date);
+        dictionary_note.setQuote(quote);
+        dictionary_note.setColor(pickedColor);
+
+        mList.set(position,dictionary_note);
+
+    }
+
+    //수정된 노트 어레이와 나머지 노트 어레이 합쳐서 저장
+    private void saveArrayToPref() {
+
+        wholeList.addAll(wholeExceptNowList);
+        wholeList.addAll(mList);
+        Gson gson = new Gson();
+        String json = gson.toJson(wholeList);
+        userEditor.putString("note",json);
+        userEditor.apply();
+    }
+    //어레이 저장 끝
+
+
+    private void alert() {
+        AlertDialog.Builder reallyGoOutAlert = new AlertDialog.Builder(EditNote.this);
+        reallyGoOutAlert.setTitle("정말 나가시겠습니까?")
+                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+                .setPositiveButton("나가기", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent1 = new Intent(getApplicationContext(), BookLog_Notes.class);
+                        intent1.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        startActivity(intent1);
+                        finish();
+                    }
+                }).show();
+    }
+
+
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
         final Activity thisActivity = this;
 
-        AlertDialog.Builder reallyGoOutAlert = new AlertDialog.Builder(this);
-        reallyGoOutAlert.setPositiveButton("나가기", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                NavUtils.navigateUpFromSameTask(thisActivity);
-                finish();
+        alert();
 
-            }
-        });
-        reallyGoOutAlert.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-        });
-
-        if(editText_userNote.getText().length()!=0){
-            System.out.println("/////////////////////////////////////////텍스트 내용 : "+editText_userNote.getText().length());
-            AlertDialog alert = reallyGoOutAlert.create();
-            alert.setTitle("아직 저장하지 않은 노트가 있습니다. \n정말로 나가시겠습니까?");
-            alert.show();
-        }else{
-            String note = editText_userNote.getText().toString();
-            String page =editText_page.getText().toString();
-            String date = tv_addNote_date.getText().toString();
-            String quote = editText_quote.getText().toString();
-
-
-            //노트 추가 화면에서 책 상세 화면으로 넘겨줘야 할 자료들 인텐트에 넣기
-            Intent intent = new Intent();
-            Dictionary_note dic;
-            dic = new Dictionary_note("제목",page,date,quote,note,pickedColor);
-            intent.putExtra("dictionary",dic);
-            intent.putExtra("note",note);
-            setResult(RESULT_OK,intent);
-            finish();
-        }
+//        AlertDialog.Builder reallyGoOutAlert = new AlertDialog.Builder(this);
+//        reallyGoOutAlert.setPositiveButton("나가기", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialogInterface, int i) {
+//                NavUtils.navigateUpFromSameTask(thisActivity);
+//                finish();
+//
+//            }
+//        });
+//        reallyGoOutAlert.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialogInterface, int i) {
+//
+//            }
+//        });
+//
+//        if(editText_userNote.getText().length()!=0){
+//            System.out.println("/////////////////////////////////////////텍스트 내용 : "+editText_userNote.getText().length());
+//            AlertDialog alert = reallyGoOutAlert.create();
+//            alert.setTitle("아직 저장하지 않은 노트가 있습니다. \n정말로 나가시겠습니까?");
+//            alert.show();
+//        }else{
+//            String note = editText_userNote.getText().toString();
+//            String page =editText_page.getText().toString();
+//            String date = tv_addNote_date.getText().toString();
+//            String quote = editText_quote.getText().toString();
+//
+//
+//            //노트 추가 화면에서 책 상세 화면으로 넘겨줘야 할 자료들 인텐트에 넣기
+//            Intent intent = new Intent();
+//            Dictionary_note dic;
+//            dic = new Dictionary_note("제목",page,date,quote,note,pickedColor);
+//            intent.putExtra("dictionary",dic);
+//            intent.putExtra("note",note);
+//            setResult(RESULT_OK,intent);
+//            finish();
+//        }
 
     }
 
@@ -299,12 +345,6 @@ public class EditNote extends AppCompatActivity {
     protected void onPostResume() {
         super.onPostResume();
 
-//        SharedPreferences pref = getSharedPreferences("pref",Activity.MODE_PRIVATE);
-//        SharedPreferences.Editor editor = pref.edit();
-//
-//        editor.putString("name","띠로로");
-//        //name 이라는 키를 가진 프리퍼런스에 띠로로 라는 글자를 저장해뒀다.
-//        editor.commit();
     }
 
     @Override
@@ -312,23 +352,8 @@ public class EditNote extends AppCompatActivity {
         super.onPause();
 
 
-//        SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
-//        if(pref!=null){
-//            //저장된 데이터가 있는 경우에
-//            String name = pref.getString("name","");
-//            //두번째 파라미터는 저장된 name이 없는 경우에 사용할 디폴트 값.
-//
-//            Toast.makeText(this,"넣어둔 건 말이야 : "+name, Toast.LENGTH_LONG).show();
-//            finish();
-//        }
     }
 
-    //    RadioButton.OnClickListener radioButtonClickListener = new RadioButton.OnClickListener(){
-//        @Override
-//        public void onClick(View view) {
-//            Toast.makeText(getApplicationContext(),"black_btn : "+radioBtn_black.isChecked)
-//        }
-//    };
 
 
 }

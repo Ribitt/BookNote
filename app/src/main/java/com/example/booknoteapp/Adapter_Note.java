@@ -8,8 +8,6 @@ import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -112,8 +110,10 @@ public class Adapter_Note extends RecyclerView.Adapter<Adapter_Note.noteViewHold
                                             //수정하기
                                             Intent intent = new Intent(mContext,EditNote.class);
                                             Dictionary_note selectedBook = mList.get(getAdapterPosition());
-                                            intent.putExtra("selectedBook",selectedBook);
+                                            intent.putExtra("selectedNote",selectedBook);
                                             intent.putExtra("position",getAdapterPosition());
+                                            intent.putExtra("mList",mList);
+                                            intent.putExtra("wholeExceptNowList",wholeExceptNowList);
                                             mContext.startActivity(intent);
                                             break;
                                         case 1:
@@ -149,7 +149,7 @@ public class Adapter_Note extends RecyclerView.Adapter<Adapter_Note.noteViewHold
                     public void onClick(DialogInterface dialogInterface, int i) {
 
                         mList.remove(position);
-                        saveBookArrayToPref();
+                        saveArrayToPref();
                         notifyItemRemoved(position);
                         notifyItemRangeChanged(position,mList.size());
 
@@ -161,7 +161,7 @@ public class Adapter_Note extends RecyclerView.Adapter<Adapter_Note.noteViewHold
     //정말 삭제하시겠습니까? 끝
 
     //수정된 노트 어레이와 나머지 노트 어레이 합쳐서 저장
-    private void saveBookArrayToPref() {
+    private void saveArrayToPref() {
 
         wholeList.addAll(wholeExceptNowList);
         wholeList.addAll(mList);

@@ -81,11 +81,8 @@ public class AddNote extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_note);
 
-
         initialize();
         allListener();
-
-
     }
 
 
@@ -222,6 +219,9 @@ public class AddNote extends AppCompatActivity {
         String note = editText_userNote.getText().toString();
         String page =editText_page.getText().toString();
         String date = tv_addNote_date.getText().toString();
+        if(tv_addNote_date.getText().toString().equals("")){
+            date = tv_addNote_date.getHint().toString();
+        }
         String quote = editText_quote.getText().toString();
 
         Dictionary_note newNote = new Dictionary_note(title,page,date,quote,note,pickedColor);
