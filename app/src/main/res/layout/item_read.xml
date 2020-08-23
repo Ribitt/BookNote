@@ -27,7 +27,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="120dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="8dp"
             android:paddingLeft="20dp">
@@ -75,7 +75,7 @@
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:layout_marginLeft="3dp"
-                android:textSize="13sp"
+                android:textSize="12sp"
                 android:text="2020.8.4"
 
                 ></TextView>

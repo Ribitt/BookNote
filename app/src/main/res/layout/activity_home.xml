@@ -309,14 +309,14 @@
                     android:layout_height="wrap_content"
                     android:text="최근 독서 노트"
                     android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:background="@drawable/underline_green"
+                    android:textSize="13sp"
+                    android:background="@drawable/border_underline"
                     android:layout_marginBottom="15dp"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_recent_notes"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp">
+                    android:layout_height="wrap_content">
 
                 </androidx.recyclerview.widget.RecyclerView>
 
@@ -336,8 +336,8 @@
                     android:layout_height="wrap_content"
                     android:text="읽고 있는 책"
                     android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:background="@drawable/underline_green"
+                    android:textSize="13sp"
+                    android:background="@drawable/border_underline"
                     android:layout_marginBottom="15dp"/>
 
                 <androidx.recyclerview.widget.RecyclerView

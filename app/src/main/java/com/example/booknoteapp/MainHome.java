@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,13 +35,13 @@ public class MainHome extends AppCompatActivity {
     Adapter_Reading adapter_reading=null;
     ArrayList<Dictionary_book> readingList;
 
-
-    SharedPreferences currentUserPref;
-    SharedPreferences.Editor currentUserPrefEditor;
-
-
+    RecyclerView recentNoteRecycler;
+    Adapter_NoteForHome adapter_note=null;
+    ArrayList<Dictionary_note> noteArrayList;
 
 
+    SharedPreferences userPref;
+    SharedPreferences.Editor userEditor;
 
 
     @Override
@@ -52,8 +51,17 @@ public class MainHome extends AppCompatActivity {
 
         initialize();
         allListener();
+
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         getReadingPrefToArray();
         showReadingRecycler();
+        getNoteArrayFromPref();
+        showNoteRecycler();
     }
 
     private void initialize() {
@@ -69,7 +77,7 @@ public class MainHome extends AppCompatActivity {
 
         //리사이클러뷰
         recentReadingRecycler = findViewById(R.id.recycler_reading);
-
+        recentNoteRecycler = findViewById(R.id.recycler_recent_notes);
 
 
         //관리자용 쉐어드를 불러온다
@@ -77,9 +85,9 @@ public class MainHome extends AppCompatActivity {
         //currentUser에 지금 로그인한 회원의 이메일이 저장되어있다.
         String userEmail = userPref.getString("currentUser","");
         //그 유저 이메일이 패키지 이름인 된 저장소를 불러온다.
-        currentUserPref= getSharedPreferences(userEmail,MODE_PRIVATE);
+        this.userPref = getSharedPreferences(userEmail,MODE_PRIVATE);
         //저장되어있는 닉네임을 불러온다
-        String nick = currentUserPref.getString("nickname","");
+        String nick = this.userPref.getString("nickname","");
 
         nickname.setText(nick);
 
@@ -144,11 +152,22 @@ public class MainHome extends AppCompatActivity {
 
     private void getReadingPrefToArray() {
         Gson gson = new Gson();
-        String json = currentUserPref.getString("reading","EMPTY");
+        String json = userPref.getString("reading","EMPTY");
         Type type = new TypeToken<ArrayList<Dictionary_book>>() {
         }.getType();
         if(!json.equals("EMPTY")){
             readingList= gson.fromJson(json,type);
+        }
+
+    }
+
+    private void getNoteArrayFromPref() {
+        Gson gson = new Gson();
+        String json = userPref.getString("note","EMPTY");
+        Type type = new TypeToken<ArrayList<Dictionary_note>>() {
+        }.getType();
+        if(!json.equals("EMPTY")){
+            noteArrayList= gson.fromJson(json,type);
         }
 
     }
@@ -159,6 +178,13 @@ public class MainHome extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recentReadingRecycler.setLayoutManager(layoutManager);
 
+    }
+
+    private void showNoteRecycler() {
+        adapter_note = new Adapter_NoteForHome(noteArrayList);
+        recentNoteRecycler.setAdapter(adapter_note);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recentNoteRecycler.setLayoutManager(layoutManager);
     }
 
 
