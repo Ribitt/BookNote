@@ -26,7 +26,6 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -63,8 +62,8 @@ public class AddNote extends AppCompatActivity {
     int pickedColor;
 
     String title;
-    SharedPreferences pref;
-    SharedPreferences.Editor editor;
+    SharedPreferences userPref;
+    SharedPreferences.Editor userEditor;
     ArrayList<Dictionary_note> noteList = new ArrayList<>();
 
 
@@ -86,6 +85,12 @@ public class AddNote extends AppCompatActivity {
         initialize();
         allListener();
 
+
+    }
+
+
+    private void initialize() {
+
         //////툴바 적용하기
         Toolbar toolbar = (Toolbar)findViewById(R.id.app_toolbar);
         toolbar.setTitleTextColor(getResources().getColor(R.color.green));
@@ -95,16 +100,10 @@ public class AddNote extends AppCompatActivity {
         actionBar.setTitle("노트 추가하기");
 
 
-
-    }
-
-
-    private void initialize() {
-
         String currentEmail = getSharedPreferences("users", Context.MODE_PRIVATE).getString("currentUser","");
-        pref = getSharedPreferences(currentEmail,this.MODE_PRIVATE);
-        editor = pref.edit();
-        title = pref.getString("bookNow","");
+        userPref = getSharedPreferences(currentEmail,this.MODE_PRIVATE);
+        userEditor = userPref.edit();
+        title = userPref.getString("bookNow","");
 
 
         //라디오 버튼 선언
@@ -170,8 +169,8 @@ public class AddNote extends AppCompatActivity {
           return true;
 
            case R.id.btn_done:
-
                //완료 버튼을 누른 경우 (저장하기)
+
                getPrefToArray();
                //쉐어드에 저장된 리스트를 불러온다.
                saveNewNoteToArray();
@@ -213,8 +212,8 @@ public class AddNote extends AppCompatActivity {
     private void saveArrayToPref() {
         Gson gson = new Gson();
         String json = gson.toJson(noteList);
-        editor.putString("note",json);
-        editor.commit();
+        userEditor.putString("note",json);
+        userEditor.commit();
     }
 
 
@@ -235,7 +234,7 @@ public class AddNote extends AppCompatActivity {
     private void getPrefToArray() {
         Gson gson = new Gson();
         String json ="EMPTY";
-        json = pref.getString("note","EMPTY");
+        json = userPref.getString("note","EMPTY");
 
         if(!json.equals("EMPTY")){
             Type type = new TypeToken<ArrayList<Dictionary_note>>() {

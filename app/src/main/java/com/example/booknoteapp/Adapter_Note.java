@@ -3,26 +3,41 @@ package com.example.booknoteapp;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 
 public class Adapter_Note extends RecyclerView.Adapter<Adapter_Note.noteViewHolder> {
 
-    ArrayList<Dictionary_note> mList = null;
-    View.OnClickListener mEditListener;
+    ArrayList<Dictionary_note> mList; //해당 책 노트 리스트
+    ArrayList<Dictionary_note> wholeExceptNowList; //전체에서 지금것만 뺀 리스트
+    ArrayList<Dictionary_note> wholeList = new ArrayList<>(); //전체 노트 리스트
+
+    SharedPreferences userPref;
+    SharedPreferences.Editor userEditor;
 
     int position;
     Context mContext;
+
+    public Adapter_Note(ArrayList<Dictionary_note> wholeExceptNowList, ArrayList<Dictionary_note> mList) {
+        this.wholeExceptNowList = wholeExceptNowList;
+        this.mList = mList;
+
+    }
 
     @NonNull
     @Override
@@ -33,6 +48,11 @@ public class Adapter_Note extends RecyclerView.Adapter<Adapter_Note.noteViewHold
         View view = inflater.inflate(R.layout.item_note,parent,false);
 
         Adapter_Note.noteViewHolder holder = new Adapter_Note.noteViewHolder(view);
+
+        String currentEmail = mContext.getSharedPreferences("users", Context.MODE_PRIVATE).getString("currentUser","");
+        userPref = mContext.getSharedPreferences(currentEmail,mContext.MODE_PRIVATE);
+        userEditor = userPref.edit();
+
 
         return holder;
     }
@@ -48,25 +68,6 @@ public class Adapter_Note extends RecyclerView.Adapter<Adapter_Note.noteViewHold
         holder.note.setTextColor(dic.getColor());
 
 
-        holder.btn_edit.setTag(holder.getAdapterPosition());
-       // holder.btn_edit.setOnClickListener(mEditListener);
-        //태그 달고 외부에서 리스너를 받아 설정
-
-        //태그를 달아라. 걍 달고 다닐 수 있고 부를 수 있는 뭐 그런건갑지?
-
-        holder.btn_delete.setTag(holder.getAdapterPosition());
-        //딜리트 버튼에 이벤트 리스너
-        holder.btn_delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int position = (int)view.getTag();
-
-
-            }
-        });
-
-
-
     }
 
     @Override
@@ -79,9 +80,9 @@ public class Adapter_Note extends RecyclerView.Adapter<Adapter_Note.noteViewHold
         TextView pageNum;
         TextView date;
         TextView note;
-        ImageButton btn_delete;
-        ImageButton btn_edit;
         TextView quote;
+        ImageView edit_or_delete;
+        CharSequence[] list_edit_or_delete = {"노트 수정하기","삭제하기"};
 
         public noteViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -91,19 +92,48 @@ public class Adapter_Note extends RecyclerView.Adapter<Adapter_Note.noteViewHold
             pageNum = itemView.findViewById(R.id.tv_note_pageNum);
             date = itemView.findViewById(R.id.tv_note_date);
             note = itemView.findViewById(R.id.tv_note_userNote);
-            btn_delete = itemView.findViewById(R.id.btn_note_delete);
+            edit_or_delete = itemView.findViewById(R.id.edit_or_delete);
             quote = itemView.findViewById(R.id.tv_note_quote);
-            btn_edit = itemView.findViewById(R.id.btn_note_edit);
 
-            btn_delete.setOnClickListener(new View.OnClickListener() {
+            ////수정삭제 클릭 리스너
+            edit_or_delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    position = getAdapterPosition();
-                    alert();
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+
+                    builder
+                            .setItems(list_edit_or_delete, new DialogInterface.OnClickListener() {
+                                //선택목록이랑 클릭 이벤트 리스너를 같이 주는군
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    switch (i) {
+                                        case 0:
+                                            //수정하기
+                                            Intent intent = new Intent(mContext,EditNote.class);
+                                            Dictionary_note selectedBook = mList.get(getAdapterPosition());
+                                            intent.putExtra("selectedBook",selectedBook);
+                                            intent.putExtra("position",getAdapterPosition());
+                                            mContext.startActivity(intent);
+                                            break;
+                                        case 1:
+                                            //삭제하기
+                                            position = getAdapterPosition();
+                                            alert();
+
+                                            break;
+                                    }
+                                }
+                            });
+
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+
                 }
             });
-        }
-    }
+
+        }//뷰홀더 생성자 끝
+    }//뷰홀더 끝
 
     //정말 삭제하시겠습니까?
     private void alert() {
@@ -119,9 +149,10 @@ public class Adapter_Note extends RecyclerView.Adapter<Adapter_Note.noteViewHold
                     public void onClick(DialogInterface dialogInterface, int i) {
 
                         mList.remove(position);
+                        saveBookArrayToPref();
                         notifyItemRemoved(position);
                         notifyItemRangeChanged(position,mList.size());
-                      //  saveBookArrayToPref(mList);
+
 
 
                     }
@@ -129,9 +160,16 @@ public class Adapter_Note extends RecyclerView.Adapter<Adapter_Note.noteViewHold
     }
     //정말 삭제하시겠습니까? 끝
 
+    //수정된 노트 어레이와 나머지 노트 어레이 합쳐서 저장
+    private void saveBookArrayToPref() {
 
-    public Adapter_Note(ArrayList<Dictionary_note> mList) {
-        this.mList = mList;
-      //  this.mEditListener = mEditListener;
+        wholeList.addAll(wholeExceptNowList);
+        wholeList.addAll(mList);
+        Gson gson = new Gson();
+        String json = gson.toJson(wholeList);
+        userEditor.putString("note",json);
+        userEditor.apply();
     }
+    //어레이 저장 끝
+
 }

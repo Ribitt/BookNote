@@ -112,8 +112,6 @@ public class Adapter_read extends RecyclerView.Adapter<Adapter_read.readViewHold
                                             position = getAdapterPosition();
                                             alert();
 
-
-
                                             break;
 
                                     }

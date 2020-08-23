@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.SearchView;
 
 import androidx.fragment.app.Fragment;
@@ -38,9 +37,12 @@ public class Fragment_Note extends Fragment {
     RecyclerView recyclerView;
     Adapter_Note adapter;
 
-    SharedPreferences pref;
-    SharedPreferences.Editor editor;
+    SharedPreferences userPref;
+    SharedPreferences.Editor userEditor;
     ArrayList<Dictionary_note> noteList = new ArrayList<>();
+    ArrayList<Dictionary_note> wholeList = new ArrayList<>();
+    ArrayList<Dictionary_note> wholeExceptNowList = new ArrayList<>();
+    String bookNow;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,8 +67,10 @@ public class Fragment_Note extends Fragment {
 
 
         String currentEmail = this.getActivity().getSharedPreferences("users", Context.MODE_PRIVATE).getString("currentUser","");
-        pref = this.getActivity().getSharedPreferences(currentEmail,this.getActivity().MODE_PRIVATE);
-        editor = pref.edit();
+        userPref = this.getActivity().getSharedPreferences(currentEmail,this.getActivity().MODE_PRIVATE);
+        userEditor = userPref.edit();
+
+       bookNow = userPref.getString("bookNow","");
     }
 
     private void allListener() {
@@ -88,7 +92,7 @@ public class Fragment_Note extends Fragment {
     private void getArrayFromPref(){
 
         Gson gson = new Gson();
-        String json = pref.getString("note","EMPTY");
+        String json = userPref.getString("note","EMPTY");
         noteList.clear();
         //클리어를 해줘야 반복해서 내용이 저장되지 않는다. 
 
@@ -97,17 +101,23 @@ public class Fragment_Note extends Fragment {
             Type type = new TypeToken<ArrayList<Dictionary_note>>() {
             }.getType();
 
-            ArrayList<Dictionary_note> allList = gson.fromJson(json,type);
-            String bookNow = pref.getString("bookNow","");
+            wholeList = gson.fromJson(json,type);
+            //노트 전체 리스트
 
-            for(int i=0; i<allList.size();i++){
-                if(allList.get(i).getTitle().equals(bookNow)){
-                    noteList.add(allList.get(i));
+            for(int i=0; i<wholeList.size();i++){
+                if(wholeList.get(i).getTitle().equals(bookNow)){
+                    //지금 책에 해당하는 노트 리스트만 가져온다
+                    noteList.add(wholeList.get(i));
+                }else{
+                    wholeExceptNowList.add(wholeList.get(i));
+                    //그걸 뺀 나머지 리스트도 저장해둔다
                 }
 
             }
+
+
         }
-        adapter = new Adapter_Note(noteList);
+        adapter = new Adapter_Note(wholeExceptNowList, noteList);
         recyclerView.setAdapter(adapter);
 
 

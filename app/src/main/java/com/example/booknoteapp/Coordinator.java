@@ -55,8 +55,8 @@ public class Coordinator extends AppCompatActivity {
 
 
         recyclerView = findViewById(R.id.recycler_notes);
-        adapterNote = new Adapter_Note(mList);
-        recyclerView.setAdapter(adapterNote);
+       // adapterNote = new Adapter_Note(mList);
+        //recyclerView.setAdapter(adapterNote);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         for(int i=0; i<20; i++) {

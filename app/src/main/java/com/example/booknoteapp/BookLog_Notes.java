@@ -29,7 +29,6 @@ public class BookLog_Notes extends AppCompatActivity  {
     Dictionary_note dic;
 
 
-    TextView tv_toBookLogPages;
     TextView tv_bookLog_title;
     ImageView bookCoverImg;
     TextView tv_author;
@@ -42,8 +41,7 @@ public class BookLog_Notes extends AppCompatActivity  {
     TextView tv_notePreview;
     TextView tv_bookPage;
     TextView tv_p;
-    //노트 추가 버튼
-    Button btn_addNote;
+
     int position;
     //수정하려고 하는 리사이클러 뷰 인덱스 넘버
 
@@ -83,7 +81,6 @@ public class BookLog_Notes extends AppCompatActivity  {
         tv_bookLog_title = findViewById(R.id.tv_bookLog_title);
         bookCoverImg =findViewById(R.id.bookCoverImg);
         tv_author = findViewById(R.id.tv_bookLog_author);
-     //   tv_pageNum = findViewById(R.id.tv_bookLog_bookPages);
         tv_publisher = findViewById(R.id.tv_bookLog_publisher);
 
         //노트 프리뷰,페이지 뷰
@@ -96,12 +93,6 @@ public class BookLog_Notes extends AppCompatActivity  {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(vp);
-//
-//        recyclerView = findViewById(R.id.recycler_notes);
-//        adapterNote = new Adapter_Note(mList,mEditListener);
-//        recyclerView.setAdapter(adapterNote);
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-//        recyclerView.setLayoutManager(layoutManager);
 
 
     }//이니셜라이저 끝
