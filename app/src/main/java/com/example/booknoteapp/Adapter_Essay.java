@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,6 @@ import androidx.annotation.NonNull;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
@@ -27,9 +27,8 @@ public class Adapter_Essay extends androidx.recyclerview.widget.RecyclerView.Ada
 
 
 
-    ArrayList<Dictionary_Essay> showList =new ArrayList<>();
-    ArrayList<Dictionary_Essay> restList =new ArrayList<>();
-    ArrayList<Dictionary_Essay> wholeList=new ArrayList<>();
+    ArrayList<Dictionary_Essay> showList;
+    ArrayList<Dictionary_Essay> wholeList;
     Context mContext;
 
     SharedPreferences userPref;
@@ -44,14 +43,15 @@ public class Adapter_Essay extends androidx.recyclerview.widget.RecyclerView.Ada
 
     int position;
     int positionInWhole;
+    private int lastPosition = -1;
 
     CharSequence[] list_edit_or_delete = {"에세이 수정하기","삭제하기"};
 
 
 
-    Adapter_Essay(ArrayList<Dictionary_Essay> showList, ArrayList<Dictionary_Essay> restList) {
+    Adapter_Essay(ArrayList<Dictionary_Essay> showList, ArrayList<Dictionary_Essay> wholeList) {
         this.showList = showList;
-        this.restList = restList;
+        this.wholeList = wholeList;
 
     }
 
@@ -105,7 +105,6 @@ public class Adapter_Essay extends androidx.recyclerview.widget.RecyclerView.Ada
                                     switch (i) {
                                         case 0:
                                             //수정하기
-                                            position = getAdapterPosition();
 
                                             Intent intent = new Intent(mContext,AddEssay.class);
                                             Dictionary_Essay selectedEssay = showList.get(getAdapterPosition());
@@ -113,7 +112,6 @@ public class Adapter_Essay extends androidx.recyclerview.widget.RecyclerView.Ada
                                             intent.putExtra("position",getAdapterPosition());
                                             intent.putExtra("from","edit");
                                             intent.putExtra("showList",showList);
-
 
                                             mContext.startActivity(intent);
                                             break;
@@ -154,24 +152,16 @@ public class Adapter_Essay extends androidx.recyclerview.widget.RecyclerView.Ada
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
-
+                        wholeList.remove(showList.get(position).getPositionInWhole());
+                        //전체 리스트에서 지운다
                         showList.remove(position);
-                        makeWholeList();
-                        saveArrayToPref(wholeList, devPrefEditor);
-                        notifyDataSetChanged();
+                        //보여줄 리스트에서도 지운다
+                        //showList에서 먼저 지우면 인덱스 오류난다.
+                        //Log.d("보여줄 리스트에서 지우고 난 다음에 전체 리스트 사이즈 : ", String.valueOf(wholeList.size()));
 
-//                        if(showList.get(position).isOpen){
-//                            //공개인 경우
-//                            //이미 리스트에서 해당 아이템을 지운 다음에는 포지션 값이 이상해진다. 먼저 공개리스트부터 처리
-//                            getArrayFromPref(devPref);
-//                            wholeList.remove(positionInWhole);
-//                            saveArrayToPref(wholeList, devPrefEditor);
-//                        }
-//                        //비공개인 경우
-//                        showList.remove(position);
-//                        notifyItemRemoved(position);
-//                        notifyDataSetChanged();
-//                        saveArrayToPref(showList, userPrefEditor);
+                        saveArrayToPref(wholeList, devPrefEditor);
+                        //전체 리스트를 저장한다
+                        notifyDataSetChanged();
 
 
                     }
@@ -179,17 +169,6 @@ public class Adapter_Essay extends androidx.recyclerview.widget.RecyclerView.Ada
     }
     //정말 삭제하시겠습니까? 끝
 
-    private void makeWholeList() {
-
-        for(int i=0; i<showList.size(); i++){
-            //원래 전체 리스트에서 가지고 있던 포지션대로 나머지 리스트에 추가해준다.
-            restList.add(showList.get(i).getPosition(), showList.get(i));
-        }
-
-        wholeList = restList;
-
-
-    }
 
     //지금 어레이를 쉐어드에 저장하기
     private void saveArrayToPref(ArrayList<Dictionary_Essay> arrayList, SharedPreferences.Editor editor) {
@@ -199,24 +178,6 @@ public class Adapter_Essay extends androidx.recyclerview.widget.RecyclerView.Ada
         editor.apply();
     }
 
-
-
-    private void getArrayFromPref(SharedPreferences pref){
-        Gson gson = new Gson();
-        String json = pref.getString("essay","EMPTY");
-
-        Type type = new TypeToken<ArrayList<Dictionary_Essay>>() {
-        }.getType();
-
-        if(!json.equals("EMPTY")){
-            wholeList = gson.fromJson(json,type);
-            for(int i=0; i<wholeList.size(); i++){
-                if(showList.get(position).getEssayTitle().equals(wholeList.get(i).getEssayTitle())){
-                    positionInWhole = i;
-                }
-            }
-        }
-    }
 
 
     @NonNull
@@ -269,6 +230,7 @@ public class Adapter_Essay extends androidx.recyclerview.widget.RecyclerView.Ada
         }else{
             holder.edit_or_delete.setVisibility(View.VISIBLE);
         }
+
 
         //공개 여부를 봐서 비공개면 띄우지 않는다.
 //        if(!dictionary_essay.getOpen()){

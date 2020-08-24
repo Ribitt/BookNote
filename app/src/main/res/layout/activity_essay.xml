@@ -89,6 +89,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:visibility="gone"
                 android:text="아직 작성된 에세이가 없습니다. \n에세이 쓰기를 눌러 새로운 에세이를 써보세요"/>
             <androidx.recyclerview.widget.RecyclerView
                android:padding="5dp"

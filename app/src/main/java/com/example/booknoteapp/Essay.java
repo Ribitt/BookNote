@@ -9,7 +9,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -40,19 +44,19 @@ public class Essay extends AppCompatActivity {
     String currentEmail;
 
    TextView tv_warning_noEssay;
+   Animation alpha;
 
    RecyclerView recyclerView;
    Adapter_Essay adapter_essay;
    Dictionary_book dictionary_book;
    Dictionary_Essay dictionary_essay;
 
-   ArrayList<Dictionary_Essay> essayArrayList = new ArrayList<>();
-
    ArrayList<Dictionary_Essay> wholeEssayList = new ArrayList<>();
     ArrayList<Dictionary_Essay> myEssayList = new ArrayList<>();
     ArrayList<Dictionary_Essay> openEssayList = new ArrayList<>();
-    ArrayList<Dictionary_Essay> privateEssayList = new ArrayList<>();
     ArrayList<Dictionary_Essay> wholeExceptMyEssayList = new ArrayList<>();
+
+//    AlphaAnimation alphaAnimation;
 
    SharedPreferences userPref;
    SharedPreferences.Editor userPrefEditor;
@@ -79,6 +83,10 @@ public class Essay extends AppCompatActivity {
 
     private void initialize(){
 
+//        alphaAnimation = new AlphaAnimation(0,1);
+//        alphaAnimation.setDuration(800);
+
+        alpha = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.alpha);
         devPref = getSharedPreferences("users", Context.MODE_PRIVATE);
         devPrefEditor = devPref.edit();
 
@@ -117,40 +125,34 @@ public class Essay extends AppCompatActivity {
                 btn_myEssay.setBackground(getDrawable(R.drawable.button_yellowgreen));
                 getWholeArrayFromPref(devPref);
                 getUserEssayOnly();
+                showRecycler(myEssayList,wholeEssayList);
 
             }
         });
         //내 에세이 버튼 끝
-//
-//        //모두의 에세이 보기 버튼
-//        btn_everyEssay.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                myEssayOnly =false;
-//                btn_everyEssay.setBackground(getDrawable(R.drawable.button_yellowgreen));
-//                btn_myEssay.setBackground(getDrawable(R.drawable.button_grey));
-//
-//                Gson gson = new Gson();
-//                essayArrayList.clear();
-//                String json = devPref.getString("essay","EMPTY");
-//
-//                Type type = new TypeToken<ArrayList<Dictionary_Essay>>() {
-//                }.getType();
-//                if(!json.equals("EMPTY")){
-//                    essayArrayList = gson.fromJson(json,type);
-//                }
-//                //adapter_essay = new Adapter_Essay(essayArrayList);
-//                recyclerView.setAdapter(adapter_essay);
-//
-//            }
-//        });
-//        //모두의 에세이
+
+        //모두의 에세이 보기 버튼
+        btn_everyEssay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myEssayOnly =false;
+                btn_everyEssay.setBackground(getDrawable(R.drawable.button_yellowgreen));
+                btn_myEssay.setBackground(getDrawable(R.drawable.button_grey));
+                getWholeArrayFromPref(devPref);
+                getOpenList();
+                //공개된 에세이만 따로 저장한다
+                showRecycler(openEssayList, wholeEssayList);
+                //어댑터에 공개 에세이와 전체 에세이를 보낸다.
+
+            }
+        });
+        //모두의 에세이
 
         //에세이 쓰기 버튼
         btn_writeEssay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               makeFakeEssay();
+             //  makeFakeEssay();
                 Intent intent = new Intent(getApplicationContext(), AddEssayBook.class);
                 startActivity(intent);
 
@@ -205,6 +207,8 @@ public class Essay extends AppCompatActivity {
     }//올리스너 끝
 
     private void getUserEssayOnly(){
+
+        myEssayList.clear();
         for(int i=0; i<wholeEssayList.size(); i++){
             if(wholeEssayList.get(i).getUserEmail().equals(currentEmail)){
                 myEssayList.add(wholeEssayList.get(i));
@@ -253,41 +257,40 @@ public class Essay extends AppCompatActivity {
         super.onPostResume();
 
         getWholeArrayFromPref(devPref);
-        //전체 에세이 리스트를 받아오는데, 각 에세이는 각자의 원래 전체 리스트에서의 인덱스 값을 가지고 있다.
+        //전체 에세이 리스트를 받아온다. 각 에세이는 객체는 지금 전체 리스트에서의 인덱스값을 저장해준다.
         if(myEssayOnly){
             getUserEssayOnly();
-            showRecycler(myEssayList,wholeExceptMyEssayList);
-
+            showRecycler(myEssayList,wholeEssayList);
+            //혹시 내 에세이가 하나도 없으면 없다고 글자 띄워주기
+            if(myEssayList.size()==0){
+                tv_warning_noEssay.setVisibility(View.VISIBLE);
+            }else if(myEssayList.size()>0){
+                tv_warning_noEssay.setVisibility(View.GONE);
+            }
 
         }else{
-
-            getOpenListAndPrivateList();
-            //비공개 에세이랑 공개 에세이를 구분한다.
-            showRecycler(openEssayList, privateEssayList);
-           // getArrayFromPref(devPref);
+            getOpenList();
+            //공개된 에세이만 따로 저장한다
+            showRecycler(openEssayList, wholeEssayList);
+           //어댑터에 공개 에세이와 전체 에세이를 보낸다.
         }
 
     }
 
-    private void showRecycler(ArrayList<Dictionary_Essay> showList, ArrayList<Dictionary_Essay> restList ){
-        adapter_essay = new Adapter_Essay(showList, restList);
+
+    private void showRecycler(ArrayList<Dictionary_Essay> showList, ArrayList<Dictionary_Essay> wholeEssayList){
+        adapter_essay = new Adapter_Essay(showList, wholeEssayList);
         recyclerView.setAdapter(adapter_essay);
-        adapter_essay.notifyDataSetChanged();
-
-
+        recyclerView.startAnimation(alpha);
+       // recyclerView.setAnimation(alphaAnimation);
 
     }
 
-    private void getOpenListAndPrivateList(){
+    private void getOpenList(){
 
-        privateEssayList.clear();
         openEssayList.clear();
-
         for(int i=0; i<wholeEssayList.size(); i++){
-            if(!wholeEssayList.get(i).getOpen()){
-                privateEssayList.add(wholeEssayList.get(i));
-                //비공개 설정이 되어 있는 에세이는 비공개 에세이 리스트로 넣어준다
-            }else {
+            if(wholeEssayList.get(i).getOpen()){
                 openEssayList.add(wholeEssayList.get(i));
                 //공개 설정된 녀석은 공개 에세이 리스트로 넣어준다.
             }
@@ -296,13 +299,10 @@ public class Essay extends AppCompatActivity {
     }
 
 
-
-
     private void getWholeArrayFromPref(SharedPreferences pref) {
         Gson gson = new Gson();
 
 //        //프레프 비우기용
-//        essayArrayList.clear();
 //        String json = gson.toJson(essayArrayList);
 //        userPrefEditor.putString("essay",json);
 //        userPrefEditor.commit();
@@ -310,64 +310,22 @@ public class Essay extends AppCompatActivity {
 //        devPrefEditor.commit();
 
         wholeEssayList.clear();
-        essayArrayList.clear();
-       String json = pref.getString("essay","EMPTY");
+        String json = pref.getString("essay","EMPTY");
 
         Type type = new TypeToken<ArrayList<Dictionary_Essay>>() {
         }.getType();
         if(!json.equals("EMPTY")){
             wholeEssayList = gson.fromJson(json,type);
+            Log.d("전체 리스트 길이 : ", String.valueOf(wholeEssayList.size()));
             //전체 리스트를 가져온다
             for(int i=0; i<wholeEssayList.size(); i++){
-                wholeEssayList.get(i).setPosition(i);
+                wholeEssayList.get(i).setPositionInWhole(i);
                 //각 에세이에 원래 전체 리스트에서의 인덱스를 저장한다.
             }
             //전체 리스트에서 각 에세이가 어느 위치였는지 인덱스 값을 준다
         }
 
-
-        //혹시 내 에세이가 하나도 없으면 없다고 글자 띄워주기
-        if(myEssayOnly && essayArrayList.size()==0){
-            tv_warning_noEssay.setVisibility(View.VISIBLE);
-        }else if(myEssayOnly && essayArrayList.size()>0){
-            tv_warning_noEssay.setVisibility(View.GONE);
-        }else if(!myEssayOnly){
-            tv_warning_noEssay.setVisibility(View.GONE);
-        }
-
-
     }
-    private void getArrayFromPref(SharedPreferences pref) {
-        Gson gson = new Gson();
 
-//        //프레프 비우기용
-//        essayArrayList.clear();
-//        String json = gson.toJson(essayArrayList);
-//        userPrefEditor.putString("essay",json);
-//        userPrefEditor.commit();
-//        devPrefEditor.putString("essay",json);
-//        devPrefEditor.commit();
 
-        essayArrayList.clear();
-         String json = pref.getString("essay","EMPTY");
-
-        Type type = new TypeToken<ArrayList<Dictionary_Essay>>() {
-        }.getType();
-        if(!json.equals("EMPTY")){
-            essayArrayList = gson.fromJson(json,type);
-        }
-
-        if(myEssayOnly && essayArrayList.size()==0){
-           tv_warning_noEssay.setVisibility(View.VISIBLE);
-        }else if(myEssayOnly && essayArrayList.size()>0){
-            tv_warning_noEssay.setVisibility(View.GONE);
-        }else if(!myEssayOnly){
-            tv_warning_noEssay.setVisibility(View.GONE);
-        }
-
-      //  adapter_essay = new Adapter_Essay(essayArrayList);
-        recyclerView.setAdapter(adapter_essay);
-        adapter_essay.notifyDataSetChanged();
-
-    }
 }

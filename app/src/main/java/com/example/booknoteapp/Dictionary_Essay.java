@@ -1,6 +1,5 @@
 package com.example.booknoteapp;
 
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
@@ -12,14 +11,14 @@ import java.io.Serializable;
 public class Dictionary_Essay  implements Serializable {
 
     String userEmail;
-    int position;
+    int positionInWhole;
 
-    public int getPosition() {
-        return position;
+    public int getPositionInWhole() {
+        return positionInWhole;
     }
 
-    public void setPosition(int position) {
-        this.position = position;
+    public void setPositionInWhole(int positionInWhole) {
+        this.positionInWhole = positionInWhole;
     }
 
     String bookTitle;

@@ -23,7 +23,6 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,14 +37,9 @@ public class AddEssay extends AppCompatActivity {
     SharedPreferences devPref;
     SharedPreferences.Editor devPrefEditor;
 
-    ArrayList<Dictionary_Essay> userEssayArrayList = new ArrayList<>();
     ArrayList<Dictionary_Essay> everyEssayList = new ArrayList<>();
 
     Dictionary_Essay editedEssay;
-
-
-    ArrayList<Dictionary_Essay> restList;
-
     Dictionary_book bookDict;
 
 
@@ -65,7 +59,9 @@ public class AddEssay extends AppCompatActivity {
     EditText et_essayContent;
 
     String time = "";
-    int positionInShowList;
+
+    Toolbar toolbar;
+    ActionBar actionBar;
 
 
 
@@ -100,10 +96,10 @@ public class AddEssay extends AppCompatActivity {
 
 
         //////툴바 적용하기
-        Toolbar toolbar = (Toolbar)findViewById(R.id.app_toolbar);
+        toolbar = (Toolbar)findViewById(R.id.app_toolbar);
         toolbar.setTitleTextColor(getResources().getColor(R.color.green));
         setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
+        actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle("에세이 쓰기");
 
@@ -155,22 +151,19 @@ public class AddEssay extends AppCompatActivity {
                 return true;
 
             case R.id.btn_done://완료 버튼을 누른 경우 (저장하기)
-
+                getArrayFromDevPref(devPref);
 
                 if(from.equals("add")){
                     //새로 추가를 통해 온 경우
-                    getArrayFromDevPref(devPref);
-                    saveNewEssayToArray(everyEssayList);
-                    saveArrayToPref(devPrefEditor, everyEssayList);
-                    //내 쉐어드 가져와서 추가하고
+                    saveNewEssayToArray(everyEssayList); //전체 리스트에 새로운 에세이 저장
+
                     //에세이 쉐어드 가져와서 추가하고
                 }else if(from.equals("edit")){
-                    //수정하기를 통해 온 경우
-                    saveEditedEssayToArray();
-                    makeWholeList();
-                    saveArrayToPref(devPrefEditor, everyEssayList);
+                    //수정하기를 통해 온 경우 saveEditedEssayToArray();
+                    saveEditedEssay(); //새로 수정된 내용 저장
+                    everyEssayList.set(editedEssay.getPositionInWhole(),editedEssay);
                 }
-
+                saveArrayToPref(devPrefEditor, everyEssayList);
 
 
                 Intent intent1 = new Intent(getApplicationContext(), Essay.class);
@@ -188,8 +181,6 @@ public class AddEssay extends AppCompatActivity {
     //상단 메뉴 버튼 리스너
 
 
-
-
     private void getArrayFromDevPref(SharedPreferences pref){
         Gson gson = new Gson();
         String json = pref.getString("essay","EMPTY");
@@ -202,34 +193,17 @@ public class AddEssay extends AppCompatActivity {
 
     }
 
-    private void makeWholeList() {
 
-        Gson gson = new Gson();
-        String json = devPref.getString("essay","EMPTY");
-
-        Type type = new TypeToken<ArrayList<Dictionary_Essay>>() {
-        }.getType();
-        if(!json.equals("EMPTY")){
-            everyEssayList = gson.fromJson(json,type);
-        }
-
-        everyEssayList.set(editedEssay.getPosition(),editedEssay);
-
-
-    }
 
     //지금 수정된 에세이 어레이 리스트에 저장하기
-    private void saveEditedEssayToArray() {
+    private void saveEditedEssay() {
         getTime();
 
         editedEssay.setDate(time);
-        editedEssay.setUserEmail(userEmail);
+        editedEssay.setOpen(isOpen);
         editedEssay.setNickname( userPref.getString("nickname",""));
         editedEssay.setEssayTitle(et_essayTitle.getText().toString());
         editedEssay.setEssayContent(et_essayContent.getText().toString());
-
-
-
     }
     //지금 에세이 저장하기 끝
 
@@ -318,6 +292,7 @@ public class AddEssay extends AppCompatActivity {
                 tv_bookAuthor.setText(bookDict.getAuthor());
                 from = "add";
             }else if(intent.getStringExtra("from").equals("edit")){
+                actionBar.setTitle("에세이 수정");
                 Log.d("여기온다","온다");
                  editedEssay = (Dictionary_Essay) intent.getSerializableExtra("selectedEssay");
                 //책 내용 세팅
@@ -329,7 +304,11 @@ public class AddEssay extends AppCompatActivity {
                 //에세이 내용 세팅
                 et_essayTitle.setText(editedEssay.getEssayTitle());
                 et_essayContent.setText(editedEssay.getEssayContent());
-                positionInShowList = intent.getIntExtra("position",0);
+                isOpen = editedEssay.isOpen;
+                if(!isOpen){
+                    btn_open.setBackground(getDrawable(R.drawable.button_grey));
+                    btn_private.setBackground(getDrawable(R.drawable.button_yello));
+                }
                 from ="edit";
 
 
