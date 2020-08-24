@@ -55,12 +55,15 @@ public class Adapter_PageLog extends RecyclerView.Adapter<Adapter_PageLog.pageLo
     private View.OnClickListener positive = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            //수정하기
 
             if(!dialog.getStartP().equals("") && !dialog.getEndP().equals("")){//둘 다 값이 있을 때만 일하자 !!
 
-                String title = mList.get(position).getTitle();
-                //ArrayList에 넣어준다
-                Dictionary_pageLog dic = new Dictionary_pageLog(title,dialog.getDate(),dialog.getStartP(),dialog.getEndP());
+
+                Dictionary_pageLog dic = mList.get(position);
+                dic.setDate(dialog.getDate());
+                dic.setEndP(dialog.getEndP());
+                dic.setStartP(dialog.getStartP());
                 mList.set(position,dic);
                 //수정한 내용이 해당 자리에 반영되도록 한다.
                 notifyItemChanged(position);

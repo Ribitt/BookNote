@@ -42,7 +42,7 @@ public class Fragment_Note extends Fragment {
     ArrayList<Dictionary_note> noteList = new ArrayList<>();
     ArrayList<Dictionary_note> wholeList = new ArrayList<>();
     ArrayList<Dictionary_note> wholeExceptNowList = new ArrayList<>();
-    String bookNow;
+    Dictionary_book bookNow;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,6 +51,7 @@ public class Fragment_Note extends Fragment {
 
         initialize();
         allListener();
+       getBookFromPref();
 
         return rootView;
     }
@@ -70,9 +71,19 @@ public class Fragment_Note extends Fragment {
         userPref = this.getActivity().getSharedPreferences(currentEmail,this.getActivity().MODE_PRIVATE);
         userEditor = userPref.edit();
 
-       bookNow = userPref.getString("bookNow","");
+
     }
 
+    private void getBookFromPref(){
+        Gson gson = new Gson();
+        String json = userPref.getString("bookNow","EMPTY");
+
+        Type type = new TypeToken<Dictionary_book>() {
+        }.getType();
+        if(!json.equals("EMPTY")){
+            bookNow = gson.fromJson(json,type);
+        }
+    }
     private void allListener() {
 
         //노트추가 버튼
@@ -103,9 +114,10 @@ public class Fragment_Note extends Fragment {
 
             wholeList = gson.fromJson(json,type);
             //노트 전체 리스트
+            String bookTitle = bookNow.getTitle();
 
             for(int i=0; i<wholeList.size();i++){
-                if(wholeList.get(i).getTitle().equals(bookNow)){
+                if(wholeList.get(i).getTitle().equals(bookTitle)){
                     //지금 책에 해당하는 노트 리스트만 가져온다
                     noteList.add(wholeList.get(i));
                 }else{

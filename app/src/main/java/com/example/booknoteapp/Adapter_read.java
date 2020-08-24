@@ -78,8 +78,9 @@ public class Adapter_read extends RecyclerView.Adapter<Adapter_read.readViewHold
                     intent.putExtra("position",getAdapterPosition());
                    // intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 
-                    editor.putString("bookNow",selectedBook.getTitle());
-                    editor.commit();
+                    Dictionary_book bookNow = mList.get(getAdapterPosition());
+                    saveBookDictToPref(bookNow);
+
                     mContext.startActivity(intent);
                 }
             });
@@ -129,6 +130,7 @@ public class Adapter_read extends RecyclerView.Adapter<Adapter_read.readViewHold
         }
     }//////뷰홀더는 여기까지
 
+
     private void alert() {
         AlertDialog.Builder reallyGoOutAlert = new AlertDialog.Builder(mContext);
         reallyGoOutAlert.setTitle("정말 나가시겠습니까?")
@@ -158,6 +160,14 @@ public class Adapter_read extends RecyclerView.Adapter<Adapter_read.readViewHold
         Gson gson = new Gson();
         String json = gson.toJson(arrayList);
         editor.putString("read",json);
+        editor.apply();
+    }
+
+    //지금 어레이를 쉐어드에 저장하기
+    private void saveBookDictToPref(Dictionary_book bookNow) {
+        Gson gson = new Gson();
+        String json = gson.toJson(bookNow);
+        editor.putString("bookNow",json);
         editor.apply();
     }
 

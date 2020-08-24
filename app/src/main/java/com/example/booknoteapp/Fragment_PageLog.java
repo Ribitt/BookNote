@@ -2,7 +2,6 @@ package com.example.booknoteapp;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -50,8 +49,8 @@ public class Fragment_PageLog extends Fragment {
     SeekBar seekBar;
 
 
-    String bookNow ="";
-    SharedPreferences pref;
+    Dictionary_book bookNow;
+    SharedPreferences userPref;
     SharedPreferences.Editor editor;
     ArrayList<Dictionary_pageLog> mList = new ArrayList<>();
 
@@ -62,16 +61,15 @@ public class Fragment_PageLog extends Fragment {
 
         initialize();
         allListener();
+        getBookFromPref();
 
         return rootView;
     }
 
     private void initialize() {
         String currentEmail = this.getActivity().getSharedPreferences("users", Context.MODE_PRIVATE).getString("currentUser","");
-        pref = this.getActivity().getSharedPreferences(currentEmail,this.getActivity().MODE_PRIVATE);
-        editor = pref.edit();
-
-        bookNow = pref.getString("bookNow","");
+        userPref = this.getActivity().getSharedPreferences(currentEmail,this.getActivity().MODE_PRIVATE);
+        editor = userPref.edit();
 
         recyclerView = rootView.findViewById(R.id.recycler_pageLog);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -125,36 +123,27 @@ public class Fragment_PageLog extends Fragment {
 
                 //ArrayList에 넣어준다
                 dic = new Dictionary_pageLog(bookNow,dialog.getDate(),dialog.getStartP(),dialog.getEndP());
-                mList.add(0,dic);
-                //새로 추가한 내용이 맨 위로 가도록 한다. 그냥 dict넣어주면 맨 밑으로 간다.
-                adapter_pageLog = new Adapter_PageLog(mList);
-                recyclerView.setAdapter(adapter_pageLog);
+                if(Integer.parseInt(dialog.getEndP())<Integer.parseInt(dialog.getStartP())){
+                    Toast.makeText(rootView.getContext(),"마지막 페이지는 시작 페이지보다 작은 숫자일 수 없습니다", Toast.LENGTH_LONG).show();
+                }else{
+                    mList.add(0,dic);
+                    //새로 추가한 내용이 맨 위로 가도록 한다. 그냥 dict넣어주면 맨 밑으로 간다.
+                    adapter_pageLog = new Adapter_PageLog(mList);
+                    recyclerView.setAdapter(adapter_pageLog);
 
-                tv_bookmark.setText(dialog.getEndP());
-                seekBar.setProgress(Integer.parseInt(dialog.getEndP()),true);
-                saveArrayToPref();
+                    tv_bookmark.setText(dialog.getEndP());
+                    seekBar.setProgress(Integer.parseInt(dialog.getEndP()),true);
+                    saveArrayToPref();
+                    dialog.dismiss();
+                }
 
-
-                //  adapter_pageLog.notifyItemInserted(0); //0번 위치에 새로운 애가 왔다 잘 봐라
-                //맨 밑으로 추가하면 그냥 notifyDataSetChanged호출
-
-
-//                //유저가 입력한 마지막 페이지 값을 프로그레스 바에도 적용한다. 입력값은 문자열이므로 정수로 변환한다.
-//                userReadPageNum = Integer.parseInt(dialog.getEndP());
-//                progressBar_bookLog.setProgress(userReadPageNum);
-//
-//                //유저가 입력한 값을 프로그레스 바 하단에 있는 숫자에도 반영해준다
-//                tv_progress_readPageNum.setText(dialog.getEndP());
-//
-//                //리스트에도 넣어준다
-//                PreferenceManager.setString(getApplicationContext(),"pageNum",dialog.getEndP());
 
 
             }else{//하나라도 없으면 아무 일 없이 넘어가기
-                Toast.makeText(rootView.getContext(),"시작 페이지와 마지막 페이지를 입력해주세요", Toast.LENGTH_LONG).show();
+                Toast.makeText(rootView.getContext(),"시작 페이지와 마지막 페이지를 모두 입력해주세요", Toast.LENGTH_LONG).show();
             }
 
-            dialog.dismiss();
+
         }
     };
 
@@ -166,6 +155,17 @@ public class Fragment_PageLog extends Fragment {
     };
 ////////////////////////////페이지 추가 다이얼로그 생성자에 해당하는 커스텀 클릭 리스너들 끝
 
+    private void getBookFromPref(){
+        Gson gson = new Gson();
+
+        String json = userPref.getString("bookNow","EMPTY");
+
+        Type type = new TypeToken<Dictionary_book>() {
+        }.getType();
+        if(!json.equals("EMPTY")){
+            bookNow = gson.fromJson(json,type);
+        }
+    }
 
     private void saveArrayToPref() {
 
@@ -180,7 +180,12 @@ public class Fragment_PageLog extends Fragment {
     private void getArrayFromPref(){
 
         Gson gson = new Gson();
-        String json = pref.getString("pageLog","EMPTY");
+    //페이지 로그 비우기
+    //        String empty = "EMPTY";
+    //        editor.putString("pageLog",empty);
+    //        editor.commit();
+
+        String json = userPref.getString("pageLog","EMPTY");
         mList.clear();
         //클리어를 해줘야 반복해서 내용이 저장되지 않는다.
 
@@ -191,9 +196,10 @@ public class Fragment_PageLog extends Fragment {
 
             ArrayList<Dictionary_pageLog> allList = gson.fromJson(json,type);
 
+            String bookTitle = bookNow.getTitle();
 
             for(int i=0; i<allList.size();i++){
-                if(allList.get(i).getTitle().equals(bookNow)){
+                if(allList.get(i).getDictionary_book().getTitle().equals(bookTitle)){
                     mList.add(allList.get(i));
                 }
 

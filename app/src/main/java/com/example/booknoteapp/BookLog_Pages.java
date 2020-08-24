@@ -3,6 +3,7 @@ package com.example.booknoteapp;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -59,6 +60,9 @@ public class BookLog_Pages extends AppCompatActivity  {
     Button btn_to_stat;
     /////////////////////////////
 
+    SharedPreferences userPref;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,26 +70,8 @@ public class BookLog_Pages extends AppCompatActivity  {
         setContentView(R.layout.activity_book_log__pages);
 
 
+        initialize();
 
-
-        //리사이클러뷰
-        recyclerView = findViewById(R.id.recycler_pageLog);
-        adapter_pageLog = new Adapter_PageLog(mList);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter_pageLog);
-        //리사이클러뷰
-
-
-        //독서 노트 화면으로
-        tv_toBookLogNotes = (TextView)findViewById(R.id.tv_toBookLogNotes);
-        tv_toBookLogNotes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(),BookLog_Notes.class);
-                startActivity(intent);
-                finish();
-            }
-        });
 
 
         //기록 추가버튼
@@ -108,13 +94,6 @@ public class BookLog_Pages extends AppCompatActivity  {
                 }
         );
 
-        // 하단 메뉴바 버튼 선언
-        btn_to_calendar = (Button)findViewById(R.id.btn_to_calender);
-        btn_to_drawer = (Button)findViewById(R.id.btn_to_drawer);
-        btn_to_essay = (Button)findViewById(R.id.btn_to_assay);
-        btn_to_setting = (Button)findViewById(R.id.btn_to_setting);
-        btn_to_stat = (Button)findViewById(R.id.btn_to_stat);
-        // 하단 메뉴바 버튼 선언 끝
 
         // 하단 메뉴바 클릭 이벤트
         btn_to_calendar.setOnClickListener(
@@ -177,6 +156,24 @@ public class BookLog_Pages extends AppCompatActivity  {
 
     }
 
+    private void initialize(){
+        //리사이클러뷰
+        recyclerView = findViewById(R.id.recycler_pageLog);
+        adapter_pageLog = new Adapter_PageLog(mList);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter_pageLog);
+        //리사이클러뷰
+
+
+        // 하단 메뉴바 버튼 선언
+        btn_to_calendar = (Button)findViewById(R.id.btn_to_calender);
+        btn_to_drawer = (Button)findViewById(R.id.btn_to_drawer);
+        btn_to_essay = (Button)findViewById(R.id.btn_to_assay);
+        btn_to_setting = (Button)findViewById(R.id.btn_to_setting);
+        btn_to_stat = (Button)findViewById(R.id.btn_to_stat);
+        // 하단 메뉴바 버튼 선언 끝
+    }
+
 
 
 
@@ -209,11 +206,11 @@ public class BookLog_Pages extends AppCompatActivity  {
            if(!dialog.getStartP().equals("") && !dialog.getEndP().equals("")){//둘 다 값이 있을 때만 일하자 !!
 
                //ArrayList에 넣어준다
-               dic = new Dictionary_pageLog("제목",dialog.getDate(),dialog.getStartP(),dialog.getEndP());
-               mList.add(0,dic);
+              // dic = new Dictionary_pageLog("제목",dialog.getDate(),dialog.getStartP(),dialog.getEndP());
+             //  mList.add(0,dic);
                //새로 추가한 내용이 맨 위로 가도록 한다. 그냥 dict넣어주면 맨 밑으로 간다.
 
-               adapter_pageLog.notifyItemInserted(0); //0번 위치에 새로운 애가 왔다 잘 봐라
+            //  adapter_pageLog.notifyItemInserted(0); //0번 위치에 새로운 애가 왔다 잘 봐라
                //맨 밑으로 추가하면 그냥 notifyDataSetChanged호출
 
 

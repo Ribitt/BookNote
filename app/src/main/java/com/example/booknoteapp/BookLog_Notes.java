@@ -5,9 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,7 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class BookLog_Notes extends AppCompatActivity  {
@@ -27,6 +28,7 @@ public class BookLog_Notes extends AppCompatActivity  {
     Adapter_Note adapterNote = null;
     ArrayList<Dictionary_note> mList = new ArrayList<>();
     Dictionary_note dic;
+    Dictionary_book bookNow;
 
 
     TextView tv_bookLog_title;
@@ -35,12 +37,12 @@ public class BookLog_Notes extends AppCompatActivity  {
     TextView tv_pageNum;
     TextView tv_publisher;
 
+    SharedPreferences userPref;
 
 
     //유저가 작성한 독서노트 페이지&노트 프리뷰
     TextView tv_notePreview;
-    TextView tv_bookPage;
-    TextView tv_p;
+
 
     int position;
     //수정하려고 하는 리사이클러 뷰 인덱스 넘버
@@ -69,13 +71,18 @@ public class BookLog_Notes extends AppCompatActivity  {
 
 
         initialize();
-        setIntentDate();
+        setBookNow();
         allListener();
 
     }
 
 
     private void initialize() {
+
+
+        String currentEmail = getSharedPreferences("users",MODE_PRIVATE).getString("currentUser","");
+        userPref = getSharedPreferences(currentEmail,this.MODE_PRIVATE);
+        //bookNow를 가져올 쉐어드 참조
 
 
         tv_bookLog_title = findViewById(R.id.tv_bookLog_title);
@@ -103,30 +110,40 @@ public class BookLog_Notes extends AppCompatActivity  {
 
     }
     //전달받은 책 정보 띄우기
-    private void setIntentDate() {
-        Intent intent = getIntent();
-        if(intent.getExtras()!=null) {
+    private void setBookNow() {
 
-            //책 커버, 제목, 작가, 출판사, 페이지
-            Dictionary_book dict = (Dictionary_book) intent.getSerializableExtra("selectedBook");
-            tv_bookLog_title.setText(dict.getTitle());
-            if(dict.bookCover==null){
-                bookCoverImg.setBackground(getResources().getDrawable(R.drawable.ic_book));
-            }else{
-                bookCoverImg.setImageBitmap(dict.getBookCover());
-            }
-            if(dict.getPageNum().equals("")){
-             //   tv_pageNum.setText("0");
-            }else{
-             //   tv_pageNum.setText(dict.getPageNum());
-            }
-
-            tv_author.setText(dict.getAuthor());
-            tv_publisher.setText(dict.getPublisher());
+        getBookFromPref();
+        tv_bookLog_title.setText(bookNow.getTitle());
+        if(bookNow.bookCover==null){
+            bookCoverImg.setBackground(getResources().getDrawable(R.drawable.ic_book));
+        }else{
+            bookCoverImg.setImageBitmap(bookNow.getBookCover());
         }
+        if(bookNow.getPageNum().equals("")){
+            //   tv_pageNum.setText("0");
+        }else{
+            //   tv_pageNum.setText(dict.getPageNum());
+        }
+
+        tv_author.setText(bookNow.getAuthor());
+        tv_publisher.setText(bookNow.getPublisher());
+
 
     }
     //전달받은 책 정보 띄우기 끝
+
+
+    private void getBookFromPref(){
+        Gson gson = new Gson();
+        String json = userPref.getString("bookNow","EMPTY");
+
+        Type type = new TypeToken<Dictionary_book>() {
+        }.getType();
+        if(!json.equals("EMPTY")){
+            bookNow = gson.fromJson(json,type);
+        }
+    }
+
 
     private void allListener() {
 

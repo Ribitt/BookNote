@@ -22,6 +22,7 @@ import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
+import com.prolificinteractive.materialcalendarview.spans.DotSpan;
 
 import java.util.Calendar;
 
@@ -148,6 +149,15 @@ public class BookCalendar extends AppCompatActivity {
         //주수에 따라 높이 달라지는 것에 맞춰서 총 높이 정해지기
 
 
+
+        calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+
+            }
+        });
+
+
     }
 
 
@@ -202,6 +212,7 @@ public class BookCalendar extends AppCompatActivity {
         public void decorate(DayViewFacade view) {
             view.addSpan(new StyleSpan(Typeface.BOLD));
             view.addSpan(new RelativeSizeSpan(1.2f));
+            view.addSpan(new DotSpan(5,getColor(R.color.yellowGreen)));
             //view.addSpan(new ForegroundColorSpan(getColor(R.color.green)));
             //view.addSpan(new BackgroundColorSpan(getColor(R.color.myYellow)));
 

@@ -1,26 +1,33 @@
 package com.example.booknoteapp;
 
-public class Dictionary_pageLog {
+import java.io.Serializable;
+
+public class Dictionary_pageLog implements Serializable {
 
     String date;
     String startP;
     String endP;
-    String title;
+    int readPageNum;
+    Dictionary_book dictionary_book;
 
-    public Dictionary_pageLog(String title, String date, String startP, String endP) {
+    public Dictionary_pageLog(Dictionary_book dictionary_book, String date, String startP, String endP) {
         this.date = date;
         this.startP = startP;
         this.endP = endP;
-        this.title =title;
+        this.dictionary_book = dictionary_book;
+        readPageNum = (Integer.parseInt(endP)-Integer.parseInt(startP));
     }
 
-
-    public String getTitle() {
-        return title;
+    public int getReadPageNum() {
+        return readPageNum;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public Dictionary_book getDictionary_book() {
+        return dictionary_book;
+    }
+
+    public void setDictionary_book(Dictionary_book dictionary_book) {
+        this.dictionary_book = dictionary_book;
     }
 
     public String getDate() {

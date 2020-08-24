@@ -106,8 +106,9 @@ public class Adapter_Reading extends androidx.recyclerview.widget.RecyclerView.A
                         intent.putExtra("selectedBook",selectedBook);
                         intent.putExtra("position",getAdapterPosition());
 
-                        editor.putString("bookNow",selectedBook.getTitle());
-                        editor.commit();
+                        Dictionary_book bookNow = mList.get(getAdapterPosition());
+                        saveBookDictToPref(bookNow);
+
                         mContext.startActivity(intent);
 
                     }
@@ -135,6 +136,17 @@ public class Adapter_Reading extends androidx.recyclerview.widget.RecyclerView.A
         }
 
     }
+
+
+    //지금 어레이를 쉐어드에 저장하기
+    private void saveBookDictToPref(Dictionary_book bookNow) {
+        Gson gson = new Gson();
+        String json = gson.toJson(bookNow);
+        editor.putString("bookNow",json);
+        editor.apply();
+    }
+
+    
     //정말 삭제하시겠습니까?
     private void alert() {
         AlertDialog.Builder reallyGoOutAlert = new AlertDialog.Builder(mContext);
