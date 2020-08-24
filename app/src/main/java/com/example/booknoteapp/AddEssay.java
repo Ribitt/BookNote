@@ -65,8 +65,6 @@ public class AddEssay extends AppCompatActivity {
 
 
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();

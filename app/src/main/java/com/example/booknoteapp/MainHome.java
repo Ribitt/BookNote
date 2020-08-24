@@ -16,9 +16,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
+import java.time.Month;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class MainHome extends AppCompatActivity {
 
@@ -30,6 +35,9 @@ public class MainHome extends AppCompatActivity {
     Button btn_toHome;
     ImageView btn_toSetting;
 
+    TextView tv_yearAndMonth;
+    TextView tv_home_monthly_read_pages;
+    TextView tv_home_monthly_written_notes;
 
    RecyclerView recentReadingRecycler;
     Adapter_Reading adapter_reading=null;
@@ -39,6 +47,7 @@ public class MainHome extends AppCompatActivity {
     Adapter_NoteForHome adapter_note=null;
     ArrayList<Dictionary_note> noteArrayList;
 
+    String yearAndMonth;
 
     SharedPreferences userPref;
     SharedPreferences.Editor userEditor;
@@ -51,6 +60,8 @@ public class MainHome extends AppCompatActivity {
 
         initialize();
         allListener();
+        getTime();
+
 
     }
 
@@ -62,11 +73,27 @@ public class MainHome extends AppCompatActivity {
         showReadingRecycler();
         getNoteArrayFromPref();
         showNoteRecycler();
+        getPageLogNumFromPref();
     }
 
     private void initialize() {
 
+
+        //관리자용 쉐어드를 불러온다
+        SharedPreferences userPref = getSharedPreferences("users", Activity.MODE_PRIVATE);
+        //currentUser에 지금 로그인한 회원의 이메일이 저장되어있다.
+        String userEmail = userPref.getString("currentUser","");
+        //그 유저 이메일이 패키지 이름인 된 저장소를 불러온다.
+        this.userPref = getSharedPreferences(userEmail,MODE_PRIVATE);
+        //저장되어있는 닉네임을 불러온다
+        String nick = this.userPref.getString("nickname","");
+
         nickname = findViewById(R.id.tv_home_nickname);
+        tv_yearAndMonth = findViewById(R.id.tv_home_yearAndMonth);
+        tv_home_monthly_read_pages = findViewById(R.id.tv_home_monthly_read_pages);
+        tv_home_monthly_written_notes = findViewById(R.id.tv_home_monthly_written_notes);
+
+
 
         //아래 메뉴 버튼
         btn_toDrawer =findViewById(R.id.btn_to_drawer);
@@ -80,14 +107,6 @@ public class MainHome extends AppCompatActivity {
         recentNoteRecycler = findViewById(R.id.recycler_recent_notes);
 
 
-        //관리자용 쉐어드를 불러온다
-        SharedPreferences userPref = getSharedPreferences("users", Activity.MODE_PRIVATE);
-        //currentUser에 지금 로그인한 회원의 이메일이 저장되어있다.
-        String userEmail = userPref.getString("currentUser","");
-        //그 유저 이메일이 패키지 이름인 된 저장소를 불러온다.
-        this.userPref = getSharedPreferences(userEmail,MODE_PRIVATE);
-        //저장되어있는 닉네임을 불러온다
-        String nick = this.userPref.getString("nickname","");
 
         nickname.setText(nick);
 
@@ -150,6 +169,19 @@ public class MainHome extends AppCompatActivity {
     }//올리스너 끝
 
 
+    //현재시간 가져오는 메소드
+    private void getTime() {
+        Calendar calendar = Calendar.getInstance();
+        String year = String.valueOf( calendar.get(Calendar.YEAR));
+        String month = String.valueOf(calendar.get(Calendar.MONTH)+1);
+        yearAndMonth = year+"\n"+month+"월";
+        tv_yearAndMonth.setText(yearAndMonth);
+
+    }
+
+
+
+    //현재시간 가져오는 메소드 끝
     private void getReadingPrefToArray() {
         Gson gson = new Gson();
         String json = userPref.getString("reading","EMPTY");
@@ -169,6 +201,26 @@ public class MainHome extends AppCompatActivity {
         if(!json.equals("EMPTY")){
             noteArrayList= gson.fromJson(json,type);
         }
+        tv_home_monthly_written_notes.setText(String.valueOf(noteArrayList.size()));
+    }
+
+    private void getPageLogNumFromPref(){
+        Gson gson = new Gson();
+        String json = userPref.getString("pageLog","EMPTY");
+        ArrayList<Dictionary_pageLog> allLogList = new ArrayList<>();
+        Type type = new TypeToken<ArrayList<Dictionary_pageLog>>() {
+        }.getType();
+        if(!json.equals("EMPTY")){
+            allLogList= gson.fromJson(json,type);
+        }//페이지 로그 전체를 가져온다.
+
+        int pageSum=0;
+
+        for(int i=0; i<allLogList.size();i++){
+            pageSum = pageSum + allLogList.get(i).getReadPageNum();
+        }
+
+        tv_home_monthly_read_pages.setText(String.valueOf(pageSum));
 
     }
 

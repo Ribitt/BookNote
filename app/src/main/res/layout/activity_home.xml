@@ -95,34 +95,35 @@
 
                     <TextView
 
-                        android:id="@+id/tv_home_year"
+                        android:id="@+id/tv_home_yearAndMonth"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
                         android:textSize="20sp"
-                        android:text="2020"/>
+                        android:gravity="center"
+                        android:text="2020\n8월"/>
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:orientation="horizontal">-->
 
-                        <TextView
+<!--                        <TextView-->
 
-                            android:id="@+id/tv_home_month"
-                            android:textSize="18sp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textStyle="bold"
-                            android:text="8"/>
-                        <TextView
+<!--                            android:id="@+id/tv_home_month"-->
+<!--                            android:textSize="18sp"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:textStyle="bold"-->
+<!--                            android:text="8"/>-->
+<!--                        <TextView-->
 
-                            android:textSize="18sp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textStyle="bold"
-                            android:text="월"/>
-                    </LinearLayout>
+<!--                            android:textSize="18sp"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:textStyle="bold"-->
+<!--                            android:text="월"/>-->
+<!--                    </LinearLayout>-->
 
 
 
@@ -159,6 +160,7 @@
                             android:id="@+id/tv_home_monthly_read_pages"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/myBlack"
                             android:text="0"/>
 
                         <TextView
@@ -182,18 +184,19 @@
 
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="독서 노트를 "/>
+                            android:text="누적 독서 노트 "/>
 
                         <TextView
                             android:id="@+id/tv_home_monthly_written_notes"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/myBlack"
                             android:text="0"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text=" 개 썼습니다"/>
+                            android:text=" 개"/>
 
                     </LinearLayout>
                     <!--            독서 노트 몇개 썼다 끝-->
@@ -315,6 +318,7 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_recent_notes"
+                    android:background="@color/lightGrey"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
