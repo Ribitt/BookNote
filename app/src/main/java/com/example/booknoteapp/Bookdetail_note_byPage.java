@@ -91,7 +91,7 @@ public class Bookdetail_note_byPage extends AppCompatActivity  {
                     @Override
                     public void onClick(View view) {
                         btn_to_calendar.setBackgroundColor(myYellow);
-                        Intent intent = new Intent(getApplicationContext(), Calendar.class);
+                        Intent intent = new Intent(getApplicationContext(), BookCalendar.class);
                         startActivity(intent);
                     }
                 }

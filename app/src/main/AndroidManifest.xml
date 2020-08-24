@@ -183,7 +183,7 @@
         <activity android:name=".Bookdetail_note_byColor" />
         <activity android:name=".Bookdetail_note_byPage" />
         <activity
-            android:name=".Calendar"
+            android:name=".BookCalendar"
             android:theme="@style/MyToolTheme" />
         <activity android:name=".Drawer_interested" />
         <activity android:name=".Drawer_read" />
