@@ -7,10 +7,20 @@ import android.util.Base64;
 import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
+import java.io.Serializable;
 
-public class Dictionary_Essay {
+public class Dictionary_Essay  implements Serializable {
 
     String userEmail;
+    int position;
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
 
     String bookTitle;
     String bookAuthor;

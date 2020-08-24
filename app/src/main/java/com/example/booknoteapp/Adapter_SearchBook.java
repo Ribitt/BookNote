@@ -69,6 +69,7 @@ public class Adapter_SearchBook extends androidx.recyclerview.widget.RecyclerVie
                     public void onClick(View view) {
                         Dictionary_book dict = mList.get(getAdapterPosition());
                         Intent intent = new Intent(mContext,AddEssay.class);
+                        intent.putExtra("from","add");
                         intent.putExtra("bookDict",dict);
                         mContext.startActivity(intent);
                        // ((Activity)mContext).finish();

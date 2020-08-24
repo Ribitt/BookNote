@@ -40,9 +40,16 @@ public class AddEssay extends AppCompatActivity {
 
     ArrayList<Dictionary_Essay> userEssayArrayList = new ArrayList<>();
     ArrayList<Dictionary_Essay> everyEssayList = new ArrayList<>();
+
+    Dictionary_Essay editedEssay;
+
+
+    ArrayList<Dictionary_Essay> restList;
+
     Dictionary_book bookDict;
 
 
+    String from;
     Button btn_open;
     Button btn_private;
 
@@ -58,6 +65,8 @@ public class AddEssay extends AppCompatActivity {
     EditText et_essayContent;
 
     String time = "";
+    int positionInShowList;
+
 
 
 
@@ -148,20 +157,20 @@ public class AddEssay extends AppCompatActivity {
             case R.id.btn_done://완료 버튼을 누른 경우 (저장하기)
 
 
-                getArrayFromUserPref(userPref);
-                saveNewEssayToArray(userEssayArrayList);
-                //리스트에 지금 노트를 추가한다.
-                saveArrayToPref(userPrefEditor, userEssayArrayList);
-                //리스트를 다시 저장한다.
-
-                if(isOpen){
-                    //공개 리스트의 경우
+                if(from.equals("add")){
+                    //새로 추가를 통해 온 경우
                     getArrayFromDevPref(devPref);
                     saveNewEssayToArray(everyEssayList);
                     saveArrayToPref(devPrefEditor, everyEssayList);
                     //내 쉐어드 가져와서 추가하고
                     //에세이 쉐어드 가져와서 추가하고
+                }else if(from.equals("edit")){
+                    //수정하기를 통해 온 경우
+                    saveEditedEssayToArray();
+                    makeWholeList();
+                    saveArrayToPref(devPrefEditor, everyEssayList);
                 }
+
 
 
                 Intent intent1 = new Intent(getApplicationContext(), Essay.class);
@@ -179,17 +188,7 @@ public class AddEssay extends AppCompatActivity {
     //상단 메뉴 버튼 리스너
 
 
-    private void getArrayFromUserPref(SharedPreferences pref){
-        Gson gson = new Gson();
-        String json = pref.getString("essay","EMPTY");
 
-        Type type = new TypeToken<ArrayList<Dictionary_Essay>>() {
-        }.getType();
-        if(!json.equals("EMPTY")){
-            userEssayArrayList = gson.fromJson(json,type);
-        }
-
-    }
 
     private void getArrayFromDevPref(SharedPreferences pref){
         Gson gson = new Gson();
@@ -203,6 +202,37 @@ public class AddEssay extends AppCompatActivity {
 
     }
 
+    private void makeWholeList() {
+
+        Gson gson = new Gson();
+        String json = devPref.getString("essay","EMPTY");
+
+        Type type = new TypeToken<ArrayList<Dictionary_Essay>>() {
+        }.getType();
+        if(!json.equals("EMPTY")){
+            everyEssayList = gson.fromJson(json,type);
+        }
+
+        everyEssayList.set(editedEssay.getPosition(),editedEssay);
+
+
+    }
+
+    //지금 수정된 에세이 어레이 리스트에 저장하기
+    private void saveEditedEssayToArray() {
+        getTime();
+
+        editedEssay.setDate(time);
+        editedEssay.setUserEmail(userEmail);
+        editedEssay.setNickname( userPref.getString("nickname",""));
+        editedEssay.setEssayTitle(et_essayTitle.getText().toString());
+        editedEssay.setEssayContent(et_essayContent.getText().toString());
+
+
+
+    }
+    //지금 에세이 저장하기 끝
+
     //지금 에세이 어레이 리스트에 저장하기
     private void saveNewEssayToArray(ArrayList<Dictionary_Essay> list) {
         getTime();
@@ -210,10 +240,10 @@ public class AddEssay extends AppCompatActivity {
         Dictionary_Essay newEssay = new Dictionary_Essay(bookDict,isOpen);
         newEssay.setDate(time);
         newEssay.setUserEmail(userEmail);
+        newEssay.setNickname( userPref.getString("nickname",""));
         newEssay.setEssayTitle(et_essayTitle.getText().toString());
         newEssay.setEssayContent(et_essayContent.getText().toString());
         list.add(0,newEssay);
-
 
     }
     //지금 에세이 저장하기 끝
@@ -278,12 +308,34 @@ public class AddEssay extends AppCompatActivity {
         ){
             /////그냥 책 추가하기를 누른 경우. 아무 일도 안해도 된다.
         }else{
-            //책 검색을 통해 넘어온 경우. 이미지, 저자, 책제목, 출판사를 세팅해준다.
-            bookDict = (Dictionary_book) intent.getSerializableExtra("bookDict");
-            iv_bookCover.setImageBitmap(bookDict.getBookCover());
-            tv_bookTitle.setText(bookDict.getTitle());
-            tv_bookPublisher.setText(bookDict.getPublisher());
-            tv_bookAuthor.setText(bookDict.getAuthor());
+
+            if(intent.getStringExtra("from").equals("add")){
+                //책 검색을 통해 넘어온 경우. 이미지, 저자, 책제목, 출판사를 세팅해준다.
+                bookDict = (Dictionary_book) intent.getSerializableExtra("bookDict");
+                iv_bookCover.setImageBitmap(bookDict.getBookCover());
+                tv_bookTitle.setText(bookDict.getTitle());
+                tv_bookPublisher.setText(bookDict.getPublisher());
+                tv_bookAuthor.setText(bookDict.getAuthor());
+                from = "add";
+            }else if(intent.getStringExtra("from").equals("edit")){
+                Log.d("여기온다","온다");
+                 editedEssay = (Dictionary_Essay) intent.getSerializableExtra("selectedEssay");
+                //책 내용 세팅
+                iv_bookCover.setImageBitmap(editedEssay.getBookCover());
+                tv_bookTitle.setText(editedEssay.getBookTitle());
+                tv_bookPublisher.setText(editedEssay.getBookPublisher());
+                tv_bookAuthor.setText(editedEssay.getBookAuthor());
+
+                //에세이 내용 세팅
+                et_essayTitle.setText(editedEssay.getEssayTitle());
+                et_essayContent.setText(editedEssay.getEssayContent());
+                positionInShowList = intent.getIntExtra("position",0);
+                from ="edit";
+
+
+
+            }
+
 
         }
     }

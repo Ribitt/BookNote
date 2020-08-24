@@ -123,6 +123,7 @@ public class Adapter_Reading extends androidx.recyclerview.widget.RecyclerView.A
                         Intent intent = new Intent(mContext, AddEssay.class);
                         Dictionary_book selectedBook = mList.get(getAdapterPosition());
                         intent.putExtra("bookDict",selectedBook);
+                        intent.putExtra("from", "add");
                         mContext.startActivity(intent);
                     }
                 });
