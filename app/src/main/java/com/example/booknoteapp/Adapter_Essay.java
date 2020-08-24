@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.graphics.drawable.GradientDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +38,7 @@ public class Adapter_Essay extends androidx.recyclerview.widget.RecyclerView.Ada
     SharedPreferences devPref;
     SharedPreferences.Editor devPrefEditor;
 
-    Boolean isOpen;
+    Boolean likeClicked = false;
 
 
     String userEmail;
@@ -90,6 +92,7 @@ public class Adapter_Essay extends androidx.recyclerview.widget.RecyclerView.Ada
             like =view.findViewById(R.id.iv_like_btn);
             tv_isOpen = view.findViewById(R.id.tv_isOpen);
 
+
             ////수정삭제 클릭 리스너
             edit_or_delete.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -133,6 +136,8 @@ public class Adapter_Essay extends androidx.recyclerview.widget.RecyclerView.Ada
                 }
             });
             ////수정삭제 클릭 리스너
+
+
 
 
         }
@@ -202,7 +207,7 @@ public class Adapter_Essay extends androidx.recyclerview.widget.RecyclerView.Ada
     }
 
     @Override
-    public void onBindViewHolder(@NonNull essayViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final essayViewHolder holder, final int position) {
 
         Dictionary_Essay dictionary_essay = showList.get(position);
 
@@ -217,6 +222,34 @@ public class Adapter_Essay extends androidx.recyclerview.widget.RecyclerView.Ada
         holder.essayTitle.setText(dictionary_essay.getEssayTitle());
 
         holder.date.setText(dictionary_essay.getDate());
+
+
+        holder.like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int likeNumber;
+                likeNumber = Integer.parseInt(holder.likeNum.getText().toString());
+
+                if(!likeClicked){
+                    likeClicked=true;
+                    likeNumber= likeNumber+1;
+                    holder.like.setImageDrawable(mContext.getDrawable(R.drawable.ic_like));
+                    int color = mContext.getColor(R.color.yellowGreen);
+                    holder.like.setColorFilter(color);
+
+                }else{
+                    likeClicked=false;
+                    likeNumber= likeNumber-1;
+                    holder.like.setImageDrawable(mContext.getDrawable(R.drawable.ic_empty_like));
+                    int color = mContext.getColor(R.color.myBlack);
+                    holder.like.setColorFilter(color);
+                }
+
+                holder.likeNum.setText(String.valueOf(likeNumber));
+                showList.get(position).setLikeNum(String.valueOf(likeNumber));
+
+            }
+        });
 
         if(dictionary_essay.isOpen){
             holder.tv_isOpen.setText("공개 에세이");

@@ -51,6 +51,8 @@ public class Essay extends AppCompatActivity {
    Dictionary_book dictionary_book;
    Dictionary_Essay dictionary_essay;
 
+    ArrayList<Dictionary_Essay> emptyList = new ArrayList<>();
+
    ArrayList<Dictionary_Essay> wholeEssayList = new ArrayList<>();
     ArrayList<Dictionary_Essay> myEssayList = new ArrayList<>();
     ArrayList<Dictionary_Essay> openEssayList = new ArrayList<>();
@@ -303,7 +305,7 @@ public class Essay extends AppCompatActivity {
         Gson gson = new Gson();
 
 //        //프레프 비우기용
-//        String json = gson.toJson(essayArrayList);
+//        String json = gson.toJson(emptyList);
 //        userPrefEditor.putString("essay",json);
 //        userPrefEditor.commit();
 //        devPrefEditor.putString("essay",json);

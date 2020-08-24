@@ -33,6 +33,15 @@ public class Dictionary_Essay  implements Serializable {
     String likeNum="0";
 
     Boolean isOpen=true;
+    Boolean likeClicked = false;
+
+    public Boolean getLikeClicked() {
+        return likeClicked;
+    }
+
+    public void setLikeClicked(Boolean likeClicked) {
+        this.likeClicked = likeClicked;
+    }
 
     public Boolean getOpen() {
         return isOpen;
