@@ -60,8 +60,11 @@ public class Fragment_PageLog extends Fragment {
         rootView = (ViewGroup)inflater.inflate(R.layout.fragment__page_log,container,false);
 
         initialize();
-        allListener();
+        //모든 뷰, 쉐어드 불러오는 부분
         getBookFromPref();
+        //쉐어드를 가지고 지금 책 정보 가져옴
+        allListener();
+        //책 추가,수정이벤트
 
         return rootView;
     }
@@ -70,6 +73,7 @@ public class Fragment_PageLog extends Fragment {
         String currentEmail = this.getActivity().getSharedPreferences("users", Context.MODE_PRIVATE).getString("currentUser","");
         userPref = this.getActivity().getSharedPreferences(currentEmail,this.getActivity().MODE_PRIVATE);
         editor = userPref.edit();
+
 
         recyclerView = rootView.findViewById(R.id.recycler_pageLog);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -93,6 +97,7 @@ public class Fragment_PageLog extends Fragment {
         //로그 추가버튼
 
     }
+
 
     ////////////////////////////페이지 추가 다이얼로그 생성자에 해당하는 커스텀 클릭 리스너들
     private View.OnClickListener dateListener = new View.OnClickListener() {

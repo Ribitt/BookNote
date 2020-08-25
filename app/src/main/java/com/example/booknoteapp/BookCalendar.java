@@ -14,9 +14,11 @@ import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -40,10 +42,11 @@ public class BookCalendar extends AppCompatActivity {
 
     MaterialCalendarView calendarView;
 
+    LinearLayout layout;
+    Animation alpha;
+
     RecyclerView recyclerView;
-
-    TextView tvNum_calender_pageSum;
-
+    TextView tv_youRead;
     TextView tv_dayOfTheMonth;
     ArrayList<CalendarDay> calendarDays = new ArrayList<>();
     Calendar calendar = Calendar.getInstance();
@@ -76,14 +79,17 @@ public class BookCalendar extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        getPageLogArrayFromPref();
 
+        getPageLogArrayFromPref();
+        //저장된 페이지 로그 불러오기
         try {
             makeCalendarDayList();
         } catch (ParseException e) {
             e.printStackTrace();
-        }
+        } // 페이지 로그가 있는 날을 리스트로 쭉 만들기
         calendarSetting();
+        //달력 세팅 (토,일 색상, 선택된 날 색상, 오늘 글자크기, 페이지 로그가 있는 날에 점찍기
+
     }
 
     private void makeCalendarDayList() throws ParseException {
@@ -108,12 +114,16 @@ public class BookCalendar extends AppCompatActivity {
         userPref = getSharedPreferences(userEmail,MODE_PRIVATE);
 
         //리사이클러뷰 참고값 & 가로 리니어 레이아웃 셋팅
-        recyclerView = findViewById(R.id.recycler_calendar);
+        recyclerView = findViewById(R.id.recycler_logOnCalendar);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(),RecyclerView.HORIZONTAL,false));
 
         tv_dayOfTheMonth = findViewById(R.id.tv_dayOfTheMonth);
         calendarView = findViewById(R.id.calendarView);
         //총 읽은 페이지 뷰
+        tv_youRead = findViewById(R.id.tv_youRead);
+
+        layout = findViewById(R.id.layout_tvAndRecycler);
+        alpha = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.alpha);
 
         //아래 메뉴 버튼
         btn_toDrawer =findViewById(R.id.btn_to_drawer);
@@ -207,14 +217,10 @@ public class BookCalendar extends AppCompatActivity {
         //주수에 따라 높이 달라지는 것에 맞춰서 총 높이 정해지기
 
 
-
-
-
         calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                Toast.makeText(getApplicationContext(), date.toString(), Toast.LENGTH_LONG).show();
-
+              //  Toast.makeText(getApplicationContext(), date.toString(), Toast.LENGTH_LONG).show();
 
                 Date datePicked = date.getDate();
                 String strDatePicked = dateFormat.format(datePicked);
@@ -230,8 +236,46 @@ public class BookCalendar extends AppCompatActivity {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+
+                try {
+                    showRecycler(datePicked);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                layout.startAnimation(alpha);
+
+
             }
         });
+
+
+    }
+
+    private void showRecycler(Date datePicked) throws ParseException {
+
+        ArrayList<Dictionary_pageLog> mList = new ArrayList<>();
+
+
+        for(Dictionary_pageLog pageLog : pageLogArrayList){
+            Date dateFromLog = dateFormat.parse(pageLog.getDate());
+            if(dateFromLog.compareTo(datePicked)==0){
+                mList.add(pageLog);
+            }
+        }
+
+        if(mList.size()>0){
+            Log.d("같은 날짜 리스트가 만들어지는가", mList.get(0).dictionary_book.toString());
+            Adapter_LogOnCalendar adapter_logOnCalendar = new Adapter_LogOnCalendar(mList);
+            recyclerView.setAdapter(adapter_logOnCalendar);
+            tv_youRead.setVisibility(View.VISIBLE);
+        }else{
+            tv_youRead.setVisibility(View.INVISIBLE);
+        }
+
+
+
+
 
 
     }
@@ -263,7 +307,7 @@ public class BookCalendar extends AppCompatActivity {
 
         @Override
         public void decorate(DayViewFacade view) {
-            view.addSpan(new DotSpan(5,getColor(R.color.green)));
+            view.addSpan(new DotSpan(7,getColor(R.color.yellowGreen)));
         }
     }
 
