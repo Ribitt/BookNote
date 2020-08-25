@@ -65,7 +65,7 @@ public class AddNote extends AppCompatActivity {
     SharedPreferences userPref;
     SharedPreferences.Editor userEditor;
     ArrayList<Dictionary_note> noteList = new ArrayList<>();
-
+    Dictionary_book bookNow;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -82,7 +82,9 @@ public class AddNote extends AppCompatActivity {
         setContentView(R.layout.activity_add_note);
 
         initialize();
+        getBookNow();
         allListener();
+
     }
 
 
@@ -100,7 +102,7 @@ public class AddNote extends AppCompatActivity {
         String currentEmail = getSharedPreferences("users", Context.MODE_PRIVATE).getString("currentUser","");
         userPref = getSharedPreferences(currentEmail,this.MODE_PRIVATE);
         userEditor = userPref.edit();
-        title = userPref.getString("bookNow","");
+
 
 
         //라디오 버튼 선언
@@ -185,6 +187,19 @@ public class AddNote extends AppCompatActivity {
 
     }
 
+    private void getBookNow() {
+
+        Gson gson = new Gson();
+        String json = userPref.getString("bookNow","EMPTY");
+        Type type = new TypeToken<Dictionary_book>() {
+        }.getType();
+
+        if(!json.equals("EMPTY")){
+            bookNow = gson.fromJson(json,type);
+        }
+
+    }
+
     private void alert() {
         AlertDialog.Builder reallyGoOutAlert = new AlertDialog.Builder(AddNote.this);
         reallyGoOutAlert.setTitle("정말 나가시겠습니까?")
@@ -216,6 +231,7 @@ public class AddNote extends AppCompatActivity {
 
     //지금 받은 정보 어레이 리스트에 저장하기
     private void saveNewNoteToArray() {
+
         String note = editText_userNote.getText().toString();
         String page =editText_page.getText().toString();
         String date = tv_addNote_date.getText().toString();
@@ -224,7 +240,7 @@ public class AddNote extends AppCompatActivity {
         }
         String quote = editText_quote.getText().toString();
 
-        Dictionary_note newNote = new Dictionary_note(title,page,date,quote,note,pickedColor);
+        Dictionary_note newNote = new Dictionary_note(bookNow,page,date,quote,note,pickedColor);
         noteList.add(0,newNote);
 
     }
@@ -240,9 +256,6 @@ public class AddNote extends AppCompatActivity {
             Type type = new TypeToken<ArrayList<Dictionary_note>>() {
             }.getType();
             noteList = gson.fromJson(json,type);
-            Log.d("들어오는지 확인", json);
-            //   Log.d("대체 어레이 리스트가 존재는 하는지 확인 ", String.valueOf(getArrayList.size()));
-            //  Log.d("대체 어레이 리스트가 존재는 하는지 확인 ", getArrayList.get(0).getTitle());
         }else{
             // 내용이 없으면 가져오지 않음
         }
@@ -326,12 +339,6 @@ public class AddNote extends AppCompatActivity {
     protected void onPostResume() {
         super.onPostResume();
 
-//        SharedPreferences pref = getSharedPreferences("pref",Activity.MODE_PRIVATE);
-//        SharedPreferences.Editor editor = pref.edit();
-//
-//        editor.putString("name","띠로로");
-//        //name 이라는 키를 가진 프리퍼런스에 띠로로 라는 글자를 저장해뒀다.
-//        editor.commit();
     }
 
     @Override
@@ -339,23 +346,8 @@ public class AddNote extends AppCompatActivity {
         super.onPause();
 
 
-//        SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
-//        if(pref!=null){
-//            //저장된 데이터가 있는 경우에
-//            String name = pref.getString("name","");
-//            //두번째 파라미터는 저장된 name이 없는 경우에 사용할 디폴트 값.
-//
-//            Toast.makeText(this,"넣어둔 건 말이야 : "+name, Toast.LENGTH_LONG).show();
-//            finish();
-//        }
     }
 
-    //    RadioButton.OnClickListener radioButtonClickListener = new RadioButton.OnClickListener(){
-//        @Override
-//        public void onClick(View view) {
-//            Toast.makeText(getApplicationContext(),"black_btn : "+radioBtn_black.isChecked)
-//        }
-//    };
          RadioGroup.OnCheckedChangeListener radioGroupButtonChangeListener = new RadioGroup.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(RadioGroup radioGroup, int i) {

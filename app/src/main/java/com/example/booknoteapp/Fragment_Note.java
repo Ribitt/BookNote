@@ -117,7 +117,7 @@ public class Fragment_Note extends Fragment {
             String bookTitle = bookNow.getTitle();
 
             for(int i=0; i<wholeList.size();i++){
-                if(wholeList.get(i).getTitle().equals(bookTitle)){
+                if(wholeList.get(i).dictionary_book.getTitle().equals(bookTitle)){
                     //지금 책에 해당하는 노트 리스트만 가져온다
                     noteList.add(wholeList.get(i));
                 }else{

@@ -87,6 +87,7 @@ public class MainHome extends AppCompatActivity {
         this.userPref = getSharedPreferences(userEmail,MODE_PRIVATE);
         //저장되어있는 닉네임을 불러온다
         String nick = this.userPref.getString("nickname","");
+        userEditor = this.userPref.edit();
 
         nickname = findViewById(R.id.tv_home_nickname);
         tv_yearAndMonth = findViewById(R.id.tv_home_yearAndMonth);
@@ -195,6 +196,12 @@ public class MainHome extends AppCompatActivity {
 
     private void getNoteArrayFromPref() {
         Gson gson = new Gson();
+//       //노트 비우기
+//        ArrayList<Dictionary_note> emptyNote = new ArrayList<>();
+//        String json1 = gson.toJson(emptyNote);
+//        userEditor.putString("note",json1);
+//        userEditor.commit();
+
         String json = userPref.getString("note","EMPTY");
         Type type = new TypeToken<ArrayList<Dictionary_note>>() {
         }.getType();

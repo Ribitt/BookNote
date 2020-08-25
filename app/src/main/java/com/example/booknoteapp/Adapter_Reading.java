@@ -22,7 +22,7 @@ public class Adapter_Reading extends androidx.recyclerview.widget.RecyclerView.A
     //1. 어레이 리스트 정하고 그 애는 일단 비어있다. 이 리스트는 딕셔너리 객체들이 들어간다.
     ArrayList<Dictionary_book> mList = null;
 
-    SharedPreferences pref;
+    SharedPreferences userPref;
     SharedPreferences.Editor editor;
 
     View.OnClickListener editListener;
@@ -135,7 +135,7 @@ public class Adapter_Reading extends androidx.recyclerview.widget.RecyclerView.A
     }
 
 
-    //지금 어레이를 쉐어드에 저장하기
+    //지금 책을 쉐어드에 저장하기
     private void saveBookDictToPref(Dictionary_book bookNow) {
         Gson gson = new Gson();
         String json = gson.toJson(bookNow);
@@ -210,8 +210,8 @@ public class Adapter_Reading extends androidx.recyclerview.widget.RecyclerView.A
 
 
         String currentEmail = mContext.getSharedPreferences("users", Context.MODE_PRIVATE).getString("currentUser","");
-        pref = mContext.getSharedPreferences(currentEmail,mContext.MODE_PRIVATE);
-        editor = pref.edit();
+        userPref = mContext.getSharedPreferences(currentEmail,mContext.MODE_PRIVATE);
+        editor = userPref.edit();
 
         return viewHolder;
     }

@@ -59,7 +59,7 @@ public class Adapter_NoteForHome extends RecyclerView.Adapter<Adapter_NoteForHom
         holder.note.setText(dic.getNote());
         holder.quote.setText(dic.getQuote());
         holder.note.setTextColor(dic.getColor());
-        holder.title.setText(dic.getTitle());
+        holder.title.setText(dic.dictionary_book.getTitle());
 
 
     }
