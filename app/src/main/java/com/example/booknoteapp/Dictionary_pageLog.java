@@ -9,6 +9,15 @@ public class Dictionary_pageLog implements Serializable {
     String endP;
     int readPageNum;
     Dictionary_book dictionary_book;
+    int positionInWholeList;
+
+    public int getPositionInWholeList() {
+        return positionInWholeList;
+    }
+
+    public void setPositionInWholeList(int positionInWholeList) {
+        this.positionInWholeList = positionInWholeList;
+    }
 
     public Dictionary_pageLog(Dictionary_book dictionary_book, String date, String startP, String endP) {
         this.date = date;

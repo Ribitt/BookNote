@@ -102,9 +102,6 @@ public class Adapter_Reading extends androidx.recyclerview.widget.RecyclerView.A
                     public void onClick(View view) {
 
                         Intent intent = new Intent(mContext,BookLog_Notes.class);
-                        Dictionary_book selectedBook = mList.get(getAdapterPosition());
-                        intent.putExtra("selectedBook",selectedBook);
-                        intent.putExtra("position",getAdapterPosition());
 
                         Dictionary_book bookNow = mList.get(getAdapterPosition());
                         saveBookDictToPref(bookNow);

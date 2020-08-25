@@ -53,6 +53,7 @@ public class Fragment_PageLog extends Fragment {
     SharedPreferences userPref;
     SharedPreferences.Editor editor;
     ArrayList<Dictionary_pageLog> mList = new ArrayList<>();
+    ArrayList<Dictionary_pageLog> allList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,8 +64,6 @@ public class Fragment_PageLog extends Fragment {
         //모든 뷰, 쉐어드 불러오는 부분
         getBookFromPref();
         //쉐어드를 가지고 지금 책 정보 가져옴
-        allListener();
-        //책 추가,수정이벤트
 
         return rootView;
     }
@@ -73,7 +72,6 @@ public class Fragment_PageLog extends Fragment {
         String currentEmail = this.getActivity().getSharedPreferences("users", Context.MODE_PRIVATE).getString("currentUser","");
         userPref = this.getActivity().getSharedPreferences(currentEmail,this.getActivity().MODE_PRIVATE);
         editor = userPref.edit();
-
 
         recyclerView = rootView.findViewById(R.id.recycler_pageLog);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -131,9 +129,10 @@ public class Fragment_PageLog extends Fragment {
                 if(Integer.parseInt(dialog.getEndP())<Integer.parseInt(dialog.getStartP())){
                     Toast.makeText(rootView.getContext(),"마지막 페이지는 시작 페이지보다 작은 숫자일 수 없습니다", Toast.LENGTH_LONG).show();
                 }else{
+                    allList.add(0,dic);
                     mList.add(0,dic);
                     //새로 추가한 내용이 맨 위로 가도록 한다. 그냥 dict넣어주면 맨 밑으로 간다.
-                    adapter_pageLog = new Adapter_PageLog(mList);
+                    adapter_pageLog = new Adapter_PageLog(mList,allList);
                     recyclerView.setAdapter(adapter_pageLog);
 
                     tv_bookmark.setText(dialog.getEndP());
@@ -175,7 +174,7 @@ public class Fragment_PageLog extends Fragment {
     private void saveArrayToPref() {
 
         Gson gson = new Gson();
-        String json = gson.toJson(mList);
+        String json = gson.toJson(allList);
         editor.putString("pageLog",json);
         editor.commit();
     }
@@ -192,14 +191,21 @@ public class Fragment_PageLog extends Fragment {
 
         String json = userPref.getString("pageLog","EMPTY");
         mList.clear();
-        //클리어를 해줘야 반복해서 내용이 저장되지 않는다.
+        allList.clear();
+        //이전에 등록한 로그가 저장되어 있을 수 있으니까 비운다.
 
 
         if(!json.equals("EMPTY")){
             Type type = new TypeToken<ArrayList<Dictionary_pageLog>>() {
             }.getType();
 
-            ArrayList<Dictionary_pageLog> allList = gson.fromJson(json,type);
+            allList = gson.fromJson(json,type);
+
+            for(int i=0; i<allList.size(); i++){
+                allList.get(i).setPositionInWholeList(i);
+                //각 에세이에 원래 전체 리스트에서의 인덱스를 저장한다.
+            }
+            //전체 리스트에서 각 에세이가 어느 위치였는지 인덱스 값을 준다
 
             String bookTitle = bookNow.getTitle();
 
@@ -211,7 +217,7 @@ public class Fragment_PageLog extends Fragment {
             }
         }
 
-        adapter_pageLog = new Adapter_PageLog(mList);
+        adapter_pageLog = new Adapter_PageLog(mList,allList);
         recyclerView.setAdapter(adapter_pageLog);
 
 
@@ -222,6 +228,9 @@ public class Fragment_PageLog extends Fragment {
     public void onResume() {
         super.onResume();
         getArrayFromPref();
+        allListener();
+        //책 추가,수정이벤트
+
 
     }
 

@@ -39,6 +39,11 @@ import java.util.Date;
 
 public class BookCalendar extends AppCompatActivity {
 
+    long now = System.currentTimeMillis();
+    Date date = new Date(now);
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
+    String time = dateFormat.format(date);
+    Date datePicked;
 
     MaterialCalendarView calendarView;
 
@@ -52,6 +57,7 @@ public class BookCalendar extends AppCompatActivity {
     Calendar calendar = Calendar.getInstance();
 
 
+
     //하단 메뉴 버튼
 
     Button btn_toDrawer;
@@ -63,7 +69,7 @@ public class BookCalendar extends AppCompatActivity {
     SharedPreferences userPref;
     ArrayList<Dictionary_pageLog> pageLogArrayList;
 
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
+
 
 
     @Override
@@ -82,6 +88,20 @@ public class BookCalendar extends AppCompatActivity {
 
         getPageLogArrayFromPref();
         //저장된 페이지 로그 불러오기
+
+        try {
+            datePicked = dateFormat.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }//오늘 시간을 데이트 양식으로 가져온다
+
+        try {
+            showRecycler(datePicked);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }//오늘 날짜에 해당하는 로그를 리사이클러뷰에 띄운다
+
+
         try {
             makeCalendarDayList();
         } catch (ParseException e) {
@@ -89,6 +109,7 @@ public class BookCalendar extends AppCompatActivity {
         } // 페이지 로그가 있는 날을 리스트로 쭉 만들기
         calendarSetting();
         //달력 세팅 (토,일 색상, 선택된 날 색상, 오늘 글자크기, 페이지 로그가 있는 날에 점찍기
+        //클릭한 날짜 리사이클러뷰 보이기
 
     }
 
@@ -235,15 +256,15 @@ public class BookCalendar extends AppCompatActivity {
                     getLogOfThisDay(datePicked);
                 } catch (ParseException e) {
                     e.printStackTrace();
-                }
+                } // 로그가 있는 날짜를 모아두는 리스트를 만든다 -> 달력에 점찍기 용
 
                 try {
                     showRecycler(datePicked);
                 } catch (ParseException e) {
                     e.printStackTrace();
-                }
+                } // 리사이클러에 해당 날짜에 존재하는 로그를 띄운다
 
-                layout.startAnimation(alpha);
+                recyclerView.startAnimation(alpha);
 
 
             }
@@ -256,25 +277,43 @@ public class BookCalendar extends AppCompatActivity {
 
         ArrayList<Dictionary_pageLog> mList = new ArrayList<>();
 
+        mList.clear();
+        //이전에 클릭한 날짜와 동일한 날짜에 쓰인 페이지 로그가 저장되어있을 수 있기 때문에 비워준다.
 
         for(Dictionary_pageLog pageLog : pageLogArrayList){
             Date dateFromLog = dateFormat.parse(pageLog.getDate());
             if(dateFromLog.compareTo(datePicked)==0){
                 mList.add(pageLog);
             }
-        }
+        }//전체 리스트에서 해당 날짜에 쓰인 로그만 뽑아서 모으기
+
+        for(int j=0; j<mList.size(); j++){
+            for(int i=j+1; i<mList.size();i++){
+                if(mList.get(j).getDictionary_book().getTitle().equals(mList.get(i).getDictionary_book().getTitle())){
+                    mList.get(j).readPageNum =  mList.get(0).readPageNum+mList.get(i).readPageNum;
+                    mList.remove(i);
+                }
+            }
+        }//동일한 제목은 숫자 합치고 하나만 나오도록 하기
+
+
+        Adapter_LogOnCalendar adapter_logOnCalendar = new Adapter_LogOnCalendar(mList);
+        recyclerView.setAdapter(adapter_logOnCalendar);
+        //만든 리스트로 리사이클러뷰 띄우기
+
+        int readPagesOnThisDay=0;
+        for(Dictionary_pageLog pageLog : mList){
+            readPagesOnThisDay += pageLog.readPageNum;
+        }//리스트에 있는 전체 페이지 수를 다 더한다
 
         if(mList.size()>0){
-            Log.d("같은 날짜 리스트가 만들어지는가", mList.get(0).dictionary_book.toString());
-            Adapter_LogOnCalendar adapter_logOnCalendar = new Adapter_LogOnCalendar(mList);
-            recyclerView.setAdapter(adapter_logOnCalendar);
+            tv_youRead.setText(String.valueOf(readPagesOnThisDay)+"페이지를 읽었습니다");
             tv_youRead.setVisibility(View.VISIBLE);
+            //있는 날에는 몇 페이지나 읽었는지 세서 띄운다
         }else{
             tv_youRead.setVisibility(View.INVISIBLE);
+            //없는 날에는 글자 없애버리시오
         }
-
-
-
 
 
 
@@ -357,6 +396,7 @@ public class BookCalendar extends AppCompatActivity {
 
         @Override
         public boolean shouldDecorate(CalendarDay day) {
+
             return date!= null && day.equals(date);
         }
 

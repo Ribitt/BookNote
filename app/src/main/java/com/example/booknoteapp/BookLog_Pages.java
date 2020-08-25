@@ -159,7 +159,7 @@ public class BookLog_Pages extends AppCompatActivity  {
     private void initialize(){
         //리사이클러뷰
         recyclerView = findViewById(R.id.recycler_pageLog);
-        adapter_pageLog = new Adapter_PageLog(mList);
+        //adapter_pageLog = new Adapter_PageLog(mList);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter_pageLog);
         //리사이클러뷰

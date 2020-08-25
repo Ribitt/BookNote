@@ -3,6 +3,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,10 +19,14 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.Date;
 
 import javax.crypto.ShortBufferException;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class Adapter_PageLog extends RecyclerView.Adapter<Adapter_PageLog.pageLogViewHolder>{
 
@@ -30,6 +35,13 @@ public class Adapter_PageLog extends RecyclerView.Adapter<Adapter_PageLog.pageLo
     private Dialog_insertPage dialog;
     private Context mContext;
     int position;
+
+
+    Dictionary_pageLog editLog;
+    ArrayList<Dictionary_pageLog> wholeList;
+    SharedPreferences userPref;
+    SharedPreferences.Editor userEditor;
+
 
 
     private View.OnClickListener dateListener = new View.OnClickListener() {
@@ -55,18 +67,20 @@ public class Adapter_PageLog extends RecyclerView.Adapter<Adapter_PageLog.pageLo
     private View.OnClickListener positive = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            //수정하기
+            //수정하기 확인 버튼 눌렀을 때
 
             if(!dialog.getStartP().equals("") && !dialog.getEndP().equals("")){//둘 다 값이 있을 때만 일하자 !!
 
 
-                Dictionary_pageLog dic = mList.get(position);
-                dic.setDate(dialog.getDate());
-                dic.setEndP(dialog.getEndP());
-                dic.setStartP(dialog.getStartP());
-                mList.set(position,dic);
+
+                editLog.setDate(dialog.getDate());
+                editLog.setEndP(dialog.getEndP());
+                editLog.setStartP(dialog.getStartP());
+                mList.set(position,editLog);
                 //수정한 내용이 해당 자리에 반영되도록 한다.
                 notifyItemChanged(position);
+                wholeList.set(mList.get(position).getPositionInWholeList(),editLog);
+                saveArrayToPref(wholeList,userEditor);
 
 
             }else{//하나라도 없으면 아무 일 없이 넘어가기
@@ -124,12 +138,12 @@ public class Adapter_PageLog extends RecyclerView.Adapter<Adapter_PageLog.pageLo
                     case 1001:
                         //수정을 고른 경우
                         position = getAdapterPosition();
-                        Dictionary_pageLog temp = mList.get(position);
+                        editLog = mList.get(position);
                         dialog = new Dialog_insertPage(mContext, dateListener, positive, negative);
                         dialog.show();
-                        dialog.startP.setText(temp.getStartP());
-                        dialog.endP.setText(temp.getEndP());
-                        dialog.date.setText(temp.getDate());
+                        dialog.startP.setText(editLog.getStartP());
+                        dialog.endP.setText(editLog.getEndP());
+                        dialog.date.setText(editLog.getDate());
                       ///  itemView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.almostWhite));
 
                         break;
@@ -161,9 +175,14 @@ public class Adapter_PageLog extends RecyclerView.Adapter<Adapter_PageLog.pageLo
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
+                        wholeList.remove(mList.get(position).getPositionInWholeList());
+                        //전체 리스트에서 먼저 지운다
                         mList.remove(position);
                         notifyItemRemoved(position);
                         notifyDataSetChanged();
+                        saveArrayToPref(wholeList,userEditor);
+
+
 
 
                     }
@@ -171,9 +190,19 @@ public class Adapter_PageLog extends RecyclerView.Adapter<Adapter_PageLog.pageLo
     }
     //정말 삭제하시겠습니까? 끝
 
-    public Adapter_PageLog(ArrayList<Dictionary_pageLog> mList ) {
+
+    //지금 어레이를 쉐어드에 저장하기
+    private void saveArrayToPref(ArrayList<Dictionary_pageLog> arrayList, SharedPreferences.Editor editor) {
+        Gson gson = new Gson();
+        String json = gson.toJson(arrayList);
+        editor.putString("pageLog",json);
+        editor.apply();
+    }
+
+    public Adapter_PageLog(ArrayList<Dictionary_pageLog> mList, ArrayList<Dictionary_pageLog> wholeList) {
 
         this.mList = mList;
+        this.wholeList=wholeList;
     }
 
     @NonNull
@@ -184,6 +213,12 @@ public class Adapter_PageLog extends RecyclerView.Adapter<Adapter_PageLog.pageLo
         mContext=parent.getContext();
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.item_page_log, parent, false);
+
+
+        String userEmail = parent.getContext().getSharedPreferences("users", MODE_PRIVATE).getString("currentUser","");
+        userPref= parent.getContext().getSharedPreferences(userEmail,MODE_PRIVATE);
+        //저장되어있는 닉네임을 불러온다
+        userEditor = userPref.edit();
 
         Adapter_PageLog.pageLogViewHolder holder = new Adapter_PageLog.pageLogViewHolder(view);
         return holder;
