@@ -16,14 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.lang.reflect.Type;
-import java.text.SimpleDateFormat;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 public class MainHome extends AppCompatActivity {
 
@@ -94,6 +90,7 @@ public class MainHome extends AppCompatActivity {
         tv_home_monthly_read_pages = findViewById(R.id.tv_home_monthly_read_pages);
         tv_home_monthly_written_notes = findViewById(R.id.tv_home_monthly_written_notes);
 
+        btn_toSetting = findViewById(R.id.btn_to_my_setting);
 
 
         //아래 메뉴 버튼
@@ -101,13 +98,11 @@ public class MainHome extends AppCompatActivity {
         btn_toCalender =findViewById(R.id.btn_to_calender);
         btn_toEssay =findViewById(R.id.btn_to_assay);
         btn_toHome = findViewById(R.id.btn_to_home);
-        btn_toSetting = findViewById(R.id.btn_home_setting);
+        btn_toSetting = findViewById(R.id.btn_to_my_setting);
 
         //리사이클러뷰
         recentReadingRecycler = findViewById(R.id.recycler_reading);
         recentNoteRecycler = findViewById(R.id.recycler_recent_notes);
-
-
 
         nickname.setText(nick);
 
