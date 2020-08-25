@@ -67,7 +67,7 @@ public class BookCalendar extends AppCompatActivity {
     /////////////////////////////
 
     SharedPreferences userPref;
-    ArrayList<Dictionary_pageLog> pageLogArrayList;
+    ArrayList<Dictionary_pageLog> pageLogArrayList=new ArrayList<>();
 
 
 
@@ -209,6 +209,8 @@ public class BookCalendar extends AppCompatActivity {
         Gson gson = new Gson();
         String json = userPref.getString("pageLog","EMPTY");
 
+        pageLogArrayList.clear();
+
         Type type = new TypeToken<ArrayList<Dictionary_pageLog>>() {
         }.getType();
         if(!json.equals("EMPTY")){
@@ -283,6 +285,7 @@ public class BookCalendar extends AppCompatActivity {
         for(Dictionary_pageLog pageLog : pageLogArrayList){
             Date dateFromLog = dateFormat.parse(pageLog.getDate());
             if(dateFromLog.compareTo(datePicked)==0){
+                Log.d("지금 리스트의 길이가 0이어야 한다.", String.valueOf(mList.size()));
                 mList.add(pageLog);
             }
         }//전체 리스트에서 해당 날짜에 쓰인 로그만 뽑아서 모으기
@@ -403,7 +406,7 @@ public class BookCalendar extends AppCompatActivity {
         @Override
         public void decorate(DayViewFacade view) {
             view.addSpan(new StyleSpan(Typeface.BOLD));
-            view.addSpan(new RelativeSizeSpan(1.2f));
+            view.addSpan(new RelativeSizeSpan(1.1f));
 
             //view.addSpan(new ForegroundColorSpan(getColor(R.color.green)));
             //view.addSpan(new BackgroundColorSpan(getColor(R.color.myYellow)));
