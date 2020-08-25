@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,6 +19,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -34,6 +36,9 @@ public class MainHome extends AppCompatActivity {
     TextView tv_yearAndMonth;
     TextView tv_home_monthly_read_pages;
     TextView tv_home_monthly_written_notes;
+    TextView tv_yearly_goal_pages;
+    ProgressBar progressBar_home_yearly;
+    TextView tv_goal_percentage;
 
    RecyclerView recentReadingRecycler;
     Adapter_Reading adapter_reading=null;
@@ -58,18 +63,19 @@ public class MainHome extends AppCompatActivity {
         allListener();
         getTime();
 
-
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
+
         getReadingPrefToArray();
         showReadingRecycler();
         getNoteArrayFromPref();
         showNoteRecycler();
         getPageLogNumFromPref();
+        getPageGoalFromPref();
     }
 
     private void initialize() {
@@ -89,6 +95,10 @@ public class MainHome extends AppCompatActivity {
         tv_yearAndMonth = findViewById(R.id.tv_home_yearAndMonth);
         tv_home_monthly_read_pages = findViewById(R.id.tv_home_monthly_read_pages);
         tv_home_monthly_written_notes = findViewById(R.id.tv_home_monthly_written_notes);
+
+        tv_yearly_goal_pages = findViewById(R.id.tv_yearly_goal_pages);
+        progressBar_home_yearly = findViewById(R.id.progressBar_home_yearly);
+        tv_goal_percentage = findViewById(R.id.tv_goal_percentage);
 
         btn_toSetting = findViewById(R.id.btn_to_my_setting);
 
@@ -156,7 +166,7 @@ public class MainHome extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 ///////////////////////////////////세팅화면 만들고 수정 필요
-                Intent intent = new Intent(getApplicationContext(),Essay.class);
+                Intent intent = new Intent(getApplicationContext(),MySetting.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
             }
@@ -174,6 +184,18 @@ public class MainHome extends AppCompatActivity {
         tv_yearAndMonth.setText(yearAndMonth);
 
     }
+
+    //목표 페이지 가져오기
+    private void getPageGoalFromPref(){
+        int pageGaol = userPref.getInt("pageGoal",10000);
+        progressBar_home_yearly.setMax(pageGaol);
+        //프로그레스 바 최대치로 정해준다
+
+        DecimalFormat format = new DecimalFormat("###,###");
+        String formatString = format.format(pageGaol);
+        tv_yearly_goal_pages.setText(formatString+" 페이지");
+    }
+    //목표 페이지 가져오기 끝
 
 
 

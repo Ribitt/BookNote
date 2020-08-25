@@ -19,7 +19,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/MyToolTheme">
-        <activity android:name=".MySetting"></activity>
+        <activity android:name=".MySetting">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainHome" />
+
+        </activity>
         <activity android:name=".AddEssay">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
