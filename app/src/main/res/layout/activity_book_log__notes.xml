@@ -46,16 +46,35 @@
                 android:orientation="vertical">
 
 
-
-                <TextView
-                    android:id="@+id/tv_bookLog_title"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:maxLines="4"
-                    android:ellipsize="end"
-                    android:text="책 제목" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_bookLog_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:maxLines="4"
+                        android:ellipsize="end"
+                        android:text="책 제목" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"/>
+
+<!--                    <ImageView-->
+<!--                        android:id="@+id/edit_or_delete"-->
+<!--                        android:layout_width="20dp"-->
+<!--                        android:layout_height="20dp"-->
+<!--                        android:src="@drawable/ic_more"-->
+<!--                        android:tint="@color/border"/>-->
+                </LinearLayout>
+
+
 
                 <TextView
                     android:id="@+id/tv_bookLog_author"
@@ -98,10 +117,10 @@
                 android:layout_height="wrap_content"
                 android:text="페이지 기록" />
 
-            <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="서평" />
+<!--            <com.google.android.material.tabs.TabItem-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="서평" />-->
 
 
         </com.google.android.material.tabs.TabLayout>

@@ -8,16 +8,16 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <SearchView
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"/>
+<!--    <SearchView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="?attr/actionBarSize"/>-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_reading"
         android:scrollbars="vertical"
         android:scrollbarSize="5dp"
         android:scrollbarThumbVertical="@color/myYellow"
-        android:layout_marginTop="?attr/actionBarSize"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

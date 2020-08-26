@@ -269,6 +269,7 @@ public class MainHome extends AppCompatActivity {
         }
 
         tv_home_monthly_read_pages.setText(String.valueOf(pageSum));
+        progressBar_home_yearly.setProgress(pageSum);
 
     }
 

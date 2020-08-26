@@ -59,8 +59,8 @@ public class Fragment_Note extends Fragment {
 
 
     private void initialize(){
-        searchView = rootView.findViewById(R.id.searchView_note);
-        btn_sort_note = rootView.findViewById(R.id.btn_sort_note);
+       // searchView = rootView.findViewById(R.id.searchView_note);
+       // btn_sort_note = rootView.findViewById(R.id.btn_sort_note);
         btn_addNote = rootView.findViewById(R.id.btn_addNote);
 
         recyclerView = rootView.findViewById(R.id.recycler_notes);

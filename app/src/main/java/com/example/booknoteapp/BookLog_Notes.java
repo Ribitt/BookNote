@@ -98,7 +98,7 @@ public class BookLog_Notes extends AppCompatActivity  {
         Adapter_ViewPager_BookDetail adapter_viewPager = new Adapter_ViewPager_BookDetail(getSupportFragmentManager());
         vp.setAdapter(adapter_viewPager);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+       TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(vp);
 
 

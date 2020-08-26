@@ -46,7 +46,9 @@ public class Fragment_PageLog extends Fragment {
     ViewGroup rootView;
 
     TextView tv_bookmark;
-    SeekBar seekBar;
+  //
+    //
+    //  SeekBar seekBar;
 
 
     Dictionary_book bookNow;
@@ -76,8 +78,8 @@ public class Fragment_PageLog extends Fragment {
         recyclerView = rootView.findViewById(R.id.recycler_pageLog);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         btn_addLog = rootView.findViewById(R.id.btn_addLog);
-        tv_bookmark = rootView.findViewById(R.id.tv_bookLog_bookmark);
-        seekBar = rootView.findViewById(R.id.seekBar);
+      //  tv_bookmark = rootView.findViewById(R.id.tv_bookLog_bookmark);
+       // seekBar = rootView.findViewById(R.id.seekBar);
     }
 
     private void allListener() {
@@ -135,8 +137,8 @@ public class Fragment_PageLog extends Fragment {
                     adapter_pageLog = new Adapter_PageLog(mList,allList);
                     recyclerView.setAdapter(adapter_pageLog);
 
-                    tv_bookmark.setText(dialog.getEndP());
-                    seekBar.setProgress(Integer.parseInt(dialog.getEndP()),true);
+                  //  tv_bookmark.setText(dialog.getEndP());
+                   // seekBar.setProgress(Integer.parseInt(dialog.getEndP()),true);
                     saveArrayToPref();
                     dialog.dismiss();
                 }

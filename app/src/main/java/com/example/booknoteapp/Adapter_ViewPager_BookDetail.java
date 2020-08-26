@@ -18,11 +18,11 @@ public class Adapter_ViewPager_BookDetail extends FragmentPagerAdapter {
         fragmentArrayList = new ArrayList<Fragment>();
         fragmentArrayList.add(new Fragment_Note());
         fragmentArrayList.add(new Fragment_PageLog());
-        fragmentArrayList.add(new Fragment_Review());
+       // fragmentArrayList.add(new Fragment_Review());
 
         tapText.add("독서 노트");
         tapText.add("페이지 기록");
-        tapText.add("서평");
+        //tapText.add("서평");
    }
 
     @Nullable

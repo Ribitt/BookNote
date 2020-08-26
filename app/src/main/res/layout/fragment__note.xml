@@ -11,34 +11,34 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:gravity="center_vertical">-->
 
-            <SearchView
-                android:id="@+id/searchView_note"
-                android:layout_width="0dp"
-                android:layout_weight="8"
-                android:layout_height="20dp"
-                android:queryHint="노트 내용을 검색하세요"
-                android:iconifiedByDefault="false"
-                />
+<!--            <SearchView-->
+<!--                android:id="@+id/searchView_note"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_weight="8"-->
+<!--                android:layout_height="20dp"-->
+<!--                android:queryHint="노트 내용을 검색하세요"-->
+<!--                android:iconifiedByDefault="false"-->
+<!--                />-->
 
-            <Button
-                android:id="@+id/btn_sort_note"
-                android:layout_width="0dp"
-                android:layout_weight="2"
-                android:layout_height="40dp"
-                android:padding="10dp"
-                android:paddingLeft="5dp"
-                android:layout_marginRight="10dp"
-                android:drawableStart="@drawable/ic_sort_small"
-                android:drawableTint="@color/myBlack"
-                android:text="정렬"/>
+<!--            <Button-->
+<!--                android:id="@+id/btn_sort_note"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_weight="2"-->
+<!--                android:layout_height="40dp"-->
+<!--                android:padding="10dp"-->
+<!--                android:paddingLeft="5dp"-->
+<!--                android:layout_marginRight="10dp"-->
+<!--                android:drawableStart="@drawable/ic_sort_small"-->
+<!--                android:drawableTint="@color/myBlack"-->
+<!--                android:text="정렬"/>-->
 
-        </LinearLayout>
+<!--        </LinearLayout>-->
 
 
 
@@ -52,6 +52,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_notes"
         android:scrollbars="vertical"
+        android:layout_marginTop="10dp"
         android:scrollbarSize="5dp"
         android:scrollbarThumbVertical="@color/myYellow"
         android:layout_width="match_parent"
