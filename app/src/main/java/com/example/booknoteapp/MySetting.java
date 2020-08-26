@@ -9,11 +9,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -29,9 +33,14 @@ public class MySetting extends AppCompatActivity {
     SharedPreferences userPref;
     SharedPreferences.Editor userEditor;
 
+    String userEmail;
+    String NICKNAMES="nicknames";
+    String nickname;
+
 
     Toolbar toolbar;
     ActionBar actionBar;
+    Boolean isNewNick = false;
 
     LinearLayout btn_pageGoal;
     TextView btn_changeNick;
@@ -40,8 +49,6 @@ public class MySetting extends AppCompatActivity {
     TextView btn_signOut;
     TextView btn_sendDevEmail;
     TextView tv_pageGoal;
-
-
 
 
 
@@ -59,8 +66,9 @@ public class MySetting extends AppCompatActivity {
         devPref = getSharedPreferences("users",MODE_PRIVATE);
         devEditor = devPref.edit();
 
-        String userEmail = devPref.getString("currentUser","");
+        userEmail = devPref.getString("currentUser","");
         userPref = getSharedPreferences(userEmail,MODE_PRIVATE);
+        nickname = userPref.getString("nickname","");
         userEditor = userPref.edit();
 
         //////툴바 적용하기
@@ -83,6 +91,25 @@ public class MySetting extends AppCompatActivity {
     }//이니셜라이즈
 
     private void allListener(){
+
+        //닉네임 변경
+        btn_changeNick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ChangeNickname.class);
+                startActivity(intent);
+            }
+        });
+        //닉네임 변경 끝
+
+        //회원 탈퇴
+        btn_signOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                signOutDialog().show();
+            }
+        });
+        //회원 탈퇴 끝
 
         //비밀번호 변경
         btn_changePassword.setOnClickListener(new View.OnClickListener() {
@@ -132,6 +159,62 @@ public class MySetting extends AppCompatActivity {
 
     }//올 리스너 끝
 
+
+
+
+    //회원 탈퇴 다이얼로그
+    private AlertDialog.Builder signOutDialog(){
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MySetting.this);
+        dialogBuilder.setTitle("회원 탈퇴");
+        dialogBuilder.setMessage("정말 탈퇴하시겠습니까?");
+
+
+        dialogBuilder.setPositiveButton("탈퇴하기", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                //유저 이메일, 비밀번호 지우기
+                Log.d("지금 유저 이메일은 ", userEmail);
+                Log.d("지금 유저 닉네임은", userPref.getString("nickname",""));
+
+                //유저 이메일과 비밀번호 지우기
+                devEditor.remove(userEmail);
+
+                //유저 닉네임 지우기
+//                String nickname = userPref.getString("nickname","");
+                String allNicknames = devPref.getString(NICKNAMES,"");
+                allNicknames = allNicknames.replaceAll("#"+nickname,"");
+                Log.d("닉네임 전체",allNicknames);
+
+                //닉네임 지운 리스트 다시 devPref에 저장
+                devEditor.putString(NICKNAMES,allNicknames);
+
+                //혹시 자동 로그인 되어 있었다면 바꾸기
+                devEditor.putBoolean("autoLogin",false);
+
+                devEditor.commit();
+
+                dialogInterface.dismiss();
+                finish();
+                Intent intent = new Intent(getApplicationContext(), Login.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                //지금 부르는 액티비티를 제외하고 전부 죽임
+                startActivity(intent);
+
+            }
+        });
+        dialogBuilder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        return dialogBuilder;
+
+    }
+    //회원 탈퇴 다이얼로그 끝
 
     //페이지 목표 다이얼로그
     private AlertDialog.Builder pageGoalDialog(){

@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -58,8 +59,9 @@ public class Login extends AppCompatActivity {
     private void autoLogin() {
 
 
-        if(pref.getBoolean("autoLogin",true)){
+        if(pref.getBoolean("autoLogin",false)){
             //오토 로그인 설정이 되어 있으면 로그인 처리를 알아서 하고 넘어간다.
+            Log.d("지금 오토로그인 아냐?","맞다");
 
             //일단 마지막으로 로그인한 유저가 자동 로그인을 누르고 갔다는 소리기 때문에 그 유저 이메일 가져오고
             String userEmail = pref.getString("currentUser","");

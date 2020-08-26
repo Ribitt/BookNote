@@ -1,6 +1,8 @@
 package com.example.booknoteapp;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -44,6 +46,15 @@ public class ChangePassword extends AppCompatActivity {
     }
 
     private void initialize(){
+
+        //////툴바 적용하기
+        Toolbar toolbar = (Toolbar)findViewById(R.id.app_toolbar);
+        toolbar.setTitleTextColor(getResources().getColor(R.color.green));
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle("비밀번호 변경");
+
 
         devPref = getSharedPreferences("users",MODE_PRIVATE);
         devEditor = devPref.edit();

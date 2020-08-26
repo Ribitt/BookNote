@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -37,6 +38,8 @@ public class Fragment_reading extends Fragment {
     ViewGroup rootView;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
+
+    TextView tv_noBook;
 
     private ArrayList<Dictionary_book> readingBooksList = new ArrayList<>();
 
@@ -61,6 +64,7 @@ public class Fragment_reading extends Fragment {
     public void onResume() {
         super.onResume();
         getArrayFromPref();
+        showNoBook();
     }
 
     //이니셜라이즈
@@ -72,6 +76,7 @@ public class Fragment_reading extends Fragment {
         recyclerView_reading.setLayoutManager(new GridLayoutManager(getActivity(),3));
         recyclerView_reading.setAdapter(adapter_reading);
         btn_addBook = rootView.findViewById(R.id.btn_addBook);
+        tv_noBook = rootView.findViewById(R.id.tv_no_book);
 
 
         String currentEmail = this.getActivity().getSharedPreferences("users", Context.MODE_PRIVATE).getString("currentUser","");
@@ -126,6 +131,13 @@ public class Fragment_reading extends Fragment {
 
     }//올 리스너 끝
 
+    private void showNoBook(){
+        if(readingBooksList.size()==0){
+            tv_noBook.setVisibility(View.VISIBLE);
+        }else if(readingBooksList.size()>0){
+            tv_noBook.setVisibility(View.GONE);
+        }
+    }
 
     private void getArrayFromPref() {
         Gson gson = new Gson();

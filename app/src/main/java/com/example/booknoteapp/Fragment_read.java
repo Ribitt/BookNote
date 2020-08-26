@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -39,6 +40,8 @@ public class Fragment_read extends Fragment {
     ViewGroup rootView;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
+    TextView tv_noBook;
+
 
     private ArrayList<Dictionary_book> readBooksList = new ArrayList<>();
 
@@ -73,7 +76,7 @@ public class Fragment_read extends Fragment {
         String currentEmail = this.getActivity().getSharedPreferences("users", Context.MODE_PRIVATE).getString("currentUser","");
         pref = this.getActivity().getSharedPreferences(currentEmail,this.getActivity().MODE_PRIVATE);
         editor = pref.edit();
-
+        tv_noBook = rootView.findViewById(R.id.tv_no_book);
     }
     //이니셜라이즈 끝끝
 
@@ -124,12 +127,21 @@ public class Fragment_read extends Fragment {
 
     }//올 리스너 끝
 
+
     @Override
     public void onResume() {
         super.onResume();
         getPrefToArray();
+        showNoBook();
     }
 
+    private void showNoBook(){
+        if(readBooksList.size()==0){
+            tv_noBook.setVisibility(View.VISIBLE);
+        }else if(readBooksList.size()>0){
+            tv_noBook.setVisibility(View.GONE);
+        }
+    }
 //    private void saveArrayToPref(ArrayList<Dictionary_read> arrayList) {
 //        Gson gson = new Gson();
 //        String json = gson.toJson(arrayList);

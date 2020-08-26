@@ -40,9 +40,10 @@ public class MainHome extends AppCompatActivity {
     ProgressBar progressBar_home_yearly;
     TextView tv_goal_percentage;
 
-   RecyclerView recentReadingRecycler;
+     RecyclerView recentReadingRecycler;
     Adapter_Reading adapter_reading=null;
-    ArrayList<Dictionary_book> readingList;
+    ArrayList<Dictionary_book> readingList=new ArrayList<>();
+    //초기화를 해두지 않은 채로(null) 어댑터에 보내지면 오류가 난다.
 
     RecyclerView recentNoteRecycler;
     Adapter_NoteForHome adapter_note= null;
@@ -76,6 +77,7 @@ public class MainHome extends AppCompatActivity {
         showNoteRecycler();
         getPageLogNumFromPref();
         getPageGoalFromPref();
+        setNick();
     }
 
     private void initialize() {
@@ -87,8 +89,7 @@ public class MainHome extends AppCompatActivity {
         String userEmail = userPref.getString("currentUser","");
         //그 유저 이메일이 패키지 이름인 된 저장소를 불러온다.
         this.userPref = getSharedPreferences(userEmail,MODE_PRIVATE);
-        //저장되어있는 닉네임을 불러온다
-        String nick = this.userPref.getString("nickname","");
+
         userEditor = this.userPref.edit();
 
         nickname = findViewById(R.id.tv_home_nickname);
@@ -114,7 +115,7 @@ public class MainHome extends AppCompatActivity {
         recentReadingRecycler = findViewById(R.id.recycler_reading);
         recentNoteRecycler = findViewById(R.id.recycler_recent_notes);
 
-        nickname.setText(nick);
+
 
     }//이니셜라이징 끝
 
@@ -173,6 +174,12 @@ public class MainHome extends AppCompatActivity {
         });
 
     }//올리스너 끝
+
+    private void setNick(){
+        //저장되어있는 닉네임을 불러온다
+        String nick = this.userPref.getString("nickname","");
+        nickname.setText(nick);
+    }
 
 
     //현재시간 가져오는 메소드

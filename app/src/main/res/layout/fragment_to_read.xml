@@ -16,6 +16,12 @@
         android:scrollbarThumbVertical="@color/myYellow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/tv_no_book"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="책장이 비어있습니다. +버튼을 눌러 책을 추가해보세요"/>
 
 
     <Button
