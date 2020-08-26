@@ -45,8 +45,8 @@ public class MainHome extends AppCompatActivity {
     ArrayList<Dictionary_book> readingList;
 
     RecyclerView recentNoteRecycler;
-    Adapter_NoteForHome adapter_note=null;
-    ArrayList<Dictionary_note> noteArrayList;
+    Adapter_NoteForHome adapter_note= null;
+    ArrayList<Dictionary_note> noteArrayList=new ArrayList<>();
 
     String yearAndMonth;
 
@@ -199,7 +199,7 @@ public class MainHome extends AppCompatActivity {
 
 
 
-    //현재시간 가져오는 메소드 끝
+    //리딩 어레이를 프레프에서 가져오기
     private void getReadingPrefToArray() {
         Gson gson = new Gson();
         String json = userPref.getString("reading","EMPTY");
@@ -211,6 +211,7 @@ public class MainHome extends AppCompatActivity {
 
     }
 
+    //노트 어레이를 프레프에서 가져오기
     private void getNoteArrayFromPref() {
         Gson gson = new Gson();
 //       //노트 비우기
@@ -222,10 +223,26 @@ public class MainHome extends AppCompatActivity {
         String json = userPref.getString("note","EMPTY");
         Type type = new TypeToken<ArrayList<Dictionary_note>>() {
         }.getType();
+
+        ArrayList<Dictionary_note> allNoteList = new ArrayList<>();
         if(!json.equals("EMPTY")){
-            noteArrayList= gson.fromJson(json,type);
+            allNoteList= gson.fromJson(json,type);
         }
-        tv_home_monthly_written_notes.setText(String.valueOf(noteArrayList.size()));
+        tv_home_monthly_written_notes.setText(String.valueOf(allNoteList.size()));
+        //전체 노트 개수 쓰기
+
+        noteArrayList.clear();
+        //이전에 받았던 목록은 지워준다.
+
+        for(int i=0; i<allNoteList.size(); i++){
+            noteArrayList.add(allNoteList.get(i));
+            //노트 리스트에 노트 전체를 순서대로 넣는다
+            if(i>8){
+                //10개까지만 넣는다.
+                break;
+            }
+        }
+
     }
 
     private void getPageLogNumFromPref(){

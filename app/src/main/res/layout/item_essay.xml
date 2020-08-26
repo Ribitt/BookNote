@@ -168,6 +168,7 @@
             android:ellipsize="end"/>
 
 
+
         <TextView
             android:id="@+id/tv_date"
             android:layout_width="match_parent"
