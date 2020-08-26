@@ -468,28 +468,31 @@ public class AddBook extends AppCompatActivity {
             //진행하지 마세요
         }
 
-
         if(requestCode==PICK_FROM_ALBUM){
             //사진 uri를 가져다가 절대경로를 추출하는 작업을 끝내면 절대경로를 스트링으로 반환한다.
-            getPictureFromGallery(data.getData());
-
+            currentPhotoPath = getRealPathFromURI(data.getData());
         }else if(requestCode==PICK_FROM_CAMERA){
 
-            getPictureFromPhoto();
-            makePictureSmallAndSet();
-
         }
-        // rotateBitmap();
+        setPicture();
 
     }
 
-    private void getPictureFromGallery(Uri imgUri){
-        String imagePath = getRealPathFromURI(imgUri);
-        //uri를 가지고 사진의 절대경로를 가져온다
+    private void resizeBitmap(Bitmap bitmap){
+        //사진 들어갈 자리 크기를 구한다
+        int targetW = imageV_addBook_addBookCover.getWidth();
+        int targetH = imageV_addBook_addBookCover.getHeight();
+
+        coverBitmap = Bitmap.createScaledBitmap(bitmap, targetW,targetH,true);
+    }
+
+
+    private void setPicture(){
+        Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath);
 
         ExifInterface exif = null;
         try {
-            exif = new ExifInterface(imagePath);
+            exif = new ExifInterface(currentPhotoPath);
         }catch (IOException e){
             e.printStackTrace();
         } //이미지의 회전값을 가져온다
@@ -498,14 +501,10 @@ public class AddBook extends AppCompatActivity {
         //얼마나 돌려야하는지 값을 받아온다.
         int exifDegree = exifOrientationToDegrees(exifOrientation);
 
-        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);// 경로를 통해 비트맵으로 이미지를 전환한다.
         coverBitmap = rotateBitmap(bitmap,exifDegree);//이미지를 돌려서 저장한다.
+        resizeBitmap(coverBitmap); //이미지를 줄인다
         imageV_addBook_addBookCover.setImageBitmap(coverBitmap);  //제대로 돌린 이미지를 이미지뷰에 세팅한다.
         tv_addBookCover.setVisibility(View.INVISIBLE); //이미지 추가 글씨는 없앤다.
-
-    }
-
-    private void getPictureFromPhoto(){
 
     }
 
@@ -575,16 +574,6 @@ public class AddBook extends AppCompatActivity {
 
     //어레이리스트 쉐어드에 저장하기 끝
 
-  
-
-
-
-
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
-
-    }
 
 
     /////사진찍기
@@ -651,7 +640,7 @@ public class AddBook extends AppCompatActivity {
         return imageFile;
     }
 
-    //카메라에서 찍은 사진 저장하기
+    //카메라에서 찍은 사진경로 저장하기
 
 
 
