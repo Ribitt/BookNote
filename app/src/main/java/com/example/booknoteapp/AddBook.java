@@ -23,6 +23,8 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -302,12 +304,53 @@ public class AddBook extends AppCompatActivity {
         //읽기 시작한 날 리스너
 
 
+        //이미지 추가 버튼 눌렀을 때
+        imageV_addBook_addBookCover.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
 
+                        //클릭하면 배경 사진이 바뀌고 텍스트는 없어짐
+//                        btn_addBook_addBookCover.setBackground(getDrawable(R.drawable.book_jieun));
+//                        btn_addBook_addBookCover.setText("");
+
+
+                        //카메라 불러오는 메소드
+                        camGalleryPermissionCheck(); //카메라,앨범 권한이 승인돼있는지 확인하는 메소드
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(AddBook.this);
+
+                        builder.setTitle("이미지 추가")
+                                .setItems(cameraOrGallery, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        switch(i) {
+                                            case 0: //사진찍기인 경우
+                                                takePicture();
+
+                                                break;
+                                            case 1: //갤러리에서 불러오기인 경우
+
+                                                Intent getImgIntent = new Intent();
+                                                getImgIntent.setAction(Intent.ACTION_PICK);
+                                                getImgIntent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                                getImgIntent.setType("image/*");
+                                                startActivityForResult(getImgIntent,PICK_FROM_ALBUM);
+                                                break;
+                                        }
+
+                                    }
+                                });
+
+                        AlertDialog imagePopUp = builder.create();
+                        imagePopUp.show();
+                    }
+                }
+        );
 
 
 
     }//이벤트 리스너 끝
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -340,7 +383,7 @@ public class AddBook extends AppCompatActivity {
                 }else{
                     isAuthor= true;
                 }
-             ////////////////////////////////////////////작가와 저자를 모두 입력했는지 확인하기 위해 판별함
+                ////////////////////////////////////////////작가와 저자를 모두 입력했는지 확인하기 위해 판별함
 
                 if(isTitle){
 
@@ -348,41 +391,41 @@ public class AddBook extends AppCompatActivity {
                         Intent intent = new Intent(getApplicationContext(), DrawerTap.class);
 
                         //책장 상태에 따라서 책 리스트를 가져온다 (읽은/읽을/읽는 중)
-                            getPrefToArray();
+                        getPrefToArray();
 
-                            //공통으로 꼭 들어가야 할 작가와 제목을 넣어준다
-                            Dictionary_book dictionary_book = new Dictionary_book(status,et_title.getText().toString(),et_author.getText().toString());
-                            //책 커버 이미지가 있다면 이미지를 넣어준다.
-                            if(coverBitmap!=null){
-                                dictionary_book.setBookCover(coverBitmap);
-                            }
-                            dictionary_book.setPageNum(et_page.getText().toString());
-                            dictionary_book.setPublisher(et_publisher.getText().toString());
+                        //공통으로 꼭 들어가야 할 작가와 제목을 넣어준다
+                        Dictionary_book dictionary_book = new Dictionary_book(status,et_title.getText().toString(),et_author.getText().toString());
+                        //책 커버 이미지가 있다면 이미지를 넣어준다.
+                        if(coverBitmap!=null){
+                            dictionary_book.setBookCover(coverBitmap);
+                        }
+                        dictionary_book.setPageNum(et_page.getText().toString());
+                        dictionary_book.setPublisher(et_publisher.getText().toString());
 
-                            //각 상태별로 다양한 내용을 더 넣어준다.
-                            if(reading){
-                                 dictionary_book.setStartDate(tv_addBook_read_startDate.getText().toString());
+                        //각 상태별로 다양한 내용을 더 넣어준다.
+                        if(reading){
+                            dictionary_book.setStartDate(tv_addBook_read_startDate.getText().toString());
 
-                            }else if(read) {
-                                dictionary_book.setStartDate(tv_addBook_read_startDate.getText().toString());
-                                dictionary_book.setFinishedDate(tv_addBook_read_finishDate.getText().toString());
-                                dictionary_book.setRating(rating_addBook_read.getRating());
-                                dictionary_book.setReview( et_addBook_read_ALineReview.getText().toString());
+                        }else if(read) {
+                            dictionary_book.setStartDate(tv_addBook_read_startDate.getText().toString());
+                            dictionary_book.setFinishedDate(tv_addBook_read_finishDate.getText().toString());
+                            dictionary_book.setRating(rating_addBook_read.getRating());
+                            dictionary_book.setReview( et_addBook_read_ALineReview.getText().toString());
 
-                            }else if(interested){
+                        }else if(interested){
 
-                                dictionary_book.setMemo(et_addBook_interested_memo.getText().toString());
-                            }
+                            dictionary_book.setMemo(et_addBook_interested_memo.getText().toString());
+                        }
 
-                            //추가할 내용을 다 더해준 리스트를 북리스트에 추가한 뒤에
-                            bookList.add(0,dictionary_book);
-                            //쉐어드에 저장해준다.
-                            saveBookArrayToPref(bookList);
-                            //이제 책 추가 액티비티는 종료
-                            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                            startActivity(intent);
-                            finish();
-                            ///////////////////////////////////////////////////////////////////////////////////////////////////책 저장하기 완료
+                        //추가할 내용을 다 더해준 리스트를 북리스트에 추가한 뒤에
+                        bookList.add(0,dictionary_book);
+                        //쉐어드에 저장해준다.
+                        saveBookArrayToPref(bookList);
+                        //이제 책 추가 액티비티는 종료
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        startActivity(intent);
+                        finish();
+                        ///////////////////////////////////////////////////////////////////////////////////////////////////책 저장하기 완료
 
                     }else{
                         Toast.makeText(this, "작가를 입력해주세요", Toast.LENGTH_LONG).show();
@@ -398,10 +441,73 @@ public class AddBook extends AppCompatActivity {
             }
 
 
-      }
+        }
         return super.onOptionsItemSelected(item);
     }
 
+
+    ///사진찍기 / 갤러리에서 사진 받아오기 인텐트 결과값 처리하기
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode!= Activity.RESULT_OK) {
+            //예외상황 발생 처리 ex) 이동했지만 선택하지 않고 뒤로 간 경우, 카메라로 촬영 후 저장하지 않고 뒤로가기를 누른 경우.
+            //사진 촬영중 취소하면 tempFile이 빈 섬네일로 저장되기 때문에 삭제해줘야한다.
+            Toast.makeText(this,"취소되었습니다.", Toast.LENGTH_LONG).show();
+
+            if(tempFile!=null){
+                if(tempFile.exists()){
+                    if(tempFile.delete()){
+
+                        // Toast.makeText(this,"삭제성공", Toast.LENGTH_LONG).show();
+                        tempFile=null;
+                    }
+                }
+            }
+            return;
+            //진행하지 마세요
+        }
+
+
+        if(requestCode==PICK_FROM_ALBUM){
+            //사진 uri를 가져다가 절대경로를 추출하는 작업을 끝내면 절대경로를 스트링으로 반환한다.
+            getPictureFromGallery(data.getData());
+
+        }else if(requestCode==PICK_FROM_CAMERA){
+
+            getPictureFromPhoto();
+            makePictureSmallAndSet();
+
+        }
+        // rotateBitmap();
+
+    }
+
+    private void getPictureFromGallery(Uri imgUri){
+        String imagePath = getRealPathFromURI(imgUri);
+        //uri를 가지고 사진의 절대경로를 가져온다
+
+        ExifInterface exif = null;
+        try {
+            exif = new ExifInterface(imagePath);
+        }catch (IOException e){
+            e.printStackTrace();
+        } //이미지의 회전값을 가져온다
+
+        int exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+        //얼마나 돌려야하는지 값을 받아온다.
+        int exifDegree = exifOrientationToDegrees(exifOrientation);
+
+        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);// 경로를 통해 비트맵으로 이미지를 전환한다.
+        coverBitmap = rotateBitmap(bitmap,exifDegree);//이미지를 돌려서 저장한다.
+        imageV_addBook_addBookCover.setImageBitmap(coverBitmap);  //제대로 돌린 이미지를 이미지뷰에 세팅한다.
+        tv_addBookCover.setVisibility(View.INVISIBLE); //이미지 추가 글씨는 없앤다.
+
+    }
+
+    private void getPictureFromPhoto(){
+
+    }
 
     //정말 나가시겠습니까?
     private void alert() {
@@ -478,49 +584,6 @@ public class AddBook extends AppCompatActivity {
     protected void onPostResume() {
         super.onPostResume();
 
-        //이미지 추가 버튼 눌렀을 때
-        imageV_addBook_addBookCover.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        //클릭하면 배경 사진이 바뀌고 텍스트는 없어짐
-//                        btn_addBook_addBookCover.setBackground(getDrawable(R.drawable.book_jieun));
-//                        btn_addBook_addBookCover.setText("");
-
-
-                        //카메라 불러오는 메소드
-                        camGalleryPermissionCheck(); //카메라,앨범 권한이 승인돼있는지 확인하는 메소드
-
-                        AlertDialog.Builder builder = new AlertDialog.Builder(AddBook.this);
-
-                        builder.setTitle("이미지 추가")
-                                .setItems(cameraOrGallery, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        switch(i) {
-                                            case 0: //사진찍기인 경우
-                                                takePicture();
-
-
-                                                break;
-                                            case 1: //갤러리에서 불러오기인 경우
-
-                                                Intent getImgIntent = new Intent();
-                                                getImgIntent.setAction(Intent.ACTION_PICK);
-                                                getImgIntent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-                                                startActivityForResult(getImgIntent,PICK_FROM_ALBUM);
-                                                break;
-                                        }
-
-                                    }
-                                });
-
-                        AlertDialog imagePopUp = builder.create();
-                        imagePopUp.show();
-                    }
-                }
-        );
     }
 
 
@@ -576,82 +639,58 @@ public class AddBook extends AppCompatActivity {
         if(!storageDir.exists())storageDir.mkdirs();
 
         //빈 파일 생성
-        File image = File.createTempFile(
+        File imageFile = File.createTempFile(
                 imageFileName,
                 ".jpg",
                 storageDir
         );
 
-        currentPhotoPath = image.getAbsolutePath();
+        currentPhotoPath = imageFile.getAbsolutePath();
         //파일에 이름이랑 양식이랑 넣어서 반환
-        return image;
+
+        return imageFile;
     }
 
     //카메라에서 찍은 사진 저장하기
 
 
-    ///인텐트에 정보가 포함되어 넘어온다
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode!= Activity.RESULT_OK) {
-            //예외상황 발생 처리 ex) 이동했지만 선택하지 않고 뒤로 간 경우, 카메라로 촬영 후 저장하지 않고 뒤로가기를 누른 경우.
-            //사진 촬영중 취소하면 tempFile이 빈 섬네일로 저장되기 때문에 삭제해줘야한다.
-            Toast.makeText(this,"취소되었습니다.", Toast.LENGTH_LONG).show();
 
-            if(tempFile!=null){
-             if(tempFile.exists()){
-                 if(tempFile.delete()){
 
-                    // Toast.makeText(this,"삭제성공", Toast.LENGTH_LONG).show();
-                     tempFile=null;
-                 }
-             }
-            }
-            return;
-            //진행하지 마세요
+    private String getRealPathFromURI(Uri photoUri){
+        int column_index=0;
+        String[] proj = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getContentResolver().query(photoUri, proj,null,null,null);
+        if(cursor.moveToFirst()){
+            column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
         }
-
-
-        if(requestCode==PICK_FROM_ALBUM){
-
-            //갤러리에서 선택한 이미지의 Uri를 받아온다.
-            Uri photoUri = data.getData();
-
-            //커서를 통해 스키마를 content://에서 file://로 바꿔준다. 사진이 저장된 절대경로를 받아오는 과정이다.
-            Cursor cursor=null;
-            try{
-                String[] proj = {MediaStore.Images.Media.DATA};
-
-                assert photoUri !=null;
-                cursor = getContentResolver().query(photoUri, proj,null,null,null);
-
-                assert cursor!=null;
-                int columm_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-
-                cursor.moveToFirst();
-
-                //여기에 이미지를 저장한다.
-                tempFile = new File(cursor.getString(columm_index));
-                currentPhotoPath = tempFile.getAbsolutePath();
-
-            }finally {
-
-            }
-            setPic();
-
-        }else if(requestCode==PICK_FROM_CAMERA){
-
-            setPic();
-
-        }
+        return cursor.getString(column_index);
     }
 
+    private int exifOrientationToDegrees(int exifOrientation){
+        //사진의 회전값 가져오기. 찍은 방향대로 이미지뷰에 처리 되어야 한다.
+    if(exifOrientation== ExifInterface.ORIENTATION_ROTATE_90){
+        return 90;
+    }else if(exifOrientation == ExifInterface.ORIENTATION_ROTATE_180){
+        return 180;
+    }else if(exifOrientation == ExifInterface.ORIENTATION_ROTATE_270){
+        return 270;
+    }return 0;
 
+    }
 
+    private Bitmap rotateBitmap(Bitmap bitmapSrc, float degree){
+
+        //Matrix객체 생성
+        Matrix matrix = new Matrix();
+        //회전 각도 셋팅
+        matrix.postRotate(degree);
+        //이미지와 Matrix를 세팅해서 Bitmap객체 생성
+        return Bitmap.createBitmap(bitmapSrc,0,0,bitmapSrc.getWidth(),bitmapSrc.getHeight(),matrix,true);
+
+    }
 
     //찍거나 갤러리에서 가져온 사진 이미지 크기 줄여서 넣기
-    private void setPic(){
+    private void makePictureSmallAndSet(){
         //사진 들어갈 자리 크기를 구한다
         int targetW = imageV_addBook_addBookCover.getWidth();
         int targetH = imageV_addBook_addBookCover.getHeight();
@@ -660,7 +699,7 @@ public class AddBook extends AppCompatActivity {
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
 
-        BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+        //BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
         int photoW = bmOptions.outWidth;
         int photoH = bmOptions.outHeight;
 
@@ -672,10 +711,17 @@ public class AddBook extends AppCompatActivity {
         bmOptions.inSampleSize = scaleFactor;
         bmOptions.inPurgeable=true;
 
+
         Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+        //이미지 줄이기
+
         imageV_addBook_addBookCover.setImageBitmap(bitmap);
+        //사진 커버 자리에 지금 비트맵 집어 넣기
         tv_addBookCover.setText("");
+        // 이미지 추가라는 글씨 없애기
+
         coverBitmap = bitmap;
+        //사진 딕셔너리에 저장될 커버 비트맵에 해당 이미지 저장하기.
 
     }
     //찍어온 사진 이미지 크기 줄여서 넣기
