@@ -43,6 +43,8 @@ public class MySetting extends AppCompatActivity {
 
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +84,25 @@ public class MySetting extends AppCompatActivity {
 
     private void allListener(){
 
+        //비밀번호 변경
+        btn_changePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ChangePassword.class);
+                startActivity(intent);
+            }
+        });
+        //비밀번호 변경 끝
+
+        //로그아웃 하기
+        btn_logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                logOutDialog().show();
+            }
+        });
+        //로그아웃 하기 끝
+
         //목표 페이지 변경하기
         btn_pageGoal.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,6 +132,8 @@ public class MySetting extends AppCompatActivity {
 
     }//올 리스너 끝
 
+
+    //페이지 목표 다이얼로그
     private AlertDialog.Builder pageGoalDialog(){
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MySetting.this);
@@ -148,6 +171,43 @@ public class MySetting extends AppCompatActivity {
         return dialogBuilder;
 
     }
+    //페이지 목표 다이얼로그 끝
+
+    //로그아웃 다이얼로그
+    private AlertDialog.Builder logOutDialog(){
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MySetting.this);
+        dialogBuilder.setTitle("로그아웃");
+        dialogBuilder.setMessage("로그아웃 하시겠습니까?");
+
+        final EditText et = new EditText(MySetting.this);
+
+        dialogBuilder.setPositiveButton("로그아웃", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                devEditor.putBoolean("autoLogin",false);
+                devEditor.commit();
+                //개발자 프레프에 자동로그인 설정을 없애기
+
+                dialogInterface.dismiss();
+                finish();
+                Intent intent = new Intent(getApplicationContext(), Login.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                //지금 부르는 액티비티를 제외하고 전부 죽임
+                startActivity(intent);
+            }
+        });
+        dialogBuilder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        return dialogBuilder;
+
+    }//로그아웃 다이얼로그 끝
 
 
 }
