@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -78,6 +80,7 @@ public class Adapter_Note extends RecyclerView.Adapter<Adapter_Note.noteViewHold
         TextView pageNum;
         TextView date;
         TextView note;
+        TextView tv_see_more;
         TextView quote;
         ImageView edit_or_delete;
         CharSequence[] list_edit_or_delete = {"노트 수정하기","삭제하기"};
@@ -90,8 +93,40 @@ public class Adapter_Note extends RecyclerView.Adapter<Adapter_Note.noteViewHold
             pageNum = itemView.findViewById(R.id.tv_note_pageNum);
             date = itemView.findViewById(R.id.tv_note_date);
             note = itemView.findViewById(R.id.tv_note_userNote);
+            tv_see_more = itemView.findViewById(R.id.tv_see_more);
             edit_or_delete = itemView.findViewById(R.id.edit_or_delete);
             quote = itemView.findViewById(R.id.tv_note_quote);
+
+
+            //내용 길어지면 더보기 접기
+            final int maxLine = note.getMaxLines();
+
+            note.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    Log.d("지금 에세이 내용 줄 수는?", String.valueOf(note.getLineCount()));
+                    if(note.getLineCount()>=maxLine){
+                        tv_see_more.setVisibility(View.VISIBLE);
+                    }else{
+                        tv_see_more.setVisibility(View.GONE);
+                    }
+                }
+            });
+
+            tv_see_more.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(tv_see_more.getText().toString().equals("더보기")) {
+                        note.setMaxLines(Integer.MAX_VALUE);
+                        tv_see_more.setText("접기");
+                    }else{
+                        note.setMaxLines(maxLine);
+                        tv_see_more.setText("더보기");
+                    }
+                }
+            });
+            //내용 길어지면 더보기 접기 끝
+
 
             ////수정삭제 클릭 리스너
             edit_or_delete.setOnClickListener(new View.OnClickListener() {

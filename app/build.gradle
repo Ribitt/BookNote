@@ -50,6 +50,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.2'
 
     implementation 'com.github.prolificinteractive:material-calendarview:1.4.3'
+    implementation 'com.github.AhmMhd:SeeMoreTextView-Android:1.0.0'
 
 
 

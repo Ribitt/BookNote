@@ -106,6 +106,17 @@
             android:maxLines="4"
             android:ellipsize="end"
             android:text="여기에 메모 내용이 들어갑니다. 아 참으로 재미있는 책이었다. 울룰루 뚤루루 "></TextView>
+        <TextView
+            android:id="@+id/tv_see_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="더보기"
+            android:visibility="gone"
+            android:padding="5dp"
+            android:textStyle="bold"
+            android:textColor="@color/border"
+            />
+
 
         <TextView
             android:id="@+id/tv_note_date"

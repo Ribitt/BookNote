@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -62,6 +64,7 @@ public class Adapter_NoteForHome extends RecyclerView.Adapter<Adapter_NoteForHom
         holder.title.setText(dic.dictionary_book.getTitle());
 
 
+
     }
 
     @Override
@@ -78,6 +81,8 @@ public class Adapter_NoteForHome extends RecyclerView.Adapter<Adapter_NoteForHom
         ImageView edit_or_delete;
         TextView title;
         CardView cardView;
+        TextView tv_see_more;
+
 
 
 
@@ -93,6 +98,55 @@ public class Adapter_NoteForHome extends RecyclerView.Adapter<Adapter_NoteForHom
             edit_or_delete.setVisibility(View.GONE);
             quote = itemView.findViewById(R.id.tv_note_quote);
             cardView = itemView.findViewById(R.id.cardView_note);
+            tv_see_more = itemView.findViewById(R.id.tv_see_more);
+
+
+            //뷰 클릭하면 책 상세로 넘어가기
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d("클릭되는지 여기까지 오는지 확인","됨?");
+
+                    Intent intent = new Intent(mContext,BookLog_Notes.class);
+
+                    Dictionary_book bookNow = mList.get(getAdapterPosition()).dictionary_book;
+                    saveBookDictToPref(bookNow);
+
+                    mContext.startActivity(intent);
+
+                }
+            });
+
+            //북 커버 클릭 리스너 끝
+
+            //내용 길어지면 더보기 접기
+            final int maxLine = note.getMaxLines();
+
+            note.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    Log.d("지금 에세이 내용 줄 수는?", String.valueOf(note.getLineCount()));
+                    if(note.getLineCount()>=maxLine){
+                        tv_see_more.setVisibility(View.VISIBLE);
+                    }else{
+                        tv_see_more.setVisibility(View.GONE);
+                    }
+                }
+            });
+
+            tv_see_more.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(tv_see_more.getText().toString().equals("더보기")) {
+                        note.setMaxLines(Integer.MAX_VALUE);
+                        tv_see_more.setText("접기");
+                    }else{
+                        note.setMaxLines(maxLine);
+                        tv_see_more.setText("더보기");
+                    }
+                }
+            });
+            //내용 길어지면 더보기 접기 끝
 
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -103,9 +157,16 @@ public class Adapter_NoteForHome extends RecyclerView.Adapter<Adapter_NoteForHom
 
 
 
+
         }//뷰홀더 생성자 끝
     }//뷰홀더 끝
 
-
+    //지금 어레이를 쉐어드에 저장하기
+    private void saveBookDictToPref(Dictionary_book bookNow) {
+        Gson gson = new Gson();
+        String json = gson.toJson(bookNow);
+        userEditor.putString("bookNow",json);
+        userEditor.apply();
+    }
 
 }
