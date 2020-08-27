@@ -35,6 +35,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 public class BookCalendar extends AppCompatActivity {
@@ -285,22 +287,93 @@ public class BookCalendar extends AppCompatActivity {
         for(Dictionary_pageLog pageLog : pageLogArrayList){
             Date dateFromLog = dateFormat.parse(pageLog.getDate());
             if(dateFromLog.compareTo(datePicked)==0){
-                Log.d("지금 리스트의 길이가 0이어야 한다.", String.valueOf(mList.size()));
+                //Log.d("지금 리스트의 길이가 0이어야 한다.", String.valueOf(mList.size()));
                 mList.add(pageLog);
             }
         }//전체 리스트에서 해당 날짜에 쓰인 로그만 뽑아서 모으기
 
+        Collections.sort(mList);
+        //이름순으로 정렬된다.
+        Log.d("리스트 사이즈", String.valueOf(mList.size()));
+        ArrayList<Dictionary_pageLog> sortedList = new ArrayList<>();
+
         for(int j=0; j<mList.size(); j++){
-            for(int i=j+1; i<mList.size();i++){
-                if(mList.get(j).getDictionary_book().getTitle().equals(mList.get(i).getDictionary_book().getTitle())){
-                    mList.get(j).readPageNum =  mList.get(i).readPageNum+mList.get(i).readPageNum;
-                    mList.remove(i);
+            String mListTitle = mList.get(j).getDictionary_book().getTitle();
+            //이 책의 제목은 이거다
+            if(sortedList.size()==0){
+                //리스트에 아직 비교할 게 아무 것도 없다면
+                sortedList.add(mList.get(j));
+                //이 친구를 더해줘라
+                Log.d("솔티드 리스트 첫번재 친구 ", sortedList.get(0).getDictionary_book().getTitle());
+            }else{
+                int sortedSize = sortedList.size();
+                int positionInSorted =0;
+                Boolean isThere=false;
+                for(int i=0; i<sortedSize; i++){
+                    String sortedTitle = sortedList.get(i).getDictionary_book().getTitle();
+                    //만약 첫번째 책이랑 제목이 같으면
+                    if(sortedTitle.equals(mListTitle)){
+                        isThere=true;
+                        Log.d("같은 책이다", String.valueOf(j));
+                        positionInSorted = i;
+                        //같은 책이 있는 걸 아는 순간 반복문 더 돌리지 않고 끝낸다. 솔티드 안에서 몇번째 책인지 저장한다.
+                        break;
+                    }else{
+                        isThere=false;
+                        Log.d("같은 책이 아니다", String.valueOf(j));
+                    }
                 }
+
+                if(isThere){
+                    Log.d("저 리스트 안에 같은 책이 있다", String.valueOf(j));
+                    //책을 추가하지 않고 읽은 페이지 숫자만 더해준다
+                    sortedList.get(positionInSorted).readPageNum += mList.get(j).readPageNum;
+                }else{
+                    Log.d("없어 그딴거", String.valueOf(j));
+                    //새롭게 책을 추가한다.
+                    sortedList.add(mList.get(j));
+                }
+
+
+                //하나라도 같은 제목의 책이 있으면을 어떻게 구하지
+
+//                sortedList.get(0).readPageNum += mList.get(j).readPageNum;
+//                sortedList.add(mList.get(j));
             }
-        }//같은 책은 하나로 만들기
+
+        }
 
 
-        Adapter_LogOnCalendar adapter_logOnCalendar = new Adapter_LogOnCalendar(mList);
+
+//        Log.d("지금 리스트의 길이, 4여야 한다", String.valueOf(mList.size()));
+//        for(Dictionary_pageLog pageLog : mList){
+//            Log.d("책 제목이랑 페이지 수 ", pageLog.getDictionary_book().getTitle()+","+String.valueOf(pageLog.readPageNum));
+//        }
+//
+//        int repeat = mList.size();
+//        //배열 삭제하기 시작하면 리스트 사이즈는 점점 작아져서 끝까지 못돈다.
+//        //삭제하기 전 사이즈를 저장해둔다.
+//
+//        for(int i=1; i<repeat; i++){
+//
+//            String firstBookTitle = mList.get(0).getDictionary_book().getTitle();
+//            String compareBookTitle = mList.get(1).getDictionary_book().getTitle();
+//            if(compareBookTitle.equals(firstBookTitle)){
+//                //두 번째부터 마지막 책까지 첫번째 책이랑 이름이 같으면 합치고 지운다
+//                Log.d("제목이 같다","같다" + String.valueOf(mList.get(1).readPageNum)); //총 3번 나와야 함 2번 나오네
+//                mList.get(0).readPageNum = mList.get(0).readPageNum + mList.get(1).readPageNum;
+//                mList.remove(1);
+//            }else{
+//                Log.d("통과한 로그 제목이랑 페이지 수 ", mList.get(i).getDictionary_book().getTitle()+","+String.valueOf(mList.get(i).readPageNum));
+//            }
+//        }
+
+//        Gson gson = new Gson();
+//        String json = gson.toJson(mList);
+//        Log.d("책이 왜 같이 안나오지 ", json);
+
+
+        Adapter_LogOnCalendar adapter_logOnCalendar = new Adapter_LogOnCalendar(sortedList);
         recyclerView.setAdapter(adapter_logOnCalendar);
         //만든 리스트로 리사이클러뷰 띄우기
 
@@ -321,6 +394,7 @@ public class BookCalendar extends AppCompatActivity {
 
 
     }
+
 
     private void getLogOfThisDay(Date datePicked) throws ParseException {
 
@@ -433,3 +507,27 @@ public class BookCalendar extends AppCompatActivity {
 
 
 }
+
+//    //리스트에 하나라도 있다면 비교를 시작하자
+//    Boolean isThereThisBook;
+//    int positionInSorted=0;
+//
+//                        for(int i=0; i<sortedList.size(); i++){
+//
+//        if(mListTitle.equals(sortedTitle)){
+//        isThereThisBook = true;
+//        positionInSorted = i;
+//        break;
+//        //겹치는 책이 있으면 트루값 반환, 같은 책이 솔티드에서 몇번째에 있는지 반환
+//        }else{
+//        isThereThisBook =false;
+//        }//겹치는 책이 없으면 폴스값 반환
+//
+//        if(!isThereThisBook){
+//        //겹치는 책이 하나도 없다면 지금 책을 솔티드에 추가
+//        sortedList.add(mList.get(j));
+//        }else{
+//        //겹치는 책이 하나라도 있다면 그 위치에 페이지 넘버를 더해주고 끝
+//        sortedList.get(positionInSorted).readPageNum += mList.get(j).readPageNum;
+//        }
+//        }

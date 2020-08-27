@@ -2,7 +2,7 @@ package com.example.booknoteapp;
 
 import java.io.Serializable;
 
-public class Dictionary_pageLog implements Serializable {
+public class Dictionary_pageLog implements Serializable, Comparable<Dictionary_pageLog>{
 
     String date;
     String startP;
@@ -10,6 +10,12 @@ public class Dictionary_pageLog implements Serializable {
     int readPageNum;
     Dictionary_book dictionary_book;
     int positionInWholeList;
+
+    @Override
+    public int compareTo(Dictionary_pageLog pageLog) {
+        return this.getDictionary_book().getTitle().compareTo(pageLog.getDictionary_book().getTitle());
+    }
+
 
     public int getPositionInWholeList() {
         return positionInWholeList;
@@ -64,4 +70,6 @@ public class Dictionary_pageLog implements Serializable {
         this.endP = endP;
         readPageNum = (Integer.parseInt(endP)-Integer.parseInt(this.startP));
     }
+
+
 }
