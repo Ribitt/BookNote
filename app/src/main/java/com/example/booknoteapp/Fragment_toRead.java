@@ -44,7 +44,7 @@ public class Fragment_toRead extends Fragment {
 
 
     Button btn_addBook;
-    CharSequence[] list_howToAddBook = {"직접 입력","책 검색하기","바코드 스캔"};
+    CharSequence[] list_howToAddBook = {"직접 입력","책 검색하기"};
 
 
     @Override
@@ -111,11 +111,11 @@ public class Fragment_toRead extends Fragment {
                                                 startActivity(intent1);
 
                                                 break;
-                                            case 2:
-                                                Toast.makeText(rootView.getContext(),list_howToAddBook[2]+"을 골랐습니다.",Toast.LENGTH_LONG).show();
-
-
-                                                break;
+//                                            case 2:
+//                                                Toast.makeText(rootView.getContext(),list_howToAddBook[2]+"을 골랐습니다.",Toast.LENGTH_LONG).show();
+//
+//
+//                                                break;
                                         }
 
                                     }

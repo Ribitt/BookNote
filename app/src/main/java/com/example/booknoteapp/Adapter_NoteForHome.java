@@ -31,8 +31,8 @@ public class Adapter_NoteForHome extends RecyclerView.Adapter<Adapter_NoteForHom
     int position;
     Context mContext;
 
-    public Adapter_NoteForHome(ArrayList<Dictionary_note> wholeList) {
-        this.mList = wholeList;
+    public Adapter_NoteForHome(ArrayList<Dictionary_note> recentTenNotesList) {
+        this.mList = recentTenNotesList;
     }
 
     @NonNull
@@ -48,6 +48,7 @@ public class Adapter_NoteForHome extends RecyclerView.Adapter<Adapter_NoteForHom
         String currentEmail = mContext.getSharedPreferences("users", Context.MODE_PRIVATE).getString("currentUser","");
         userPref = mContext.getSharedPreferences(currentEmail,mContext.MODE_PRIVATE);
         userEditor = userPref.edit();
+        // 최신 노트를 클릭하면 해당 책 상세 페이지로 넘어가게 하기 위해 프레프 필요. 터치 시 바로 해당 책이 bookNow에 저장되어야 하기 때문.
 
         return holder;
     }
@@ -82,8 +83,6 @@ public class Adapter_NoteForHome extends RecyclerView.Adapter<Adapter_NoteForHom
         TextView title;
         CardView cardView;
         TextView tv_see_more;
-
-
 
 
         public noteViewHolder(@NonNull View itemView) {

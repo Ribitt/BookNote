@@ -26,7 +26,9 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -46,11 +48,7 @@ public class EditNote extends AppCompatActivity {
     SharedPreferences userPref;
     SharedPreferences.Editor userEditor;
 
-    int position;
-    ArrayList<Dictionary_note> mList; //해당 책 노트 리스트
-    ArrayList<Dictionary_note> wholeExceptNowList; //전체에서 지금것만 뺀 리스트
     ArrayList<Dictionary_note> wholeList = new ArrayList<>(); //전체 노트 리스트
-
 
 
     //달력
@@ -81,6 +79,7 @@ public class EditNote extends AppCompatActivity {
 
         initialize();
         allListener();
+        getWholeList();
         getIntentExtras();
 
     }
@@ -106,11 +105,6 @@ public class EditNote extends AppCompatActivity {
             radioBtn_red.toggle();
         }
         //노트 내용 채우기 끝
-
-        //리스트 가져오기
-        mList = (ArrayList<Dictionary_note>) intent.getSerializableExtra("mList");
-        wholeExceptNowList = (ArrayList<Dictionary_note>) intent.getSerializableExtra("wholeExceptNowList");
-        position = intent.getIntExtra("position",0);
 
 
     }
@@ -205,7 +199,6 @@ public class EditNote extends AppCompatActivity {
         String page =editText_page.getText().toString();
         String date = tv_addNote_date.getText().toString();
         String quote = editText_quote.getText().toString();
-        int color = pickedColor;
 
         dictionary_note.setNote(note);
         dictionary_note.setPageNum(page);
@@ -213,15 +206,33 @@ public class EditNote extends AppCompatActivity {
         dictionary_note.setQuote(quote);
         dictionary_note.setColor(pickedColor);
 
-        mList.set(position,dictionary_note);
+        wholeList.set(dictionary_note.getPositionInWholeList(),dictionary_note);
+        //전체 노트 해당 자리에 수정된 노트를 저장
+
+       // mList.set(position,dictionary_note);
 
     }
+
+    //노트 전체 리스트 가져오기
+    private void getWholeList(){
+        Gson gson = new Gson();
+        String json = userPref.getString("note","EMPTY");
+
+        if(!json.equals("EMPTY")){
+            Type type = new TypeToken<ArrayList<Dictionary_note>>() {
+            }.getType();
+
+            wholeList = gson.fromJson(json,type);
+        }
+        //노트 전체 리스트
+
+    }
+    //노트 전체 리스트 가져오기 끝
+
 
     //수정된 노트 어레이와 나머지 노트 어레이 합쳐서 저장
     private void saveArrayToPref() {
 
-        wholeList.addAll(wholeExceptNowList);
-        wholeList.addAll(mList);
         Gson gson = new Gson();
         String json = gson.toJson(wholeList);
         userEditor.putString("note",json);

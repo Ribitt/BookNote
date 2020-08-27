@@ -73,8 +73,10 @@ public class MainHome extends AppCompatActivity {
 
         getReadingPrefToArray();
         showReadingRecycler();
+
         getNoteArrayFromPref();
         showNoteRecycler();
+
         getPageLogNumFromPref();
         getPageGoalFromPref();
         setNick();
@@ -218,7 +220,7 @@ public class MainHome extends AppCompatActivity {
 
     }
 
-    //노트 어레이를 프레프에서 가져오기
+    //노트전체 리스트를 프레프에서 가져오기
     private void getNoteArrayFromPref() {
         Gson gson = new Gson();
 //       //노트 비우기
@@ -239,14 +241,14 @@ public class MainHome extends AppCompatActivity {
         //전체 노트 개수 쓰기
 
         noteArrayList.clear();
-        //이전에 받았던 목록은 지워준다.
+        //지금 화면을 열기 전에 리스트를 받았을 수 있다. 그 목록은 비워준다.
 
         for(int i=0; i<allNoteList.size(); i++){
             noteArrayList.add(allNoteList.get(i));
             //노트 리스트에 노트 전체를 순서대로 넣는다
-            if(i>8){
+            if(i>9){
                 //10개까지만 넣는다.
-                break;
+                 continue;
             }
         }
 

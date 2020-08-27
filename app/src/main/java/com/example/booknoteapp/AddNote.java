@@ -83,6 +83,7 @@ public class AddNote extends AppCompatActivity {
 
         initialize();
         getBookNow();
+        //책 상세로 들어간 순간 지금 책 딕셔너리가 유저 프레프에 저장된다.
         allListener();
 
     }
@@ -221,6 +222,7 @@ public class AddNote extends AppCompatActivity {
                 }).show();
     }
 
+    //새 노트가 0번에 추가된 어레이 리스트를 다시 저장하기
     private void saveArrayToPref() {
         Gson gson = new Gson();
         String json = gson.toJson(noteList);
@@ -229,7 +231,7 @@ public class AddNote extends AppCompatActivity {
     }
 
 
-    //지금 받은 정보 어레이 리스트에 저장하기
+    //지금 쓴 노트를 목록 0번째로 저장하기
     private void saveNewNoteToArray() {
 
         String note = editText_userNote.getText().toString();
@@ -244,7 +246,7 @@ public class AddNote extends AppCompatActivity {
         noteList.add(0,newNote);
 
     }
-    //지금 받은 정보 저장하기 끝
+    //지금 받은 정보를 0번째로 저장하기 끝
 
     ///쉐어드 프리퍼런스 가져와서 어레이 리스트로 바꿔주기
     private void getPrefToArray() {

@@ -3,7 +3,9 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -79,7 +81,8 @@ public class Adapter_PageLog extends RecyclerView.Adapter<Adapter_PageLog.pageLo
                 mList.set(position,editLog);
                 //수정한 내용이 해당 자리에 반영되도록 한다.
                 notifyItemChanged(position);
-                wholeList.set(mList.get(position).getPositionInWholeList(),editLog);
+                wholeList.set(editLog.getPositionInWholeList(),editLog);
+                Log.d("지금 바뀐 거가 잘 들어는 가나 ", wholeList.get(editLog.getPositionInWholeList()).toString());
                 saveArrayToPref(wholeList,userEditor);
 
 
@@ -144,6 +147,10 @@ public class Adapter_PageLog extends RecyclerView.Adapter<Adapter_PageLog.pageLo
                         dialog.startP.setText(editLog.getStartP());
                         dialog.endP.setText(editLog.getEndP());
                         dialog.date.setText(editLog.getDate());
+//                        //어레이리스트를 쉐어드에 저장하는 게 없네
+//                        wholeList.set(editLog.getPositionInWholeList(),editLog);
+//                        saveArrayToPref(wholeList,userEditor);
+
                       ///  itemView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.almostWhite));
 
                         break;

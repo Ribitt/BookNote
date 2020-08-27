@@ -61,6 +61,7 @@ public class MySetting extends AppCompatActivity {
         allListener();
     }
 
+
     private void initialize(){
 
         devPref = getSharedPreferences("users",MODE_PRIVATE);
@@ -86,6 +87,12 @@ public class MySetting extends AppCompatActivity {
         btn_logOut = findViewById(R.id.btn_logOut);
         btn_signOut = findViewById(R.id.btn_signOut);
         btn_sendDevEmail = findViewById(R.id.btn_sendDevEmail);
+
+        int pageGoal = userPref.getInt("pageGoal",10000);
+        DecimalFormat format = new DecimalFormat("###,###");
+        String formatString = format.format(pageGoal);
+        tv_pageGoal.setText(formatString+" 페이지");
+
 
 
     }//이니셜라이즈
@@ -221,10 +228,10 @@ public class MySetting extends AppCompatActivity {
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MySetting.this);
         dialogBuilder.setTitle("독서 목표 페이지 변경");
-        dialogBuilder.setMessage("1년 동안 읽을 목표 페이지를 정해주세요");
+        dialogBuilder.setMessage("목표 페이지 수를 정해주세요");
 
         final EditText et = new EditText(MySetting.this);
-        et.setHint("10,000");
+        et.setHint(tv_pageGoal.getText());
         et.setInputType(InputType.TYPE_CLASS_NUMBER);
         dialogBuilder.setView(et);
         dialogBuilder.setPositiveButton("변경하기", new DialogInterface.OnClickListener() {

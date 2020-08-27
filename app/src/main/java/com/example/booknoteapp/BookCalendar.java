@@ -293,11 +293,11 @@ public class BookCalendar extends AppCompatActivity {
         for(int j=0; j<mList.size(); j++){
             for(int i=j+1; i<mList.size();i++){
                 if(mList.get(j).getDictionary_book().getTitle().equals(mList.get(i).getDictionary_book().getTitle())){
-                    mList.get(j).readPageNum =  mList.get(0).readPageNum+mList.get(i).readPageNum;
+                    mList.get(j).readPageNum =  mList.get(i).readPageNum+mList.get(i).readPageNum;
                     mList.remove(i);
                 }
             }
-        }//동일한 제목은 숫자 합치고 하나만 나오도록 하기
+        }//같은 책은 하나로 만들기
 
 
         Adapter_LogOnCalendar adapter_logOnCalendar = new Adapter_LogOnCalendar(mList);

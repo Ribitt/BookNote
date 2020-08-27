@@ -53,20 +53,20 @@ public class Adapter_Interested extends androidx.recyclerview.widget.RecyclerVie
 
 
 
-            //레이아웃 클릭으로 책상세 리스너
-            layout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(mContext,BookLog_Notes.class);
-                    Dictionary_book selectedBook = mList.get(getAdapterPosition());
-                    intent.putExtra("selectedBook",selectedBook);
-                    intent.putExtra("position",getAdapterPosition());
-                    mContext.startActivity(intent);
-
-                }
-            });
-
-            //레이아웃 클릭으로 책상세 리스너 끝
+//            //레이아웃 클릭으로 책상세 리스너
+//            layout.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Intent intent = new Intent(mContext,BookLog_Notes.class);
+//                    Dictionary_book selectedBook = mList.get(getAdapterPosition());
+//                    intent.putExtra("selectedBook",selectedBook);
+//                    intent.putExtra("position",getAdapterPosition());
+//                    mContext.startActivity(intent);
+//
+//                }
+//            });
+//
+//            //레이아웃 클릭으로 책상세 리스너 끝
 
 
             ////수정삭제 클릭 리스너

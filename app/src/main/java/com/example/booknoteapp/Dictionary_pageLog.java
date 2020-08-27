@@ -53,6 +53,7 @@ public class Dictionary_pageLog implements Serializable {
 
     public void setStartP(String startP) {
         this.startP = startP;
+        readPageNum = (Integer.parseInt(this.endP)-Integer.parseInt(startP));
     }
 
     public String getEndP() {
@@ -61,5 +62,6 @@ public class Dictionary_pageLog implements Serializable {
 
     public void setEndP(String endP) {
         this.endP = endP;
+        readPageNum = (Integer.parseInt(endP)-Integer.parseInt(this.startP));
     }
 }

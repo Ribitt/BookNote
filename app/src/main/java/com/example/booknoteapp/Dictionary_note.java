@@ -14,8 +14,23 @@ public class Dictionary_note implements Serializable {
     String note;
     String quote;
     int color;
+    int positionInWholeList;
 
+    public int getPositionInWholeList() {
+        return positionInWholeList;
+    }
 
+    public void setPositionInWholeList(int positionInWholeList) {
+        this.positionInWholeList = positionInWholeList;
+    }
+
+    public Dictionary_book getDictionary_book() {
+        return dictionary_book;
+    }
+
+    public void setDictionary_book(Dictionary_book dictionary_book) {
+        this.dictionary_book = dictionary_book;
+    }
 
     public int getColor() {
 

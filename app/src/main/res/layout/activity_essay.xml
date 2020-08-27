@@ -62,7 +62,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="모든 공개 에세이"/>
+                    android:text="공개 에세이"/>
 
                 <Button
                 android:id="@+id/btn_myEssay"
@@ -71,7 +71,7 @@
                 android:layout_height="wrap_content"
                     android:background="@drawable/button_grey"
 
-                android:text="내 에세이만 보기"/>
+                android:text="내 에세이"/>
 
 
 

@@ -18,13 +18,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class Adapter_Note extends RecyclerView.Adapter<Adapter_Note.noteViewHolder> {
 
-    ArrayList<Dictionary_note> mList; //해당 책 노트 리스트
-    ArrayList<Dictionary_note> wholeExceptNowList; //전체에서 지금것만 뺀 리스트
+    ArrayList<Dictionary_note> mList; //전체 노트 리스트 중 지금 터치한 책에 해당하는 리스트로, 이 어댑터에서 띄우는 리스트다
     ArrayList<Dictionary_note> wholeList = new ArrayList<>(); //전체 노트 리스트
 
     SharedPreferences userPref;
@@ -33,8 +34,7 @@ public class Adapter_Note extends RecyclerView.Adapter<Adapter_Note.noteViewHold
     int position;
     Context mContext;
 
-    public Adapter_Note(ArrayList<Dictionary_note> wholeExceptNowList, ArrayList<Dictionary_note> mList) {
-        this.wholeExceptNowList = wholeExceptNowList;
+    public Adapter_Note(ArrayList<Dictionary_note> mList) {
         this.mList = mList;
 
     }
@@ -52,6 +52,8 @@ public class Adapter_Note extends RecyclerView.Adapter<Adapter_Note.noteViewHold
         String currentEmail = mContext.getSharedPreferences("users", Context.MODE_PRIVATE).getString("currentUser","");
         userPref = mContext.getSharedPreferences(currentEmail,mContext.MODE_PRIVATE);
         userEditor = userPref.edit();
+
+        getWholeList();
 
 
         return holder;
@@ -144,11 +146,12 @@ public class Adapter_Note extends RecyclerView.Adapter<Adapter_Note.noteViewHold
                                         case 0:
                                             //수정하기
                                             Intent intent = new Intent(mContext,EditNote.class);
-                                            Dictionary_note selectedBook = mList.get(getAdapterPosition());
-                                            intent.putExtra("selectedNote",selectedBook);
-                                            intent.putExtra("position",getAdapterPosition());
-                                            intent.putExtra("mList",mList);
-                                            intent.putExtra("wholeExceptNowList",wholeExceptNowList);
+                                            Dictionary_note selectedNote = mList.get(getAdapterPosition());
+                                            intent.putExtra("selectedNote",selectedNote);
+                                            //지금 노트만 넣어 보낸다.
+//                                            intent.putExtra("position",getAdapterPosition());
+//                                            intent.putExtra("mList",mList);
+//
                                             mContext.startActivity(intent);
                                             break;
                                         case 1:
@@ -170,6 +173,23 @@ public class Adapter_Note extends RecyclerView.Adapter<Adapter_Note.noteViewHold
         }//뷰홀더 생성자 끝
     }//뷰홀더 끝
 
+    //노트 전체 리스트 가져오기
+    private void getWholeList(){
+        Gson gson = new Gson();
+        String json = userPref.getString("note","EMPTY");
+
+        if(!json.equals("EMPTY")){
+            Type type = new TypeToken<ArrayList<Dictionary_note>>() {
+            }.getType();
+
+            wholeList = gson.fromJson(json,type);
+        }
+            //노트 전체 리스트
+
+    }
+        //노트 전체 리스트 가져오기 끝
+
+
     //정말 삭제하시겠습니까?
     private void alert() {
         AlertDialog.Builder reallyGoOutAlert = new AlertDialog.Builder(mContext);
@@ -183,7 +203,11 @@ public class Adapter_Note extends RecyclerView.Adapter<Adapter_Note.noteViewHold
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
+                        //전체 리스트에서 먼저 삭제하기
+                        wholeList.remove(mList.get(position).positionInWholeList);
+                        //보여주는 리스트에서도 지우기
                         mList.remove(position);
+
                         saveArrayToPref();
                         notifyItemRemoved(position);
                         notifyItemRangeChanged(position,mList.size());
@@ -198,8 +222,6 @@ public class Adapter_Note extends RecyclerView.Adapter<Adapter_Note.noteViewHold
     //수정된 노트 어레이와 나머지 노트 어레이 합쳐서 저장
     private void saveArrayToPref() {
 
-        wholeList.addAll(wholeExceptNowList);
-        wholeList.addAll(mList);
         Gson gson = new Gson();
         String json = gson.toJson(wholeList);
         userEditor.putString("note",json);

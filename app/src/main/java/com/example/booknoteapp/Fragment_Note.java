@@ -41,7 +41,6 @@ public class Fragment_Note extends Fragment {
     SharedPreferences.Editor userEditor;
     ArrayList<Dictionary_note> noteList = new ArrayList<>();
     ArrayList<Dictionary_note> wholeList = new ArrayList<>();
-    ArrayList<Dictionary_note> wholeExceptNowList = new ArrayList<>();
     Dictionary_book bookNow;
 
     @Override
@@ -51,12 +50,19 @@ public class Fragment_Note extends Fragment {
 
         initialize();
         allListener();
-       getBookFromPref();
+        getBookFromPref();
 
         return rootView;
     }
 
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getArrayFromPref();
+        //노트 전체 리스트 불러와서 지금 책에 해당하는 리스트만 뽑기
+
+    }
 
     private void initialize(){
        // searchView = rootView.findViewById(R.id.searchView_note);
@@ -114,33 +120,33 @@ public class Fragment_Note extends Fragment {
 
             wholeList = gson.fromJson(json,type);
             //노트 전체 리스트
+
+            //노트 전체에 지금 전체 리스트 인덱스 값을 저장
+            for(int i=0; i<wholeList.size(); i++){
+                wholeList.get(i).setPositionInWholeList(i);
+                //i번째는 i라고 저장
+            }
+
+
             String bookTitle = bookNow.getTitle();
+            //지금 책 제목
 
             for(int i=0; i<wholeList.size();i++){
                 if(wholeList.get(i).dictionary_book.getTitle().equals(bookTitle)){
                     //지금 책에 해당하는 노트 리스트만 가져온다
                     noteList.add(wholeList.get(i));
-                }else{
-                    wholeExceptNowList.add(wholeList.get(i));
-                    //그걸 뺀 나머지 리스트도 저장해둔다
                 }
 
             }
 
 
         }
-        adapter = new Adapter_Note(wholeExceptNowList, noteList);
+        adapter = new Adapter_Note(noteList);
         recyclerView.setAdapter(adapter);
 
 
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        getArrayFromPref();
-
-    }
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
