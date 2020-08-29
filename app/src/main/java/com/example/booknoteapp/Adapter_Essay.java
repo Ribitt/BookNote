@@ -77,6 +77,7 @@ public class Adapter_Essay extends androidx.recyclerview.widget.RecyclerView.Ada
         TextView bookTitle;
         TextView bookAuthor;
         ImageView bookCover;
+        TextView bookPublisher;
         TextView essayTitle;
         TextView essayContent;
         TextView date;
@@ -109,6 +110,7 @@ public class Adapter_Essay extends androidx.recyclerview.widget.RecyclerView.Ada
             like =view.findViewById(R.id.iv_like_btn);
             tv_isOpen = view.findViewById(R.id.tv_isOpen);
             tv_see_more = (TextView) view.findViewById(R.id.tv_see_more);
+            bookPublisher = view.findViewById(R.id.tv_book_publisher);
 
             final int maxLine = essayContent.getMaxLines();
 
@@ -262,7 +264,7 @@ public class Adapter_Essay extends androidx.recyclerview.widget.RecyclerView.Ada
         holder.bookCover.setImageBitmap(dictionary_essay.getBookCover());
         holder.bookAuthor.setText(dictionary_essay.getBookAuthor());
         holder.bookTitle.setText(dictionary_essay.getBookTitle());
-
+        holder.bookPublisher.setText(dictionary_essay.getBookPublisher());
         holder.likeNum.setText(dictionary_essay.getLikeNum());
         holder.essayContent.setText(dictionary_essay.getEssayContent());
         holder.essayTitle.setText(dictionary_essay.getEssayTitle());

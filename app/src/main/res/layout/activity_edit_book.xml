@@ -366,14 +366,15 @@
 
             <RatingBar
                 android:id="@+id/rating_addBook_read"
+                android:theme="@style/RatingBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:isIndicator="false"
+                style="@style/Widget.AppCompat.RatingBar.Indicator"
                 android:numStars="5"
-                android:stepSize="0.5"
                 android:rating="3.5"
 
-                style="@style/Widget.AppCompat.RatingBar.Indicator"
+                android:stepSize="0.5"
 
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"

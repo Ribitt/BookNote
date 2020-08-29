@@ -210,6 +210,8 @@ public class AddEssay extends AppCompatActivity {
         getTime();
 
         Dictionary_Essay newEssay = new Dictionary_Essay(bookDict,isOpen);
+        Log.d("지금 저장되는 책의 출판사", bookDict.getPublisher());
+        //저장
         newEssay.setDate(time);
         newEssay.setUserEmail(userEmail);
         newEssay.setNickname( userPref.getString("nickname",""));

@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -16,6 +17,8 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,6 +44,8 @@ public class SignUp extends AppCompatActivity {
     String NICKNAME = "nickname";
     String allNicknames = "";
 
+    CountDownTimer timer;
+
     String user = "bittnuri@gmail.com";
     String passwordd = "asdf0528";
     String subject = "[BookNoteApp] 인증메일";
@@ -62,12 +67,15 @@ public class SignUp extends AppCompatActivity {
     TextView warning_existedEmail;
     TextView warning_certNum;
 
-
+    CheckBox checkBox_personal;
+    CheckBox checkBox_rule;
 
     Boolean isEmailNew = false;
     Boolean isCertSame = false;
     Boolean isPasswordSame = false;
     Boolean isNicknameNew = false;
+    Boolean agreeRule = false;
+    Boolean agreePersonal = false;
 
     SharedPreferences pref;
     SharedPreferences.Editor editor;
@@ -82,9 +90,9 @@ public class SignUp extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
 
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-        .permitDiskReads()
-        .permitDiskWrites()
-        .permitNetwork().build());
+                .permitDiskReads()
+                .permitDiskWrites()
+                .permitNetwork().build());
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.app_toolbar);
         toolbar.setTitleTextColor(getResources().getColor(R.color.green));
@@ -132,6 +140,10 @@ public class SignUp extends AppCompatActivity {
         checkConfirmBtn = findViewById(R.id.btn_signUp_checkConfirmNum);
         checkNicknameBtn = findViewById(R.id.btn_sugnUp_nicknameCheck);
 
+        checkBox_rule = findViewById(R.id.checkbox_agree_rule);
+        checkBox_personal = findViewById(R.id.checkbox_agree_personal);
+
+
         warning_password = findViewById(R.id.tv_signUp_passwordNotSame);
         warning_confirmNum = findViewById(R.id.tv_signUp_numNotSame);
         warning_nickname = findViewById(R.id.tv_signUp_nickNameAlreadyUsed);
@@ -143,6 +155,34 @@ public class SignUp extends AppCompatActivity {
     }//이니셜라이저 끝
 
     protected void allClickListener() {
+
+        //자동로그인 체크박스
+        checkBox_rule.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(isChecked){
+
+                        agreeRule = true;
+
+
+                }else{
+                    agreeRule =false;
+                }
+            }
+        });
+
+
+
+        checkBox_personal.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                if(checked){
+                    agreePersonal = true;
+                }else{
+                    agreePersonal =false;
+                }
+            }
+        });
 
 
         //이미 가입한 이메일 주소인지 확인
@@ -192,29 +232,29 @@ public class SignUp extends AppCompatActivity {
                 //쉐어드에 이메일 주소를 저장한다.
 
 
-              if(isEmailNew){
-                  //중복이 아니기 때문에 다음 단계를 진행한다.
+                if(isEmailNew){
+                    //중복이 아니기 때문에 다음 단계를 진행한다.
                     String userEmail = email.getText().toString();
-                  //형식에 맞는 이메일 주소인지 확인한다
-                 if(checkEmail(userEmail)){
-                    // 인증번호 생성하고 입력 받은 이메일 주소로 전송하기
-                     makeCertNum();
-                   //  et_certNum.setText(certNum);
-                    sendSecurityCode(getApplicationContext(),userEmail,certNum);
+                    //형식에 맞는 이메일 주소인지 확인한다
+                    if(checkEmail(userEmail)){
+                        // 인증번호 생성하고 입력 받은 이메일 주소로 전송하기
+                        makeCertNum();
+                        //  et_certNum.setText(certNum);
+                        sendSecurityCode(getApplicationContext(),userEmail,certNum);
 
-                    // Toast.makeText(SignUp.this, "인증 번호를 전송했습니다", Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(SignUp.this, "인증 번호를 전송했습니다", Toast.LENGTH_SHORT).show();
 
-                     countDown();
+                        countDown();
 
-                 }else{
-                     Toast.makeText(SignUp.this, "올바른 이메일 주소를 입력해주세요", Toast.LENGTH_SHORT).show();
-                 }
-                 //형식에 맞는 이메일 주소인지 확인 끝
+                    }else{
+                        Toast.makeText(SignUp.this, "올바른 이메일 주소를 입력해주세요", Toast.LENGTH_SHORT).show();
+                    }
+                    //형식에 맞는 이메일 주소인지 확인 끝
 
-              }else{
-                  //중복되는 이메일이기 때문에 다음 단계를 진행할 수 없다.
-                  Toast.makeText(SignUp.this, "이메일 주소를 확인하세요", Toast.LENGTH_SHORT).show();
-              }
+                }else{
+                    //중복되는 이메일이기 때문에 다음 단계를 진행할 수 없다.
+                    Toast.makeText(SignUp.this, "이메일 주소를 확인하세요", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -226,13 +266,15 @@ public class SignUp extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-               // Log.d("비밀번호 일치 확인용", et_certNum)
+                // Log.d("비밀번호 일치 확인용", et_certNum)
                 if(et_certNum.getText().toString().equals(certNum)){
                     //에딧텍스트랑 스트링 비교하는 뻘짓 하지 말자 ^^!
 
                     //인증번호 일치
                     Toast.makeText(SignUp.this, "이메일 인증 완료", Toast.LENGTH_SHORT).show();
-                    warning_certNum.setVisibility(View.GONE);
+
+                    warning_certNum.setVisibility(View.GONE);//먼저 뷰를 안보이게 하고
+                    timer.cancel(); //타이머를 멈춰줘야 한다. 타이머를 멈춘 뒤에 뷰를 안보이게 하면 1초 안보였다가 다시 나옴. 알 수가 없군.
                     isCertSame = true;
 
                 }else{
@@ -311,24 +353,39 @@ public class SignUp extends AppCompatActivity {
                         if(isNicknameNew){
                             //닉네임 중복 없는지?
 
-                            //유저의 이메일 주소를 키값으로 비밀번호를 스트링으로 저장해준다.
-                            usersEditor.putString(email.getText().toString(),passwordCheck.getText().toString());
-                            //유저의 닉네임을 새로 추가해 준다.
-                            usersEditor.putString(NICKNAMES, allNicknames+"#"+et_nickname.getText().toString());
-                            usersEditor.commit();
+                            if(agreePersonal){
 
-                            //새로 유저가 회원가입을 하게 되면 유저 이메일이 패키지명인 새로운 쉐어드 프리퍼런스를 만들고 그 안에 닉네임 값을 저장한다.
-                            //다른 액티비티에서 불러올 수 있게 하기 위함이다.
-                            SharedPreferences newPref = getSharedPreferences(email.getText().toString(),Activity.MODE_PRIVATE);
-                            SharedPreferences.Editor newEditor = newPref.edit();
-                            Toast.makeText(SignUp.this, allNicknames, Toast.LENGTH_SHORT).show();
-                            newEditor.putString(NICKNAME,et_nickname.getText().toString());
-                            newEditor.apply();
+                                if(agreeRule){
+
+                                    //유저의 이메일 주소를 키값으로 비밀번호를 스트링으로 저장해준다.
+                                    usersEditor.putString(email.getText().toString(),passwordCheck.getText().toString());
+                                    //유저의 닉네임을 새로 추가해 준다.
+                                    usersEditor.putString(NICKNAMES, allNicknames+"#"+et_nickname.getText().toString());
+                                    usersEditor.commit();
+
+                                    //새로 유저가 회원가입을 하게 되면 유저 이메일이 패키지명인 새로운 쉐어드 프리퍼런스를 만들고 그 안에 닉네임 값을 저장한다.
+                                    //다른 액티비티에서 불러올 수 있게 하기 위함이다.
+                                    SharedPreferences newPref = getSharedPreferences(email.getText().toString(),Activity.MODE_PRIVATE);
+                                    SharedPreferences.Editor newEditor = newPref.edit();
+                                    Toast.makeText(SignUp.this, allNicknames, Toast.LENGTH_SHORT).show();
+                                    newEditor.putString(NICKNAME,et_nickname.getText().toString());
+                                    newEditor.apply();
+                                    Toast.makeText(SignUp.this, "회원가입이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(getApplicationContext(),Login.class);
+                                    startActivity(intent);
+                                    finish();
+
+
+                                }else{
+                                    Toast.makeText(SignUp.this, "이용약관에 동의해주세요.", Toast.LENGTH_SHORT).show();
+                                }
+
+                            }else{
+                                Toast.makeText(SignUp.this, "개인정보 처리방침에 동의해주세요.", Toast.LENGTH_SHORT).show();
+                            }
 
 
 
-                            Toast.makeText(SignUp.this, "회원가입이 완료되었습니다.", Toast.LENGTH_SHORT).show();
-                            finish();
                         }else{
                             Toast.makeText(SignUp.this, "닉네임을 확인하세요.", Toast.LENGTH_SHORT).show();
                         }
@@ -353,7 +410,7 @@ public class SignUp extends AppCompatActivity {
 
 
     private void countDown() {
-        new CountDownTimer(70000, 1000){
+        timer = new CountDownTimer(70000, 1000){
 
             @Override
             public void onTick(long millisUntilFinished) {
@@ -381,7 +438,8 @@ public class SignUp extends AppCompatActivity {
                 warning_certNum.setText("인증 번호 만료. 인증번호를 다시 전송하세요");
                 makeCertNum();
             }
-        }.start();
+        };
+        timer.start();
     }
 
     ////이메일 보내기
@@ -413,7 +471,7 @@ public class SignUp extends AppCompatActivity {
     //랜덤한 인증번호 만들기 메소드
     private void makeCertNum() {
 
-       // long seed = System.currentTimeMillis();
+        // long seed = System.currentTimeMillis();
         Random rand = new Random();
         //시드를 변경하고 싶다면 rand.setSeed(System.currentTimeMillils())를 해주면 된다
         //따로 seed를 설정해주지 않으면 디폴트 시드값이 현재 시간이다. 음
@@ -430,7 +488,7 @@ public class SignUp extends AppCompatActivity {
             //차례로 더해서 만들어준다
         }
 
-    //  Toast.makeText(SignUp.this, certNum, Toast.LENGTH_SHORT).show();
+        //  Toast.makeText(SignUp.this, certNum, Toast.LENGTH_SHORT).show();
 
 
     }
@@ -449,32 +507,32 @@ public class SignUp extends AppCompatActivity {
         prop.put("mail.smtp.ssl.trust","smtp.gmail.com");
 
 
-       javax.mail.Session session = javax.mail.Session.getDefaultInstance(prop,new javax.mail.Authenticator(){
+        javax.mail.Session session = javax.mail.Session.getDefaultInstance(prop,new javax.mail.Authenticator(){
             protected PasswordAuthentication getPasswordAuthentication() {
 
                 return new PasswordAuthentication(user,password);
             }
         });
 
-       try{
-           MimeMessage message = new MimeMessage(session);
-           message.setFrom(new InternetAddress(user));
+        try{
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(user));
 
-           message.addRecipients(Message.RecipientType.TO, String.valueOf(new InternetAddress(userEmail)));
+            message.addRecipients(Message.RecipientType.TO, String.valueOf(new InternetAddress(userEmail)));
 
-           message.setSubject("[BookNoteApp] 인증번호");
+            message.setSubject("[BookNoteApp] 인증번호");
 
-           message.setText("BookNoteApp을 사용하기 위해 인증번호를 입력해주세요./n" +
-                   "인증번호 : "+certNum);
+            message.setText("BookNoteApp을 사용하기 위해 인증번호를 입력해주세요./n" +
+                    "인증번호 : "+certNum);
 
-           Transport.send(message);
-           Log.d("이메일이 잘 갔는지 보겠습니다", "잘 간듯");
+            Transport.send(message);
+            Log.d("이메일이 잘 갔는지 보겠습니다", "잘 간듯");
 
-       }catch (AddressException e){
-           e.printStackTrace();
-       }catch (MessagingException e){
-           e.printStackTrace();
-       }
+        }catch (AddressException e){
+            e.printStackTrace();
+        }catch (MessagingException e){
+            e.printStackTrace();
+        }
 
 
     }

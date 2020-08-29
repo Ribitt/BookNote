@@ -133,14 +133,14 @@ public class Adapter_read extends RecyclerView.Adapter<Adapter_read.readViewHold
 
     private void alert() {
         AlertDialog.Builder reallyGoOutAlert = new AlertDialog.Builder(mContext);
-        reallyGoOutAlert.setTitle("정말 나가시겠습니까?")
+        reallyGoOutAlert.setTitle("정말 삭제하시겠습니까?")
                 .setNegativeButton("취소", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
                     }
                 })
-                .setPositiveButton("나가기", new DialogInterface.OnClickListener() {
+                .setPositiveButton("삭제하기", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 

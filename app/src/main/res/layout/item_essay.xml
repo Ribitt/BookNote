@@ -131,7 +131,7 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:maxLines="2"
-                    android:text="봄알람"
+                    android:text="가나다"
                     android:textSize="13sp"
                     ></TextView>
 

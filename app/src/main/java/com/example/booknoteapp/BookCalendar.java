@@ -70,6 +70,7 @@ public class BookCalendar extends AppCompatActivity {
 
     SharedPreferences userPref;
     ArrayList<Dictionary_pageLog> pageLogArrayList=new ArrayList<>();
+    ArrayList<Dictionary_pageLog> sortedList=new ArrayList<>();
 
 
 
@@ -102,6 +103,7 @@ public class BookCalendar extends AppCompatActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }//오늘 날짜에 해당하는 로그를 리사이클러뷰에 띄운다
+
 
 
         try {
@@ -142,6 +144,7 @@ public class BookCalendar extends AppCompatActivity {
 
         tv_dayOfTheMonth = findViewById(R.id.tv_dayOfTheMonth);
         calendarView = findViewById(R.id.calendarView);
+
         //총 읽은 페이지 뷰
         tv_youRead = findViewById(R.id.tv_youRead);
 
@@ -277,6 +280,7 @@ public class BookCalendar extends AppCompatActivity {
 
     }
 
+
     private void showRecycler(Date datePicked) throws ParseException {
 
         ArrayList<Dictionary_pageLog> mList = new ArrayList<>();
@@ -292,11 +296,12 @@ public class BookCalendar extends AppCompatActivity {
             }
         }//전체 리스트에서 해당 날짜에 쓰인 로그만 뽑아서 모으기
 
-        Collections.sort(mList);
+       // Collections.sort(mList);
         //이름순으로 정렬된다.
         Log.d("리스트 사이즈", String.valueOf(mList.size()));
-        ArrayList<Dictionary_pageLog> sortedList = new ArrayList<>();
 
+
+        sortedList.clear();
         for(int j=0; j<mList.size(); j++){
             String mListTitle = mList.get(j).getDictionary_book().getTitle();
             //이 책의 제목은 이거다
@@ -343,56 +348,30 @@ public class BookCalendar extends AppCompatActivity {
 
         }
 
-
-
-//        Log.d("지금 리스트의 길이, 4여야 한다", String.valueOf(mList.size()));
-//        for(Dictionary_pageLog pageLog : mList){
-//            Log.d("책 제목이랑 페이지 수 ", pageLog.getDictionary_book().getTitle()+","+String.valueOf(pageLog.readPageNum));
-//        }
-//
-//        int repeat = mList.size();
-//        //배열 삭제하기 시작하면 리스트 사이즈는 점점 작아져서 끝까지 못돈다.
-//        //삭제하기 전 사이즈를 저장해둔다.
-//
-//        for(int i=1; i<repeat; i++){
-//
-//            String firstBookTitle = mList.get(0).getDictionary_book().getTitle();
-//            String compareBookTitle = mList.get(1).getDictionary_book().getTitle();
-//            if(compareBookTitle.equals(firstBookTitle)){
-//                //두 번째부터 마지막 책까지 첫번째 책이랑 이름이 같으면 합치고 지운다
-//                Log.d("제목이 같다","같다" + String.valueOf(mList.get(1).readPageNum)); //총 3번 나와야 함 2번 나오네
-//                mList.get(0).readPageNum = mList.get(0).readPageNum + mList.get(1).readPageNum;
-//                mList.remove(1);
-//            }else{
-//                Log.d("통과한 로그 제목이랑 페이지 수 ", mList.get(i).getDictionary_book().getTitle()+","+String.valueOf(mList.get(i).readPageNum));
-//            }
-//        }
-
-//        Gson gson = new Gson();
-//        String json = gson.toJson(mList);
-//        Log.d("책이 왜 같이 안나오지 ", json);
-
-
+        Log.d("지금 솔티드 리스트 크기",String.valueOf(sortedList.size()));
         Adapter_LogOnCalendar adapter_logOnCalendar = new Adapter_LogOnCalendar(sortedList);
         recyclerView.setAdapter(adapter_logOnCalendar);
         //만든 리스트로 리사이클러뷰 띄우기
 
+        setTv_youRead();
+        //지금 만든 리스트 숫자 합을 텍스트 뷰에 띄워주기
+    }
+
+    private void setTv_youRead(){
         int readPagesOnThisDay=0;
-        for(Dictionary_pageLog pageLog : mList){
-            readPagesOnThisDay += pageLog.readPageNum;
+        for(Dictionary_pageLog sortedLog : sortedList){
+            readPagesOnThisDay += sortedLog.readPageNum;
+
         }//리스트에 있는 전체 페이지 수를 다 더한다
 
-        if(mList.size()>0){
-            tv_youRead.setText(String.valueOf(readPagesOnThisDay)+"페이지를 읽었습니다");
+        if(sortedList.size()>0){
+            tv_youRead.setText(String.valueOf(readPagesOnThisDay)+" 페이지를 읽었습니다");
             tv_youRead.setVisibility(View.VISIBLE);
             //있는 날에는 몇 페이지나 읽었는지 세서 띄운다
-        }else{
+        }else if(sortedList.size()==0){
             tv_youRead.setVisibility(View.INVISIBLE);
             //없는 날에는 글자 없애버리시오
         }
-
-
-
     }
 
 
@@ -480,7 +459,6 @@ public class BookCalendar extends AppCompatActivity {
         @Override
         public void decorate(DayViewFacade view) {
             view.addSpan(new StyleSpan(Typeface.BOLD));
-            view.addSpan(new RelativeSizeSpan(1.1f));
 
             //view.addSpan(new ForegroundColorSpan(getColor(R.color.green)));
             //view.addSpan(new BackgroundColorSpan(getColor(R.color.myYellow)));
